@@ -24,7 +24,7 @@ I2V-CompBench 是一个面向图像到视频生成模型的结构化评测基准
 | 原则 | 说明 |
 |---|---|
 | 多图/多参考模式进入主评测 | 评测不仅覆盖单张首帧输入，也覆盖多张参考图输入。例如人物参考图、服装参考图和场景参考图共同作为输入。 |
-| 七个维度共同组成评测主体 | 主评测覆盖属性、动作、运动、空间、背景、视角和交互七类能力。 |
+| 七个维度共同构成评测核心主线 | 主评测覆盖属性、动作、运动、空间、背景、视角和交互七类能力。 |
 | Phase 1 输出可构题资产 | Phase 1 不只输出统计表，还需要输出 `reference_bank`、`candidate_recipes`、兼容性矩阵和评测元数据。 |
 | Phase 3 使用执行门控评分 | 样本得分为 `S = E * (0.6P + 0.4C)`。如果模型没有执行目标变化，即使画面稳定，总分也应较低。 |
 
@@ -308,9 +308,18 @@ Phase 1 不是只统计词频，而是把真实 I2V 数据转化成可以被 Pha
   "mask_quality": 0.88,
   "background_leakage_risk": "low",
   "identity_visibility": "high",
-  "usable_for": ["attribute_binding", "action_binding", "motion_binding", "spatial_composition", "interaction_reasoning"]
+  "usable_for": ["attribute_binding", "action_binding", "motion_binding", "spatial_composition", "interaction_reasoning"],
+  "provenance": {
+    "source": "tip_i2v_derived",
+    "sample_id": "tip_000001"
+  }
 }
 ```
+
+字段说明：
+
+- `usable_for` 是该 asset **自身**适用的维度集，不是 reference_bank 整体能力。例如主体 crop 自然不适合 background 题；只有场景 inpainted 资产 (`scene_reference_inpainted`) 才适合 `background_dynamics` 与 `view_transformation`。Phase 2 在采样时按 recipe.dimension 过滤 asset。
+- `provenance` 记录 asset 的来源样本，确保任何多图样本都可追溯到 Phase 1 的真实 TIP 首帧，论文中可作为"多图先验真实来源"的直接证据。
 
 这一步解决“多图模式没有先验”的问题：多图题不是凭空拼出来的，而是从真实 I2V 首帧中的主体共现、场景关系和视觉属性中派生出来。
 
@@ -500,6 +509,8 @@ Question Plan 必须包含：
 1. **TIP-derived real assets**：如果原始首帧或 reference_bank 资产质量足够，优先使用，增强真实分布可信度。
 2. **T2I-generated clean assets**：用于补足难度桶、罕见组合和对比组。
 3. **external optional assets**：用于补充真实多参考场景，但必须记录 provenance。
+
+> 图像来源不是 Stage 3 临时决定，而是**直接遵守 recipe 中已确定的 `source_type`**（见 Phase 1 Step 7）。Stage 3 仅负责具体图像的生成 / 抽取与失败时的 fallback。
 
 单图模式：
 
@@ -876,7 +887,14 @@ C：
 - bbox/mask 几何关系判定。
 - 多图 identity preservation 使用 CLIP-I、DINO 特征或人脸/物体特征匹配。
 
-示例：把猫放在沙发上，绿植放在沙发旁边。评测器需要找出猫、沙发和绿植，再判断 “on” 和 “beside” 这两个关系是否成立。这里不要求猫从某处移动到沙发上；如果题目要求移动过程，则应归入 Motion。
+示例：把猫放在沙发上，绿植放在沙发旁边。评测器需要找出猫、沙发和绿植，再判断 "on" 和 "beside" 这两个关系是否成立。这里不要求猫从某处移动到沙发上；如果题目要求移动过程，则应归入 Motion。
+
+**Spatial 多图（D4）vs Motion Type C 多图（D3）的边界**：两者都是"多个参考主体进入同一场景"，区分点在于：
+
+- Spatial 多图：考察**生成后是否布局正确且稳定**，只看终态关系，忽略中途运动。
+- Motion Type C：考察**参考主体进入场景后的运动轨迹**，包括方向、速度或相对位移变化。
+
+如果题目只要求最终关系，归 Spatial；如果题目要求中途方向 / 速度 / 相对位移，归 Motion。
 
 #### D5 Background Dynamics
 
@@ -1012,11 +1030,13 @@ Benchmark 论文必须验证自动评测器与人类判断相关。
 
 推荐的人工验证设置：
 
-- 每个维度抽 50 到 100 道题。
+- **正式版本（1400 题）**：每个维度抽 50 到 100 道题。
+- **pilot 版本（140 题）**：每维度全量人工 spot-check（20 道），并按相同 protocol 标 E/P/C 以早期校准评测器。
 - 每题选 3 到 4 个模型输出。
 - 人工分别标注 E/P/C，而不是只给整体分。
 - 报告 Spearman/Kendall 相关系数与标注者间一致性。
 - 按 artifact severity 分桶报告相关性，证明工具在生成视频上的有效边界。
+- Interaction 维度由于自动评测器置信度较低，应在上述比例基础上额外提高人工标注覆盖。
 
 这一步的作用是证明自动评测结果与人工判断大体一致。如果自动分数和人类判断完全不相关，评测器再复杂也没有意义。对 benchmark 论文来说，这通常是最关键的可信度证据之一。
 
