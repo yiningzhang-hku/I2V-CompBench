@@ -2,13 +2,205 @@
 
 ## 1. 定位与约束
 
-Phase 1 接收 Step 1–5 产出的结构化解析（`image_parse.jsonl`、`text_parse.jsonl`、`manifest_clean.jsonl`），在**不调用 VLM / LLM** 的前提下，通过规则推导和启发式计算，补齐评测所需的缺失字段，最终输出 `candidate_recipes.jsonl` 供 Phase 2 直接消费。
+Phase 1 接收 Step 1–5 产出的结构化解析（`image_parse.jsonl`、`text_parse.jsonl`、`manifest_clean.jsonl`、`prior_package.json`），在**不调用 VLM / LLM** 的前提下，通过规则推导和启发式计算，补齐评测所需的缺失字段，最终输出 `candidate_recipes.jsonl` 供 Phase 2 直接消费。
 
 核心约束：零 API 调用、纯确定性规则、幂等可重跑。
 
 ---
 
-## 2. 工程结构
+## 2. 上游输入：Step 1–5 原始分析管线
+
+Phase 1 增强步骤并非从零开始——它建立在 Step 1–5 通过硅基流动（SiliconFlow）API 调用 VLM / LLM 完成的结构化解析之上。以下是 Step 1–5 各步的职责、调用的模型和产出物。
+
+### 2.1 管线总览
+
+| 步骤 | 源文件 | 调用的模型 | 职责 | 核心产出 |
+|------|--------|-----------|------|----------|
+| Step 1 | `src/step1_manifest.py` | — | 扫描原始数据目录，清洗 prompt 文本，构建样本清单 | `manifest.jsonl`、`manifest_clean.jsonl` |
+| Step 2 | `src/step2_image_analysis.py` | VLM（硅基流动 API） | 对每张首帧图进行视觉结构化解析 | `image_parse.jsonl` |
+| Step 3 | `src/step3_text_analysis.py` | LLM（硅基流动 API） | 对每条 prompt 进行语义意图解析 | `text_parse.jsonl` |
+| Step 4 | `src/step4_joint_analysis.py` | — | 图文交叉验证 + 深度先验提取 | `joint_analysis.jsonl`、`dimension_priors.jsonl`、`global_distributions.jsonl` 等 |
+| Step 5 | `src/step5_pool_and_report.py` | — | 组装 Prior Package + 报告生成 | `prior_package.json`、`summary.md` |
+
+### 2.2 Step 2：VLM 图像分析
+
+调用硅基流动的 VLM API，对 TIP-I2V 数据集每张首帧图提取结构化信息：
+
+| 输出字段 | 含义 |
+|---------|------|
+| `subjects[]` | 主体列表（name、is_animate、position_in_frame、attributes、current_pose_action） |
+| `subject_count` | 主体数量 |
+| `has_multiple_subjects` | 是否多主体 |
+| `subjects_clearly_distinguishable` | 主体是否可区分 |
+| `background` | 背景信息（lighting、weather、time_of_day、foreground_background_separability、rigid_background_ratio） |
+| `camera_baseline` | 镜头基线（shot_type、camera_angle、has_rigid_reference_structure） |
+
+产出文件：`{output_dir}/image_analysis/image_parse.jsonl`
+
+### 2.3 Step 3：LLM 文本分析
+
+调用硅基流动的 LLM API，对每条 prompt 文本进行语义意图解析：
+
+| 输出字段 | 含义 |
+|---------|------|
+| `involves_attribute_change` | 是否涉及属性变化 |
+| `involves_action` | 是否涉及动作 |
+| `involves_directed_motion` | 是否涉及方向性位移 |
+| `involves_spatial_relation_change` | 是否涉及空间关系变化 |
+| `involves_background_change` | 是否涉及背景变化 |
+| `involves_camera_movement` | 是否涉及镜头运动 |
+| `attribute_change_slots[]` | 属性变化槽位（target_subject、attribute_type、from_value、to_value） |
+| `action_slots[]` | 动作槽位（target_subject、action_verb、action_detail） |
+| `motion_slots[]` | 位移槽位（target_subject、direction） |
+| `spatial_relation_slots[]` | 空间关系槽位（subject_a、subject_b、target_predicate） |
+| `background_change_slots[]` | 背景变化槽位（target_region、change_type、to_state） |
+| `camera_movement_slots[]` | 镜头运动槽位（command、target_subject） |
+| `nouns[]` / `verbs[]` / `adjectives[]` | 提取的名词/动词/形容词列表 |
+| `primary_intent` | 主意图分类 |
+
+产出文件：`{output_dir}/text_analysis/text_parse.jsonl`
+
+### 2.4 Step 4：联合分析与深度先验提取
+
+Step 4 不再调用外部 API，但执行了大量统计计算。核心功能模块：
+
+**A. 可评测性评估**
+
+对每个样本的 6 个维度（attribute_binding / motion_binding / spatial_relation / action_binding / scene_dynamics / camera_transformation）分别判定：文本是否请求 × 图像是否支持 → 是否可评测。
+
+**B. 维度级概念分布提取**
+
+对每个维度筛选出可评测样本，统计该维度下各概念的频率（top-30）：
+
+| 维度 | 统计的概念类型 |
+|------|---------------|
+| attribute_binding | target_subject、attribute_type、change_pattern（如 "red -> blue"） |
+| action_binding | target_subject、action_verb、action_detail |
+| motion_binding | target_subject、direction |
+| spatial_relation | subject（a/b 合并）、predicate |
+| scene_dynamics | target_region、change_type、to_state |
+| camera_transformation | camera_command、camera_target_subject |
+
+**C. 全局概念分布**
+
+跨维度统计所有样本的：
+- `primary_intent` 分布
+- 全局名词频率 top-30（如 person: 45%、dog: 12%）
+- 全局动词频率 top-30（如 walk: 18%、run: 9%）
+- 全局形容词频率 top-30（如 red: 8%、large: 5%）
+- `dimension_involvement` 各维度被请求的比例
+
+**D. 全局视觉构成先验**
+
+聚合所有图像分析结果：
+- `typical_subject_categories` top-30（首帧中高频出现的主体类别）
+- `shot_type_distribution`（镜头类型分布）
+- `scene_type_distribution`（lighting/weather/time_of_day 组合的场景类型分布）
+- `camera_angle_distribution`（机位角度分布）
+- `background_separability_distribution`（前后景可分离度分布）
+
+**E. 结构模板提取**
+
+将 prompt 中的具体名词/动词/形容词替换为 `{noun}` / `{verb}` / `{adj}` 占位符，统计模式频次，输出结构化句式模板。
+
+**F. 种子样例选择**
+
+对每个维度，按评分（主体重叠率 × 3 + 槽位完整性 + 长度适宜性）选出 top-10 高质量标注样例，供 Phase 2 LLM 做 few-shot。
+
+**G. 维度共现矩阵**
+
+计算 6×6 共现矩阵：统计每对维度在同一 prompt 中同时被请求的百分比。
+
+Step 4 产出文件：
+```
+{output_dir}/joint_analysis/
+├── joint_analysis.jsonl          # 逐样本 6 维可评测性
+├── dimension_coverage.csv        # 维度覆盖率统计
+├── dimension_priors.jsonl        # 6 个 DimensionPrior（概念分布 + 视觉先验 + 模板 + 种子）
+├── global_distributions.jsonl    # 全局文本概念分布
+├── global_visual_prior.json      # 全局视觉构成先验
+├── pika_distributions.json       # Pika 运镜/运动参数分布
+├── dimension_cooccurrence.json   # 维度共现矩阵
+├── mixed_intent_matrix.csv       # 共现矩阵 CSV
+└── seed_examples/                # 每维度种子样例
+    ├── seed_attribute_binding.jsonl
+    ├── seed_action_binding.jsonl
+    └── ...
+```
+
+### 2.5 Step 5：Prior Package 组装
+
+Step 5 将 Step 4 所有中间产出整合为一个统一的交付物 `prior_package.json`，结构如下：
+
+```json
+{
+  "dataset_name": "TIP-I2V",
+  "split": "Eval",
+  "total_samples": 1000,
+  "clean_samples": 980,
+  "analyzed_samples": 950,
+  "global_distributions": [
+    {"category": "noun", "entries": [{"name": "person", "count": 450, "pct": 47.37}], "total_samples": 950},
+    {"category": "verb", "entries": [...]},
+    {"category": "adjective", "entries": [...]},
+    {"category": "primary_intent", "entries": [...]},
+    {"category": "dimension_involvement", "entries": [...]}
+  ],
+  "global_visual_prior": {
+    "typical_subject_categories": [{"value": "person", "count": 320, "pct": 33.68}],
+    "shot_type_distribution": [...],
+    "scene_type_distribution": [...]
+  },
+  "pika_camera_distribution": [...],
+  "pika_motion_distribution": [...],
+  "dimension_priors": [
+    {
+      "dimension": "attribute_binding",
+      "display_name": "Subject Attribute Binding",
+      "sample_count": 120,
+      "coverage_pct": 12.63,
+      "concept_distributions": [...],
+      "visual_prior": {...},
+      "structural_templates": [...],
+      "seed_examples": [...],
+      "constraints": {...}
+    }
+  ],
+  "dimension_cooccurrence": {"attribute_binding×motion_binding": 5.26, ...}
+}
+```
+
+同时生成报告：
+- `summary.md`：人类可读的完整分析报告
+- `dataset_overview.csv`
+- `dimension_analysis_summary.csv`
+- `dimension_gap_analysis.csv`
+
+### 2.6 Step 1–5 与 Phase 1 增强的关系
+
+```
+Step 1-5（调硅基流动 API，产出原始解析 + 高频统计）
+    │
+    ├── image_parse.jsonl      ─┐
+    ├── text_parse.jsonl       ─┼── Phase 1 增强的输入
+    ├── manifest_clean.jsonl   ─┘
+    └── prior_package.json     ─── Phase 2 直接使用的先验
+            │
+            │  Phase 1 增强步骤（不调 API，纯规则补字段）
+            │  patch → align → refbank → priors2 → recipes → audit
+            │
+            └── candidate_recipes.jsonl ─── Phase 2 的唯一题目来源
+```
+
+Phase 1 增强步骤在 Step 1–5 基础上做的事：
+- **补齐 Step 2/3 没有的字段**：bbox 数值化、维度路由、防泄漏映射
+- **建立图文映射**：Step 2 和 Step 3 各自独立产出，Phase 1 的 align 步骤把两边的主体对齐
+- **进一步统计加工**：`priors_enhance` 在 Step 4/5 已有频率统计基础上，额外切分 head/torso/long_tail 三档、计算共现对、评估多图可行性
+- **打包为可采样配方**：Step 1–5 的产出是分散的 JSON 字段，Phase 1 的 recipes 步骤将其整合为 Phase 2 可直接消费的结构化 recipe
+
+---
+
+## 3. 工程结构
 
 ```
 tip_i2v_data_analysis/
@@ -31,7 +223,7 @@ tip_i2v_data_analysis/
 
 ---
 
-## 3. 模块调用关系
+## 4. 模块调用关系
 
 | 步骤 | 主脚本 | 依赖的内部模块（函数级） | 读取 | 写入 |
 |------|--------|------------------------|------|------|
@@ -56,7 +248,7 @@ tip_i2v_data_analysis/
 
 ---
 
-## 4. 七维度枚举定义
+## 5. 七维度枚举定义
 
 | 维度枚举值 | 评测目标 | 典型场景 |
 |-----------|---------|---------|
@@ -74,7 +266,7 @@ tip_i2v_data_analysis/
 
 ---
 
-## 5. 各模块技术原理
+## 6. 各模块技术原理
 
 ### 5.1 patch_existing_outputs — 字段补齐
 
@@ -522,7 +714,7 @@ for recipe in recipes:
 
 ---
 
-## 6. 全部产出文件结构
+## 7. 全部产出文件结构
 
 ```
 {output_dir}/
@@ -551,7 +743,7 @@ for recipe in recipes:
 
 ---
 
-## 7. 核心数据结构
+## 8. 核心数据结构
 
 ### AlignedSample（aligned_instances.jsonl 每行）
 
@@ -649,7 +841,7 @@ for recipe in recipes:
 
 ---
 
-## 8. 配置项
+## 9. 配置项
 
 `configs/config.yaml` 中 Phase 1 相关参数：
 
@@ -670,7 +862,7 @@ phase1:
 
 ---
 
-## 9. 运行方式
+## 10. 运行方式
 
 ```bash
 # 单步执行
@@ -687,7 +879,7 @@ python main.py --step phase1 --config configs/config.yaml
 
 ---
 
-## 10. 实现状态与扩展计划
+## 11. 实现状态与扩展计划
 
 **P0 已完成**：六个增强步骤全部实现并集成到 CLI，`--step phase1` 可一键顺序执行。
 

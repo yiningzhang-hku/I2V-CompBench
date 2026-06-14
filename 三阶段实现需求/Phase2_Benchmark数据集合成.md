@@ -163,10 +163,12 @@ build_quota → sample_recipes → build_question_plan → construct_inputs
 - `benchmark_dataset/quota_plan.json`：`QuotaPlan { mode, total_target, buckets: [QuotaBucket] }`。
 - 每个 `QuotaBucket` 含 `bucket_id / dimension / input_mode / subtype / difficulty / rarity / target_count / contrastive_pair_required`。
 
-**关键设计**
+**关键设计与底层原理**
 
-- 所有比例参数都进入 `quota_plan.json`，避免下游再读 yaml；后面的 sample / audit 直接 join `bucket_id`。
-- `target_count` 求和等于 `num_per_dimension × 7`（pilot=140、full=1400）。如果某维度 sub-ratio 本身求和不为 1，会被归一化后再分。
+- **为什么用最大余数法而不是四舍五入**：整数配额按比例切分时，简单四舍五入会让总和漂移（例如把 20 按 0.95/0.05 切，单纯舍入得到 19+1=20 看似没问题，但 20 按 0.6/0.3/0.1 切就会变成 12+6+2=20 与 12+6+2=20 时还行，遇到 0.33/0.33/0.34 就会出现 7+7+7=21 的越界）。最大余数法在每一级都先取整再把误差按"余数排序"分配，保证 `target_count` 求和精确等于 `num_per_dimension × 7`，下游 audit 才能用减法直接得到缺口。
+- **为什么把 bucket_id 提前固化到 quota_plan**：评测的真实分组键就是这五个维度，预先生成稳定主键让 sample / export / audit 都能用 join 串起来，不必每步重新算配额。下游模块只需理解"桶"这个概念，不必再读 yaml。
+- **为什么七维度共用 difficulty/rarity 但 input_mode_ratio 维度独立**：难度与稀有度是评测体系横向可比的统一概念，应当保持一致；而输入模式分布与维度本身的真实先验强耦合（view 95% 单图来自"运镜数据天然只有一张起始帧"，spatial 80% 多图来自"空间组合天然需要多个参照"），共用一份比例反而失真。
+- **为什么 motion 维度退化为 subtype 分桶**：motion 在 TIP-I2V 真实分布里的分类轴是 `type_a_absolute_single / type_b_relative_single / type_c_multi_motion`，并非 single/multi 二元。强行套 input_mode 会把"绝对位移单图"和"相对位移单图"挤进同一桶，违反 motion 边界规则（§2.3）。
 
 ### 4.2 `sample_recipes.py` — 在配额下从 Phase 1 真实候选里抽题
 
@@ -195,11 +197,13 @@ build_quota → sample_recipes → build_question_plan → construct_inputs
 - `benchmark_dataset/sampled_recipes.jsonl`：`SampledRecipe { recipe_id, bucket_id, contrastive_pair_id, contrastive_role, reference_asset_ids[] }`。
 - `benchmark_dataset/quota_unfilled_report.json`：每桶 `{ bucket_id, target, sampled, gap, reasons[] }`。
 
-**关键设计**
+**关键设计与底层原理**
 
-- **绝不绕过 Phase 1**：题目只能来自 candidate_recipes；缺口靠报告说明而不是降级。
-- **多图体检前置**：在抽样阶段就把素材不达标的 recipe 拦下，避免到 construct_inputs 才发现没图可用。
-- **A/B 配对原子化**：要么一起入选要么一起退出，避免下游 contrastive 评测时只剩半边。
+- **为什么绝不允许 Phase 2 自己拼词表**：benchmark 的可信度建立在"题目源自真实 I2V 分布"——一旦 Phase 2 用启发式拼出新组合，reviewer 的第一个质疑就是"你怎么证明这条题目对应真实用户场景"。让 candidate_recipes 成为唯一题源，每条样本都能反向追到一条 TIP 视频，省去整本论文里反复辩护"分布合理性"的成本。
+- **为什么阈值定在 quality_score ≥ 0.4 且 is_clean_background**：低质量素材会在 Phase 3 变成捷径——背景里残留杂物会让"看背景反推空间关系"成为模型的偷懒解法，模型即使没真做空间组合也能拿高分。把这层闸门放在抽样阶段（而不是 QC 阶段）是为了用最便宜的方式先剔除大批不可用 recipe，节省后续 T2I 与 VQA 调用。
+- **为什么多图至少 2 张达标**：multi_image 任务的本质是"组合多个独立线索"，1 张 reference 退化成单图任务，违背维度设计。这里硬卡比下游再降级更早、更便宜——construct_inputs 才发现少图时已经浪费了一次 question_plan 构建。
+- **为什么 A/B 必须原子化配对**：contrastive consistency 是论文里 anti-shortcut 的关键证据，需要"同一题型正反方向各跑一次"。如果只采到 A 没采到 B，这条数据在 contrastive 表里直接作废，比起多采几道无关题，"配对完整性"对评测意义更大。
+- **为什么缺口要分四类原因而不是只给一个 gap 数字**：reviewer 关心的不是"差几条"，而是"差在哪"——`no_candidate` 提示数据扩充方向，`no_reference_asset` 提示要补 Phase 1 资产，`quality_below_threshold` 提示要调阈值，`blocking_flag` 提示 Phase 1 patch 漏标。粒度化分类让缺口直接转成 actionable 的工单，而不是一句"补数据"。
 
 ### 4.3 `build_question_plan.py` — 把 recipe 翻译成可执行的题目计划
 
@@ -221,10 +225,14 @@ build_quota → sample_recipes → build_question_plan → construct_inputs
 
 - `benchmark_dataset/question_plans.jsonl`：每条 `QuestionPlan` 包含 question_id、recipe_id、维度五元组、`input_plan` / `target_plan` / `preserve_plan` / `dimension_isolation` / `evaluator_plan` / `prompt_draft`。
 
-**关键设计**
+**关键设计与底层原理**
 
-- **draft ≠ final**：这里产出的 prompt 仅用于占位与 QC 参考，最终 prompt 由 Step 4.6 看着真实首帧重写。
-- **evaluator_plan 必须填齐**：Phase 3 不再回头解析 prompt，所有 E/P/C 工具集合都在这一步定下来。
+- **为什么三层叠加且后者覆盖前者**：三个数据源各自承载不同语义——`image_parse` 给"图里实际有什么"（视觉真值），`aligned_instances` 给"文本指代到底绑到了哪个实例"（图文对齐），`text_parse` 给"用户到底想要什么变化"（意图）。后者覆盖前者体现一个原则："意图 > 对齐 > 现状"，最终 prompt 是为意图服务的，所以让 text 解析的字段拥有最高优先级。
+- **为什么 subtype 走三级回退而不是直接抛错**：模板库不可能枚举所有真实分布的 subtype 组合（例如某些罕见 subtype 在 pilot 里恰好没被 Phase 1 标出来），让 input_mode 一致即可，再不行退到该维度第一个可用 subtype。这种"宽松匹配"比"严格匹配整桶失败"更利于 pilot 跑通。
+- **为什么 question_id 用 DIM_SHORT + mode_short 而不是哈希**：人工排查时第一眼就能从 ID 看出维度与模式（`attr_multi_0001` 一眼就知道是属性绑定的多图题），比纯哈希 ID 友好；同时短前缀避免文件名超长，也方便按前缀做 grep / 分桶统计。
+- **为什么 prompt_pattern 渲染失败要回退到 base_prompt_draft 而不是丢弃**：渲染失败的真因往往是某个槽位缺值（例如 attribute_change_slots 没标全）。但 recipe 自带的 `base_prompt_draft` 已经是 Phase 1 用真实 caption 拼出的可读句子，留作兜底比让整道题失败更划算——QC 仍能跑、polish 仍能改写，只是 risk_flags 多一条 `template_render_failed` 提示人工抽查。
+- **为什么 evaluator_plan 必须在 Phase 2 落定**：如果 Phase 3 才反向解析自然语言 prompt 推工具集，会引入 NLU 误差且不可复现——同一道题在不同次评测里调用的工具栈可能不一样，分数也就不能横向比。把工具集合编码进 evaluator_plan 是把"评测目标"从自然语言搬到结构化字段，让 Phase 3 变成纯执行器。
+- **为什么 prompt_draft 不能直接当 final**：draft 是结构化模板渲染的产物，并未"看图说话"过。如果首帧实际状态与模板槽位有出入（例如模板写"a woman"，但首帧实际是"两个人，左边是女士"），prompt 与图就会错位。最终 prompt 必须经过 Step 4.6 的 VLM 描述对齐才能保证 prompt 与起始状态自洽。
 
 ### 4.4 `construct_inputs.py` — 把题目计划落实成真正的输入图像
 
@@ -251,10 +259,15 @@ build_quota → sample_recipes → build_question_plan → construct_inputs
 - `benchmark_dataset/images/`、`benchmark_dataset/references/`：实际图像文件。
 - `benchmark_dataset/input_assets_manifest.jsonl`：每行一个 question_id 对应的 `assets[]`，含 `asset_id / role / path / source_type / source_ref_id / quality`。
 
-**关键设计**
+**关键设计与底层原理**
 
-- **真实优先、合成兜底**：尽量用 Phase 1 真实素材保证视觉先验真实；T2I 仅作为缺口补救，避免合成图喧宾夺主。
-- **失败不阻断流水线**：T2I 客户端不可用时仅将该题标记，让 QC 统一处理，不在 construct 阶段抛异常。
+- **为什么用 _ROLE_TO_ASSET_TYPE 做间接映射**：题目语义层用 role（`target_subject` / `attribute_reference`），资产存储层用 asset_type（`subject` / `attribute` / `scene_reference_inpainted`）。两层 schema 各自演化（题目可能新增 role、资产库可能新增 type），中间留一张映射表能让任一层调整时不污染另一层；硬编码合并会导致一处改动牵连两套 schema。
+- **为什么单图直接复用 TIP 首帧而不是合成**：这是 benchmark 真实性的根基——单图任务的"起始状态"应当是真实视频的首帧，否则评测的就不是"模型对真实首帧的处理能力"，而是"模型对合成首帧的处理能力"，与论文论点错位。Phase 1 已经付出代价做过 manifest 清洗，没必要在这里推倒重来。
+- **为什么同角色多候选挑 quality_score 最高**：quality_score 是 Phase 1 综合 bbox 面积、可见度、完整度算出的代理指标，已经融合了多个质量信号；用它做启发式比"随机选一张"或"按时间序选最早"都更稳定，且无额外计算成本。
+- **为什么链式回退顺序是 tip → t2i → external**：三级递降的不是只看"清洁度"，更重要的是"reviewer 可审计度"——TIP 资产可追溯到原视频帧（最强）、T2I 可追溯到 prompt+seed（中等）、external 需要单独的 provenance 字段（最弱）。把审计成本作为优先级权重，而不是单纯的视觉质量。
+- **为什么 long_edge=1024 + PNG**：1024 是大多数 I2V 模型（Stable Video Diffusion / CogVideoX / Sora-class）的训练分辨率默认值，再大会让 Phase 3 推理开销陡增；PNG 无损保存避免 JPEG 在边缘产生 ringing 伪影——这些伪影会干扰 grounding 评测器的边缘检测，让 P 评分受 codec 噪声影响。
+- **为什么 T2I 失败不抛异常**：流水线 8 步，任意一步在单题失败如果中断会让上游全部白跑。让 QC 统一裁决，整体吞吐更稳；T2I API 偶尔挂掉时也不至于让整个 batch 报废。
+- **为什么把 quality 元数据存进 manifest 而不是临时计算**：QC（Step 4.5）和 export（Step 4.7）都要消费这些字段，存一次比每步重算更稳定，也避免不同步骤算法略有差异导致同一字段两次算出不同结果。
 
 ### 4.5 `verify_inputs.py` — 用结构化 VQA 给输入图把关
 
@@ -284,10 +297,14 @@ build_quota → sample_recipes → build_question_plan → construct_inputs
 - `benchmark_dataset/qc_reports/{question_id}.json`：`QCReport { question_id, qc_status, checks[], risk_flags }`。
 - `benchmark_dataset/qc_failed_to_retry.jsonl`、`benchmark_dataset/manual_review_queue.jsonl`。
 
-**关键设计**
+**关键设计与底层原理**
 
-- **soft check 不否决**：低置信度只触发人工复核，避免 VLM 抖动直接误杀样本。
-- **HARD_CHECK 集中维护**：所有阻断项集中在 `_HARD_CHECK_NAMES`，模板只要复用名字就自动获得阻断语义，不必在每个模板里重复声明。
+- **为什么用 VLM 而不是规则匹配**：题目合规性是语义级判断（"主体是否还静止"、"目标属性是否还没出现"），传统 CV 规则无法覆盖；VLM 是当前能给出语义级判定的最低成本工具。手写检测器既覆盖不全也维护不动。
+- **为什么 confidence ≥ 0.7 才算 fail**：VLM 在边界样本上有抖动，单次低置信度的"否"很可能是模型不自信而非真否决。卡在 0.7 把"明确否决"（≥0.7 的 False）与"模糊判断"（<0.7）分开——前者直接进 retry，后者进人工，两者用不同的处理成本对应不同确定度。
+- **为什么 < 0.7 直接进人工而不是再 retry**：retry 的本质是换一张图重新构造，但 VLM 不确定的题目即使换图也大概率再次抖动；让人裁决一次的边际成本，比反复跑 VLM API 既便宜又终局。
+- **为什么 HARD_CHECK 集中在 `_HARD_CHECK_NAMES` 常量而不是分散在模板**："哪些 check 一票否决"是评测设计的一等决策，模板作者不应能随意提升某个 check 的权重——否则不同维度的"严格度"会随作者风格漂移。集中常量也避免拼写错误造成静默退化（模板里把 hard check 写错名字，原本应阻断的就被默认软处理）。
+- **为什么有 `no_target_attribute_already` / `no_action_already_in_progress` 这类反向检查**：这些是防"题目自我作弊"——如果首帧已经包含目标终态，模型完全静止也能在 E 评分里拿满分。这种"起始即终态"的样本必须从源头剔除，否则 Static Copy baseline 会跟正常模型并列高分，anti-shortcut 实验直接破产。
+- **为什么 needs_manual_review 默认不进 Phase 3**：multi-image 维度本来就稀缺，但与其放进去拉低评测可信度，不如等人裁决。论文 reviewer 关心的是"你过滤了多少（怎么保证质量）"，而不是"你保留了多少（怎么凑数）"，所以默认走严格路径。
 
 ### 4.6 `finalize_prompts.py` — 看着真实首帧把 prompt 写定
 
@@ -311,10 +328,14 @@ build_quota → sample_recipes → build_question_plan → construct_inputs
 
 - `benchmark_dataset/prompts/final_prompts.jsonl`：`FinalPromptEntry { question_id, i2v_prompt, polish_attempts, used_fallback, vlm_caption }`。
 
-**关键设计**
+**关键设计与底层原理**
 
-- **看图说话**：先读首帧再写 prompt，避免 prompt 与实际起始状态错位。
-- **draft 作为安全网**：极端失败也能拿到一条不犯禁的 prompt，保证 export 不掉数据。
+- **为什么先 VLM caption 再 LLM polish 两步分工**：VLM 负责"看图说话"提供视觉锚点，LLM 负责"按目标改写"做语言润色。合并到一步让 VLM 直接出 prompt 会让结构化约束（forbidden_words、字数、reference 指代）很难管控——VLM 优于看图但弱于遵循复杂格式约束，LLM 反之，分工各取所长。
+- **为什么强制 LLM 返回 JSON 而不是裸文本**：裸文本下 LLM 经常自作主张加引号、解释、emoji 或 markdown 标题；JSON 强约束让解析端能严格校验；同时保留 `reasoning` 字段以便事后审查"模型为什么这么改"，调试 polish 失败比直接看 prompt 输出更高效。
+- **为什么解析需要 fenced ``` + 括号扫描双层兜底**：LLM 即使被强制要求输出纯 JSON，也常把它包在 markdown 代码块里、或在 JSON 前后加注释。双层解析（先剥 fenced，再扫描第一对配平的大括号）让 polish 不会因为格式细节白费一次 API 调用——单次 LLM 调用成本不低，能解析就尽量解析。
+- **为什么字数定 8–25 / interaction 30**：TIP-I2V 真实 prompt 中位数在 12 词左右，8–25 覆盖了约 80% 的真实分布；interaction 题需要描述"主体 A + 主体 B + 因果链"，强行压到 25 词会丢信息（例如把"the man hands the cup to the woman"压到"man hands cup"会让 evaluator 无法定位 woman 角色），所以专门放宽到 30 词。
+- **为什么禁词命中即重写而不是软警告**：dimension_isolation 是评测可信度的最后防线——motion 题里出现 "pan" 会让模型用相机平移伪装主体位移，spatial 题里出现 "move" 会让 spatial 与 motion 失去边界，论文 §2.3 / §2.4 的硬规则在这里落地。让禁词命中变成强制重写，是把维度边界从设计文档落到可执行约束。
+- **为什么 fallback 仍允许 export**：流水线已经把 QC 通过的样本送到这一步，如果因为 polish 失败丢弃整题会让上游 4 步白费。标记 `prompt_polish_fallback` 让审计层（Step 4.8）能统计 fallback 比例并触发后续修复——比起静默丢数据，留痕的质量警示更利于持续改进。
 
 ### 4.7 `export_dataset.py` — 四源 join 出最终数据集
 
@@ -342,10 +363,14 @@ build_quota → sample_recipes → build_question_plan → construct_inputs
 - `benchmark_dataset/samples/{dimension}.jsonl` × 7。
 - `benchmark_dataset/phase3_manifest.jsonl`：Phase 3 唯一入口。
 
-**关键设计**
+**关键设计与底层原理**
 
-- **worst-case 聚合**：多图质量取最差边界，避免一张糟糕参考被另外两张漂亮的掩盖。
-- **manifest 与 samples 一致**：行数严格相等，是 Step 4.8 的关键校验项。
+- **为什么以 question_id 落盘 join 而不是内存串接**：四个上游模块各自独立写 jsonl，如果靠内存对象串接，一旦中间任何一步崩溃就要从头重跑。落盘 + 文件 join 是流水线最稳的串接方式——任何一步失败都可以单独重跑该步，前后产物保留可复查。
+- **为什么三重门控（pass + 非空 prompt + 非空 manifest）**：三种空值各自代表不同的失败模式——`qc_status≠pass` 是质量否决，`i2v_prompt 空` 是 polish 失败且未 fallback（理论上不应发生，是兜底），`manifest 空` 是构图失败。任何一项缺失都会让 Phase 3 报错，三重门控能在 export 阶段就把这些样本滤掉，比让 Phase 3 模型跑完才发现问题节省至少一个量级的算力。
+- **为什么多图质量按 worst-case 聚合**：评测可信度的关键是"任何一张参考的弱点都会被模型利用"——三张参考里有一张背景脏，模型可能就靠那张背景做空间推断；最高/平均聚合会掩盖这种风险。worst-case 标记最保守，让 audit 能精准识别出"看似合格但有薄弱点"的多图样本。
+- **为什么 phase3_manifest 是 BenchmarkSample 的视图而不是独立结构**：保证两份产物 schema 同源——manifest 字段调整时直接从 Sample 派生，不会出现"加了字段但忘了同步 manifest"的下游事故。如果用独立 schema，schema drift 是迟早的事。
+- **为什么按 dimension 分文件而不是单一大文件**：Phase 3 评测器是按维度调度的（Step 5 `evaluators/{dimension}.py`），分文件让"只跑某维度"成为零开销操作（直接读对应 jsonl），不必每次过滤；论文统计也需要按维度切片，分文件让 wc -l 就能统计每维度规模。
+- **为什么 source_trace 必带 phase1_sample_ids 与 phase1_asset_ids**：reviewer 一抽样就要能回到 TIP 原视频与原资产去验证"这道题确实源自真实分布"。这是 benchmark "可审计性" 的硬性要求——少了任何一个 ID，"从样本反查 provenance"的链条就断了。
 
 ### 4.8 `audit_phase2.py` — 出货前的最后体检与数据卡
 
@@ -366,10 +391,12 @@ build_quota → sample_recipes → build_question_plan → construct_inputs
 
 - `benchmark_dataset/dataset_card.md`：六节统计 + 风险摘要 + 验收清单。
 
-**关键设计**
+**关键设计与底层原理**
 
-- **不修复，只报告**：audit 阶段不动数据，只生成数据卡，让人决定是否放行进 Phase 3。
-- **dataset_card.md 即论文素材**：六节统计直接对应论文 §dataset 的图表。
+- **为什么单独做 audit 而不在 export 里顺便校验**：审计是"独立见证人"角色——审计逻辑与导出逻辑共用代码会让 bug 互相隐藏（同一个错误的字段在两边都按错误规则处理仍能"自洽"通过）。分离两者才能在自检失败时给出可信信号，类似软件工程里的 "test code 不复用 production code 的私有函数"。
+- **为什么 audit 不自动修复**：自动修复的本质是"猜测意图"，但每类缺口背后的根因不同——配额缺口可能是因为 Phase 1 数据不够（要补料）、可能是阈值太严（要调参）、也可能是某个上游 step 有 bug（要 debug）。把决策权留给人，比让脚本"按某个默认策略修复"安全得多。
+- **为什么六类校验缺一不可**：六个维度对应六类风险——行数对应"完整性"、配额 gap 对应"代表性"、维度统计对应"均衡性"、contrastive 配对对应"实验设计完整性"、质量直方图对应"评测可信度"、QC 直方图对应"成本可控性"。漏掉任何一项都会在 Phase 3 暴露成问题（例如漏 contrastive 校验，到 Phase 3 跑完才发现 anti-shortcut 表算不出来）。
+- **为什么 dataset_card.md 用 Markdown 而不是 JSON**：论文素材直接 copy/paste，CI 可读，git diff 友好；JSON 适合机器消费但不适合人审阅。审计输出的主要受众是项目 owner 与论文作者，Markdown 是这个语境下最合适的载体；机器需要的关键数据由 export 阶段已经提供。
 
 ---
 
