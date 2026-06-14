@@ -138,307 +138,238 @@ data/benchmark_dataset/
 
 ## 4. 模块详细规格
 
-### 4.1 Module: `build_quota.py`
+Phase 2 由 8 个模块串成单向流水线，前一步的输出就是后一步的输入。下面按执行顺序逐个模块说明：**喂进去什么、内部做了什么、产出什么、关键设计取舍**。
 
-功能：
-
-- 生成七维度配额表。
-- 支持 full 与 pilot 两种模式。
-
-默认 full：
-
-```yaml
-num_per_dimension: 200
-rarity:
-  common: 0.8
-  rare: 0.2
-difficulty:
-  easy: 0.4
-  medium: 0.4
-  hard: 0.2
-input_mode_ratio:
-  attribute_binding: {single_image: 0.6, multi_image: 0.4}
-  action_binding: {single_image: 0.6, multi_image: 0.4}
-  motion_binding:
-    type_a_absolute_single: 0.5
-    type_b_relative_single: 0.35
-    type_c_multi_motion: 0.15
-  spatial_composition: {single_image: 0.2, multi_image: 0.8}
-  background_dynamics: {single_image: 0.6, multi_image: 0.4}
-  view_transformation: {single_image: 0.95, multi_image: 0.05}
-  interaction_reasoning: {single_image: 0.5, multi_image: 0.5}
+```text
+build_quota → sample_recipes → build_question_plan → construct_inputs
+            → verify_inputs → finalize_prompts → export_dataset → audit_phase2
 ```
 
-输出 `quota_plan.json`。
+### 4.1 `build_quota.py` — 把抽象配额拆成可执行的桶
 
-验收：
+**输入**
 
-- full 总数 = 1400。
-- pilot 可配置，比如每维度 20。
-- 所有 dimension/input_mode/subtype 都有明确 count。
+- `configs/phase2.yaml`：`mode`（pilot / full）、`num_per_dimension`（pilot=20、full=200）、`input_mode_ratio` / `subtype_ratio` / `difficulty_ratio` / `rarity_ratio`。
 
-### 4.2 Module: `sample_recipes.py`
+**处理**
 
-功能：
+1. 对每个维度依次按四级分裂：`mode → subtype → difficulty → rarity`。
+2. 每级用最大余数法 `_round_split` 把整数配额按比例分到子桶，保证总和不漂、误差落在余数最大的几个桶上。
+3. 七维度共用同一份 `difficulty_ratio` / `rarity_ratio`，但 `input_mode_ratio` 与 `subtype_ratio` 按维度独立配置。
+4. 每个叶节点拼出 `bucket_id = {dim}__{mode}__{difficulty}__{rarity}`；motion 维度因为只有 subtype 概念，bucket_id 退化为 `{dim}__{subtype}__{difficulty}__{rarity}`。
 
-- 根据 quota 从 `candidate_recipes.jsonl` 采样。
-- **不允许绕过 Phase 1 随机拼词表**。
+**输出**
 
-采样过滤：
+- `benchmark_dataset/quota_plan.json`：`QuotaPlan { mode, total_target, buckets: [QuotaBucket] }`。
+- 每个 `QuotaBucket` 含 `bucket_id / dimension / input_mode / subtype / difficulty / rarity / target_count / contrastive_pair_required`。
 
-- dimension 匹配。
-- input_mode/subtype 匹配。
-- difficulty/rarity 匹配。
-- evaluator_requirements 可满足。
-- quality_flags 不含 blocking issue。
-- 多图样本 reference requirements 可被 reference_bank 满足。
+**关键设计**
 
-输出 `sampled_recipes.jsonl`。
+- 所有比例参数都进入 `quota_plan.json`，避免下游再读 yaml；后面的 sample / audit 直接 join `bucket_id`。
+- `target_count` 求和等于 `num_per_dimension × 7`（pilot=140、full=1400）。如果某维度 sub-ratio 本身求和不为 1，会被归一化后再分。
 
-验收：
+### 4.2 `sample_recipes.py` — 在配额下从 Phase 1 真实候选里抽题
 
-- 每个配额桶缺口要写入 `quota_unfilled_report.json`。
-- 不得静默降级 input_mode。
+**输入**
 
-### 4.3 Module: `build_question_plan.py`
+- `quota_plan.json`（Step 4.1）。
+- Phase 1 的 `candidate_recipes.jsonl`（唯一题源）和 `assets.jsonl`（多图素材）。
 
-功能：
+**处理**
 
-- 将 recipe 转成结构化 `QuestionPlan`。
-- 匹配模板，生成 draft prompt 与 evaluator metadata。
+1. **建索引**：把 candidate_recipes 按 `(dimension, input_mode/subtype, difficulty, rarity)` 桶化；assets 按 `asset_id` 建查找表。
+2. **基础过滤**：剔除带阻断标志的 recipe，阻断集合为 `_BLOCKING_QUALITY_FLAGS = {"low_alignment", "missing_inpainted_scene", "subject_not_visible", "evaluator_infeasible"}`。
+3. **多图体检**：对 `input_mode=multi_image` 或 motion 的 `_MULTI_IMAGE_SUBTYPES = {"type_c_multi_motion"}`，逐条校验每个 `reference_asset_id`：
+   - 资产存在且 `quality_score ≥ 0.4`；
+   - 该资产 `is_clean_background=True`（避免引入背景泄漏）；
+   - 至少 2 个有效 reference，否则该 recipe 进 `quality_below_threshold` 缺口。
+4. **配额抽样**：每个桶按 `target_count` 抽样，contrastive 桶要按 `source_sample_id` 分组成对消费 A/B（落单时降级为 `A_only`，并在缺口报告里记 `contrastive_unpaired`）。
+5. **缺口诊断**：四类原因写入 `quota_unfilled_report.json`：
+   - `no_candidate`：桶里根本没有匹配 recipe；
+   - `no_reference_asset`：多图 recipe 但没绑定足量资产；
+   - `quality_below_threshold`：资产 quality_score 或 clean_background 不达标；
+   - `blocking_flag`：所有候选都被 quality_flags 阻断。
 
-`QuestionPlan` schema：
+**输出**
 
-```json
-{
-  "question_id": "attr_multi_0001",
-  "recipe_id": "recipe_attr_0081",
-  "dimension": "attribute_binding",
-  "input_mode": "multi_image",
-  "subtype": "attribute_transfer",
-  "difficulty": "medium",
-  "semantic_rarity": "common",
-  "contrastive_pair_id": "attr_pair_0001",
-  "contrastive_role": "A",
-  "input_plan": {
-    "required_images": [
-      {"role": "target_subject", "description": "a woman"},
-      {"role": "attribute_reference", "description": "a red jacket"}
-    ],
-    "source_preference": ["tip_derived_reference", "t2i_generated"]
-  },
-  "target_plan": {
-    "target_subject": "ref:target_subject",
-    "operation": "wear_attribute",
-    "attribute_source": "ref:attribute_reference",
-    "expected_final_state": "the woman wears the red jacket"
-  },
-  "preserve_plan": [
-    {"scope": "target_identity", "constraint": "preserve"},
-    {"scope": "background", "constraint": "stable"}
-  ],
-  "dimension_isolation": {
-    "forbidden_words": ["pan", "zoom", "move left"],
-    "camera_constraint": "fixed"
-  },
-  "evaluator_plan": {
-    "E_target": "red jacket appears on target woman",
-    "P_constraints": ["identity preserved", "no unrelated clothing changes"],
-    "C_criteria": ["no flicker", "stable wearing state"],
-    "tools": ["grounding", "segmentation", "vlm", "clip"]
-  },
-  "prompt_draft": "The woman wears the red jacket from the reference image."
-}
-```
+- `benchmark_dataset/sampled_recipes.jsonl`：`SampledRecipe { recipe_id, bucket_id, contrastive_pair_id, contrastive_role, reference_asset_ids[] }`。
+- `benchmark_dataset/quota_unfilled_report.json`：每桶 `{ bucket_id, target, sampled, gap, reasons[] }`。
 
-验收：
+**关键设计**
 
-- 每个 QuestionPlan 必须有 target_plan、preserve_plan、evaluator_plan。
-- dimension_isolation 不得为空。
+- **绝不绕过 Phase 1**：题目只能来自 candidate_recipes；缺口靠报告说明而不是降级。
+- **多图体检前置**：在抽样阶段就把素材不达标的 recipe 拦下，避免到 construct_inputs 才发现没图可用。
+- **A/B 配对原子化**：要么一起入选要么一起退出，避免下游 contrastive 评测时只剩半边。
 
-### 4.4 Module: `construct_inputs.py`
+### 4.3 `build_question_plan.py` — 把 recipe 翻译成可执行的题目计划
 
-功能：
+**输入**
 
-- 为 QuestionPlan 构建最终输入图像。
-- single image 可使用 TIP 首帧、T2I 生成首帧或外部真实图。
-- multi image 使用 reference_bank 或 T2I 补足。
+- `sampled_recipes.jsonl`（Step 4.2）。
+- Phase 1 的 `image_parse_v2.jsonl` / `text_parse_v2.jsonl` / `aligned_instances.jsonl`，提供主体、属性、关系、几何等结构化槽位。
+- `configs/templates/{dimension}.yaml` 模板库（见 §6 模板格式）。
 
-输出：
+**处理**
 
-- `images/` 与 `references/`
-- `input_assets_manifest.jsonl`
+1. **三层槽位融合**：按 `image_parse → aligned_instances → text_parse` 顺序叠加，后者覆盖前者，得到一份维度专属的 `slot_dict`（subjects / attributes / relations / camera_baseline 等）。
+2. **subtype 解析**：优先用 recipe 上显式声明的 subtype；缺失时按 `input_mode` 在模板库 `subtypes` 列表里匹配（如 `multi_image → attribute_transfer`），再缺就退到该维度第一个可用 subtype。
+3. **question_id 生成**：`{dim_short}_{mode_short}_{seq:04d}`，其中 `DIM_SHORT` 把长维度名缩成 attr / action / motion / spatial / bg / view / inter；`mode_short` 是 single / multi。
+4. **模板渲染**：用 `prompt_pattern`（Jinja-like）渲染 `prompt_draft`；若槽位缺失导致渲染失败，回退到 recipe 自带的 `base_prompt_draft`，并在 risk_flags 里记 `template_render_failed`。
+5. **结构化字段填充**：从模板拷贝 `target_plan / preserve_plan / dimension_isolation / evaluator_plan`，把里面的槽位占位符替换成实际值（`ref:target_subject` 之类指代保持原样，等 Step 4.4 落实到 asset_id）。
 
-`InputAsset` schema：
+**输出**
 
-```json
-{
-  "question_id": "spatial_multi_0001",
-  "assets": [
-    {
-      "asset_id": "asset_001",
-      "role": "object_reference",
-      "path": "data/benchmark_dataset/references/spatial_multi_0001_cat.png",
-      "source_type": "tip_derived_reference",
-      "source_ref_id": "tip_000001_s1_masked",
-      "quality": {
-        "identity_visibility": "high",
-        "crop_leakage_risk": "low",
-        "resolution_ok": true
-      }
-    }
-  ]
-}
-```
+- `benchmark_dataset/question_plans.jsonl`：每条 `QuestionPlan` 包含 question_id、recipe_id、维度五元组、`input_plan` / `target_plan` / `preserve_plan` / `dimension_isolation` / `evaluator_plan` / `prompt_draft`。
 
-验收：
+**关键设计**
 
-- multi_image 样本至少 2 张输入图。
-- 所有 input assets 有 role 和 source_trace。
-- reference quality 不达标则重采样。
+- **draft ≠ final**：这里产出的 prompt 仅用于占位与 QC 参考，最终 prompt 由 Step 4.6 看着真实首帧重写。
+- **evaluator_plan 必须填齐**：Phase 3 不再回头解析 prompt，所有 E/P/C 工具集合都在这一步定下来。
 
-### 4.5 Module: `verify_inputs.py`
+### 4.4 `construct_inputs.py` — 把题目计划落实成真正的输入图像
 
-功能：
+**输入**
 
-- 结构化 VQA/QC。
-- 检查输入是否满足题目计划。
+- `question_plans.jsonl`（Step 4.3）。
+- Phase 1 的 `manifest_clean.jsonl`（首帧路径）、`assets.jsonl`（参考资产）、`reference_bank/{asset_type}/*.jpg`。
 
-QC 输出：
+**处理**
 
-```json
-{
-  "question_id": "spatial_multi_0001",
-  "qc_status": "pass",
-  "checks": [
-    {"name": "has_exactly_one_cat_reference", "answer": true, "confidence": 0.92},
-    {"name": "scene_has_enough_space", "answer": true, "confidence": 0.81}
-  ],
-  "risk_flags": []
-}
-```
+1. **角色 → 资产类型映射**：用 `_ROLE_TO_ASSET_TYPE` 把 `target_subject → subject`、`attribute_reference → attribute`、`scene_reference → scene_reference_inpainted | scene_reference_original` 等。
+2. **首帧（single_image）**：直接复用 Phase 1 manifest 中 source_sample 对应的 `image_path`，不重新生成。
+3. **多图参考（multi_image）**：按 recipe 的 `reference_asset_ids` 取资产；若同一角色有多个候选，挑 `quality_score` 最高的那个。
+4. **`source_preference` 链式回退**：模板里的优先序是 `tip_derived_reference → t2i_generated → external`：
+   - 优先从 reference_bank 拿真实 crop；
+   - 缺位时调用 `Phase2SiliconFlowClient.call_t2i`（Kwai-Kolors/Kolors，1024×1024）按角色描述合成；
+   - T2I 失败则在 `quality.notes` 写 `t2i_generated` 或 `t2i_failed`，由 QC 决定是否丢弃。
+5. **统一规格化**：所有图像用 PIL resize 到 `long_edge=1024`，保持宽高比，统一存为 PNG。
+6. **路径约定**：单图首帧 `images/{question_id}.png`；多图参考 `references/{question_id}__{role}.png`。
+7. **资产质量元数据**：每张图记录 `identity_visibility / crop_leakage_risk / resolution_ok`，这些字段在 QC 与最终多图聚合中被反复消费。
 
-必检项：
+**输出**
 
-- 主体数量。
-- 属性/状态可见性。
-- 多图每张 reference 是否单一清楚。
-- crop/background leakage。
-- 场景容量和深度线索。
-- 起始状态是否没有提前泄露终态。
+- `benchmark_dataset/images/`、`benchmark_dataset/references/`：实际图像文件。
+- `benchmark_dataset/input_assets_manifest.jsonl`：每行一个 question_id 对应的 `assets[]`，含 `asset_id / role / path / source_type / source_ref_id / quality`。
 
-验收：
+**关键设计**
 
-- 只有 `qc_status=pass` 可进入 final dataset。
-- `needs_manual_review` 不进入 Phase 3 manifest，除非人工确认。
+- **真实优先、合成兜底**：尽量用 Phase 1 真实素材保证视觉先验真实；T2I 仅作为缺口补救，避免合成图喧宾夺主。
+- **失败不阻断流水线**：T2I 客户端不可用时仅将该题标记，让 QC 统一处理，不在 construct 阶段抛异常。
 
-### 4.6 Module: `finalize_prompts.py`
+### 4.5 `verify_inputs.py` — 用结构化 VQA 给输入图把关
 
-功能：
+**输入**
 
-- 根据通过 QC 的实际输入定稿 I2V prompt。
-- 执行禁词和长度检查。
+- `question_plans.jsonl`、`input_assets_manifest.jsonl`、对应的 PNG 图像。
+- `configs/templates/{dimension}.yaml` 中每个 subtype 声明的 `qc_checks[]`（每条 check 含 `name / question / hard_check`）。
 
-要求：
+**处理**
 
-- prompt 使用英文。
-- 8 到 25 词为主，复杂 interaction 可略长。
-- 明确 reference role。
-- 不混入非目标维度。
-- 多图 reference 指代稳定，例如 image 1 / image 2 / reference jacket。
+1. **逐题逐项跑 VQA**：对每张输入图，按模板里的 `qc_checks` 顺序调用 `Phase2SiliconFlowClient.call_vqa_structured`，模型返回 `{answer: bool, confidence: float, rationale: str}`。
+2. **HARD_CHECK 名单**：`_HARD_CHECK_NAMES` 含 11 项强制检查：
+   - `has_target_subject_visible / single_target_subject / all_required_subjects_visible`
+   - `target_subject_static / no_action_already_in_progress / no_motion_blur_present`
+   - `interaction_not_yet_started / no_target_attribute_already`
+   - `scene_has_subject_room / resolution_ok` 等。
+3. **三态聚合 `_aggregate_status`**：
+   - 任何 hard_check 返回 `answer=False` 且 `confidence ≥ 0.7` → `fail`；
+   - 任何 check `confidence < 0.7` → `needs_manual_review`；
+   - 全部通过 → `pass`。
+4. **双队列分流**：
+   - `fail` 写入 `qc_failed_to_retry.jsonl`，由配置控制是否触发 Step 4.4 重采资产；
+   - `needs_manual_review` 写入 `manual_review_queue.jsonl`，等待人工裁决，**默认不入 Phase 3**。
 
-输出 `final_prompts.jsonl`。
+**输出**
 
-### 4.7 Module: `export_dataset.py`
+- `benchmark_dataset/qc_reports/{question_id}.json`：`QCReport { question_id, qc_status, checks[], risk_flags }`。
+- `benchmark_dataset/qc_failed_to_retry.jsonl`、`benchmark_dataset/manual_review_queue.jsonl`。
 
-功能：
+**关键设计**
 
-- 汇总 QuestionPlan、InputAsset、QC、prompt。
-- 导出 `BenchmarkSample` 和 `phase3_manifest.jsonl`。
+- **soft check 不否决**：低置信度只触发人工复核，避免 VLM 抖动直接误杀样本。
+- **HARD_CHECK 集中维护**：所有阻断项集中在 `_HARD_CHECK_NAMES`，模板只要复用名字就自动获得阻断语义，不必在每个模板里重复声明。
 
-`BenchmarkSample` schema：
+### 4.6 `finalize_prompts.py` — 看着真实首帧把 prompt 写定
 
-```json
-{
-  "question_id": "motion_B_0042",
-  "dimension": "motion_binding",
-  "input_mode": "single_image",
-  "subtype": "relative_displacement",
-  "difficulty": "medium",
-  "semantic_rarity": "common",
-  "contrastive_pair_id": "motion_pair_021",
-  "contrastive_role": "A",
-  "input_images": [
-    {
-      "path": "data/benchmark_dataset/images/motion_B_0042.png",
-      "role": "first_frame",
-      "asset_id": "asset_001"
-    }
-  ],
-  "i2v_prompt": "The red ball moves to the right side of the blue box.",
-  "metadata": {
-    "target_subjects": [
-      {"id": "s1", "description": "red ball"}
-    ],
-    "reference_subjects": [
-      {"id": "s2", "description": "blue box"}
-    ],
-    "expected_change": {
-      "type": "relative_displacement",
-      "target_relation": "right_of"
-    },
-    "preserve_constraints": [
-      {"scope": "s2", "constraint": "appearance_and_position"},
-      {"scope": "background", "constraint": "stable"}
-    ],
-    "evaluator_hints": {
-      "tools": ["grounding", "segmentation", "tracking", "flow"],
-      "primary_metric": "relative_displacement"
-    }
-  },
-  "source_trace": {
-    "recipe_id": "recipe_motion_0091",
-    "source_type": "observed_single_image",
-    "phase1_sample_ids": ["tip_000918"]
-  },
-  "qc": {
-    "status": "pass",
-    "risk_flags": []
-  }
-}
-```
+**输入**
 
-Multi-image supplement：
+- `question_plans.jsonl`、`qc_reports/`、`input_assets_manifest.jsonl`、首帧 PNG。
+- 模板 `prompts/prompt_polish.txt`。
+- `Phase2SiliconFlowClient`（VLM 描述 + LLM 改写）。
 
-```json
-{
-  "input_mode": "multi_image",
-  "reference_assets": [
-    {"asset_id": "asset_001", "role": "target_subject"},
-    {"asset_id": "asset_002", "role": "scene_reference"}
-  ],
-  "multi_reference_quality": {
-    "crop_leakage_risk": "low",
-    "scene_leakage_risk": "medium",
-    "identity_visibility": "high",
-    "scale_compatibility": 0.82
-  }
-}
-```
+**处理**（仅处理 `qc_status=pass` 的题目）
 
-验收：
+1. **VLM 描述首帧**：调用 VLM 把首帧描述成中性 caption，作为定稿时的视觉锚点。
+2. **LLM polish**：把 caption + question_plan 的 `target_plan / preserve_plan / dimension_isolation` 拼进 `prompt_polish.txt`，要求模型返回 JSON：`{i2v_prompt, reasoning}`。
+3. **解析与校验**：先剥 fenced ``` 代码块再做括号扫描提取 JSON；然后对 `i2v_prompt` 做：
+   - **禁词检查**：命中 `dimension_isolation.forbidden_words` 任一词即失败；
+   - **字数检查**：常规维度 8–25 词，`interaction_reasoning` 放宽到 30 词；
+   - **指代检查**：多图必须能解析出 `image 1 / image 2` 或 `the reference X` 这类显式角色指代。
+4. **重试与回退**：最多尝试 N 次（`polish_attempts` 字段记录次数），仍不合格则回退到 `prompt_draft`，并在 `risk_flags` 加 `prompt_polish_fallback`。
 
-- `phase3_manifest.jsonl` 与 samples 数量一致。
-- 每条样本都有 E/P/C 所需 metadata。
-- 每条 multi_image 样本都有 reference_assets 与 quality。
+**输出**
 
-### 4.8 Module: `audit_phase2.py`
+- `benchmark_dataset/prompts/final_prompts.jsonl`：`FinalPromptEntry { question_id, i2v_prompt, polish_attempts, used_fallback, vlm_caption }`。
 
-功能：
+**关键设计**
 
-- 校验 benchmark_dataset/ 完整性。
-- 统计每维度 / input_mode / subtype 的实际产出数量与 quota 缺口。
-- 输出 `dataset_card.md` 与质检摘要。
+- **看图说话**：先读首帧再写 prompt，避免 prompt 与实际起始状态错位。
+- **draft 作为安全网**：极端失败也能拿到一条不犯禁的 prompt，保证 export 不掉数据。
+
+### 4.7 `export_dataset.py` — 四源 join 出最终数据集
+
+**输入**
+
+- `question_plans.jsonl`、`input_assets_manifest.jsonl`、`qc_reports/*.json`、`final_prompts.jsonl`。
+
+**处理**
+
+1. **四源 join**：以 `question_id` 为主键，把 question_plan、input_assets、qc_report、final_prompt 内连接。
+2. **门控筛选**：仅保留 `qc_status=pass` 且有非空 `i2v_prompt` 且 manifest 非空的样本。
+3. **多图质量聚合 `_aggregate_multi_quality`**（worst-case 策略）：
+   - `crop_leakage_risk` 取所有 reference 中的最大值（最差）；
+   - `identity_visibility` 取最小值（最弱）；
+   - `scale_compatibility` 由 bbox 面积比换算后取最小。
+4. **拼装 BenchmarkSample**：
+   - 维度五元组直接搬；`input_images[]` 来自 manifest；`i2v_prompt` 来自 final_prompts；
+   - `metadata` 由 question_plan 的 target/preserve/evaluator_plan 翻译而来；
+   - `source_trace` 含 `recipe_id / source_type / phase1_sample_ids / phase1_asset_ids`，全程可追溯到 TIP 原始首帧；
+   - `qc.status / qc.risk_flags` 直接从 QCReport 拷贝。
+5. **分维度落盘**：按 dimension 写到 `samples/{dimension}.jsonl`（共 7 个文件），同时把每条样本的精简版本写入 `phase3_manifest.jsonl`。
+
+**输出**
+
+- `benchmark_dataset/samples/{dimension}.jsonl` × 7。
+- `benchmark_dataset/phase3_manifest.jsonl`：Phase 3 唯一入口。
+
+**关键设计**
+
+- **worst-case 聚合**：多图质量取最差边界，避免一张糟糕参考被另外两张漂亮的掩盖。
+- **manifest 与 samples 一致**：行数严格相等，是 Step 4.8 的关键校验项。
+
+### 4.8 `audit_phase2.py` — 出货前的最后体检与数据卡
+
+**输入**
+
+- `quota_plan.json`、`sampled_recipes.jsonl`、`question_plans.jsonl`、`qc_reports/*.json`、`samples/*.jsonl`、`phase3_manifest.jsonl`。
+
+**处理**：六类校验
+
+1. **行数一致性**：`samples/*.jsonl` 总行数 = `phase3_manifest.jsonl` 行数；不一致直接 fail。
+2. **配额缺口**：将实际产出按 `bucket_id` 聚合，与 `quota_plan.target_count` 对比，列出每桶 gap。
+3. **维度统计**：每维度的 single/multi/subtype/difficulty/rarity 分布。
+4. **Contrastive 配对**：统计每对 `contrastive_pair_id` 是否同时存在 A 与 B；落单的列入风险。
+5. **多图质量直方图**：crop_leakage_risk / identity_visibility / scale_compatibility 三个字段的分布。
+6. **QC 状态直方图**：pass / fail / needs_manual_review 比例。
+
+**输出**
+
+- `benchmark_dataset/dataset_card.md`：六节统计 + 风险摘要 + 验收清单。
+
+**关键设计**
+
+- **不修复，只报告**：audit 阶段不动数据，只生成数据卡，让人决定是否放行进 Phase 3。
+- **dataset_card.md 即论文素材**：六节统计直接对应论文 §dataset 的图表。
 
 ---
 
