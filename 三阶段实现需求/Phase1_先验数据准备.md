@@ -42,7 +42,53 @@ tip_i2v_data_analysis/
     │   └── audit.py                    # 审计报告
     └── utils/
         ├── schema.py                   # 基础结构（扩展了 Phase 1 字段）
-        └── schema_phase1.py            # Phase 1 专属结构
+        ├── schema_phase1.py            # Phase 1 专属结构
+        └── io_utils.py                 # JSONL/JSON 读写工具
+```
+
+---
+
+## 模块调用关系
+
+下表列出每个步骤的主脚本、它调用了哪些内部模块、读了哪些文件、写了哪些文件：
+
+| 步骤 | 主脚本 | 调用的内部模块 | 读取的文件 | 写入的文件 |
+|------|--------|--------------|----------|----------|
+| patch | `src/phase1/patch_existing_outputs.py` | `mock_geometry`（position_to_bbox, estimate_tracking_feasibility）、`io_utils`（read_jsonl, write_jsonl） | image_parse.jsonl、text_parse.jsonl | image_parse_v2.jsonl、text_parse_v2.jsonl |
+| align | `src/phase1/align_instances.py` | `io_utils`（read_jsonl, write_jsonl, ensure_dir） | image_parse_v2.jsonl、text_parse_v2.jsonl | aligned_instances.jsonl |
+| refbank | `src/phase1/reference_bank.py` | `mock_geometry`（crop_to_path, position_to_bbox）、`io_utils`（read_jsonl, write_jsonl, ensure_dir） | image_parse_v2.jsonl、manifest_clean.jsonl | assets.jsonl、reference_bank/\*.jpg |
+| priors2 | `src/phase1/priors_enhance.py` | `io_utils`（read_jsonl, ensure_dir） | aligned_instances.jsonl、text_parse_v2.jsonl、assets.jsonl | priors/frequency_tiers.json、priors/subject_pair_distribution.json、priors/multi_reference_priors.json、priors/compatibility_matrix.json |
+| recipes | `src/phase1/recipes.py` | `io_utils`（read_jsonl, write_jsonl, ensure_dir） | aligned_instances.jsonl、assets.jsonl、text_parse_v2.jsonl、manifest_clean.jsonl | candidate_recipes.jsonl |
+| audit | `src/phase1/audit.py` | `io_utils`（read_jsonl, ensure_dir） | aligned_instances.jsonl、assets.jsonl、candidate_recipes.jsonl、text_parse_v2.jsonl、image_parse_v2.jsonl | phase1_audit_report.md |
+
+**补充说明**：
+
+- `mock_geometry.py` 本身不是独立步骤，而是一个工具库，被 patch 和 refbank 两个步骤调用。
+- 所有步骤的入口都由 `main.py` 统一调度。`main.py` 根据 `--step` 参数 import 对应模块的入口函数：
+  - patch → `patch_existing_outputs.patch_outputs(config)`
+  - align → `align_instances.align_instances(config)`
+  - refbank → `reference_bank.build_reference_bank(config)`
+  - priors2 → `priors_enhance.enhance_priors(config)`
+  - recipes → `recipes.build_recipes(config)`
+  - audit → `audit.audit(config)`
+- `schema.py` 和 `schema_phase1.py` 定义数据结构，但当前各步骤实际用 dict 操作（P0 轻量实现），未直接 import 这两个 schema 文件。它们的作用是提供结构定义供人阅读和将来升级为强类型校验时使用。
+
+数据流简图：
+
+```
+image_parse.jsonl ──┐                         ┌── aligned_instances.jsonl ──┬──────────┬──────────┐
+                   ├── [patch] ──┬── [align] ──┤              │          │          │
+text_parse.jsonl ──┘           │            │          [priors2]  [recipes]  [audit]
+                       image_v2 ─┤            │              │          │          │
+                       text_v2 ──┴── [refbank]─┤              │          │          │
+                                         │    │              │          │          │
+manifest_clean.jsonl ───────────────┘    │              │          │          │
+                                         │              │          │          │
+                                   assets.jsonl ──────┴──────────┴──────────┘
+                                                           │
+                                                  candidate_recipes.jsonl
+                                                           │
+                                                  phase1_audit_report.md
 ```
 
 运行方式：
