@@ -20,6 +20,20 @@ Phase 2: phase1_bundle/ -> benchmark_dataset/
 - 每道题必须输出 **Phase 3-ready metadata**，Phase 3 不应重新解析自然语言 prompt 才知道评测目标。
 - 不允许 Phase 2 绕过 Phase 1 自己随机拼词表。所有题目必须从 Phase 1 的 `candidate_recipes.jsonl` 采样而来。
 
+### 0.1 vs T2V-CompBench / VBench-I2V 的差异化定位
+
+本阶段产出的 benchmark 在以下三点上与现有 SOTA 做出区分，这些区别是 Phase 2 设计选择的均衡点不是图省事：
+
+| 维度 | T2V-CompBench (NeurIPS’24) | VBench-I2V | 本框架 (Phase 2 产出) |
+|------|------|------|------|
+| **题目来源** | VidProM 167 万 prompt + WordNet 分类 + GPT-4 生成 | 人工设计主题词 | TIP-I2V 真实分布采样 + Phase 1 recipe，零拼词表 |
+| **输入形态** | T2V（只有文本） | I2V 单图 | I2V 单图 + **多图作为主维度**（非 stress） |
+| **评测维度** | 7 类（含 Numeracy） | 16 类但混合质量+指令遵循 | 7 维纯指令遵循，明确不包 Numeracy（详见 Phase 1 §5） |
+| **对照设计** | static_copy 一项 | 无 | static_copy / random_motion / global_filter / camera_pan_cheat / **subject_swap_inverse** 五项 |
+| **评分公式** | 加权平均 | 维度指标拼接 | **执行门控乘法** `S = E·(0.6P + 0.4C)` |
+
+**本框架不跟随何者**：不复制 T2V-CompBench 的词表拼接路径（理由见 Phase 1 §10 决策记录），也不堆维度凑数量（VBench 的 16 类有多个与质量耦合不可独立归因）。
+
 ---
 
 ## 1. 推荐目录结构（Phase 2 部分）
@@ -321,6 +335,7 @@ build_quota → sample_recipes → build_question_plan → construct_inputs
 3. **解析与校验**：先剥 fenced ``` 代码块再做括号扫描提取 JSON；然后对 `i2v_prompt` 做：
    - **禁词检查**：命中 `dimension_isolation.forbidden_words` 任一词即失败；
    - **字数检查**：常规维度 8–25 词，`interaction_reasoning` 放宽到 30 词；
+   - **active verb 硬约束**（除 `view_transformation` 外的六个维度）：prompt 必须至少包含一个 active verb（SpaCy POS 标为 `VERB` 且 lemma 不在隐含静态集 `{be, have, exist, remain, stay, look, seem, appear}` 中）。`view_transformation` 题仅要求包含 camera 动作词（`zoom`/`pan`/`tilt`/`dolly`/`orbit` 任一）。未命中记 `failed_check="missing_active_verb"`。
    - **指代检查**：多图必须能解析出 `image 1 / image 2` 或 `the reference X` 这类显式角色指代。
 4. **重试与回退**：最多尝试 N 次（`polish_attempts` 字段记录次数），仍不合格则回退到 `prompt_draft`，并在 `risk_flags` 加 `prompt_polish_fallback`。
 
@@ -334,6 +349,7 @@ build_quota → sample_recipes → build_question_plan → construct_inputs
 - **为什么强制 LLM 返回 JSON 而不是裸文本**：裸文本下 LLM 经常自作主张加引号、解释、emoji 或 markdown 标题；JSON 强约束让解析端能严格校验；同时保留 `reasoning` 字段以便事后审查"模型为什么这么改"，调试 polish 失败比直接看 prompt 输出更高效。
 - **为什么解析需要 fenced ``` + 括号扫描双层兜底**：LLM 即使被强制要求输出纯 JSON，也常把它包在 markdown 代码块里、或在 JSON 前后加注释。双层解析（先剥 fenced，再扫描第一对配平的大括号）让 polish 不会因为格式细节白费一次 API 调用——单次 LLM 调用成本不低，能解析就尽量解析。
 - **为什么字数定 8–25 / interaction 30**：TIP-I2V 真实 prompt 中位数在 12 词左右，8–25 覆盖了约 80% 的真实分布；interaction 题需要描述"主体 A + 主体 B + 因果链"，强行压到 25 词会丢信息（例如把"the man hands the cup to the woman"压到"man hands cup"会让 evaluator 无法定位 woman 角色），所以专门放宽到 30 词。
+- **为什么强制 active verb**：T2I-CompBench 与 T2V-CompBench 都明确指出，不含动作动词的 prompt（"a red ball on the table"）让 I2V 模型退化为静态复制却仍能拿高分，评测出现 false positive。把"至少包含一个动作动词"落到 finalize_prompts 的硬检查，是把评测设计意图（"考查指令是否被执行"）从文档约定变成可执行约束。`view_transformation` 作为例外是因为它考的就是 camera 运动，动作动词会跟主维度冲突。
 - **为什么禁词命中即重写而不是软警告**：dimension_isolation 是评测可信度的最后防线——motion 题里出现 "pan" 会让模型用相机平移伪装主体位移，spatial 题里出现 "move" 会让 spatial 与 motion 失去边界，论文 §2.3 / §2.4 的硬规则在这里落地。让禁词命中变成强制重写，是把维度边界从设计文档落到可执行约束。
 - **为什么 fallback 仍允许 export**：流水线已经把 QC 通过的样本送到这一步，如果因为 polish 失败丢弃整题会让上游 4 步白费。标记 `prompt_polish_fallback` 让审计层（Step 4.8）能统计 fallback 比例并触发后续修复——比起静默丢数据，留痕的质量警示更利于持续改进。
 

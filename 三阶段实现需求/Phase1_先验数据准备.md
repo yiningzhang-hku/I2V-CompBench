@@ -264,6 +264,16 @@ tip_i2v_data_analysis/
 - 含位移过程 → `motion_binding`（即使终态涉及空间关系）。`spatial_composition` 仅评判静态帧中关系是否正确。
 - 单主体动作 → `action_binding`；多主体协同 → `interaction_reasoning`。
 
+**关于 Generative Numeracy（计数）维度的取舍说明**：
+
+T2I-CompBench 设有独立的 `numeracy` 维度（评测生成图像中"3 只猫"是否真的有 3 只）。本框架**显式不引入**该维度，原因有三：
+
+1. **任务形态不匹配**：I2V 任务的输入已是固定首帧，"几只主体"在题干设定时就已确定，模型只能延续不能新增——这把 numeracy 退化成"主体保持不消失"的 P 维度子问题，已被 `attribute_binding` / `action_binding` 的 identity preservation 覆盖。
+2. **评测可信度低**：视频中存在遮挡、出入画、运动模糊，逐帧计数的方差远大于静态图，自动评测结论不稳。
+3. **T2V-CompBench 同样未保留该维度**：其七大类（Consistent/Dynamic Attribute、Action、Motion、Spatial、Interaction、Numeracy）中 Numeracy 的人评相关性最低（论文 Table 2），属于公认的弱可评测维度。
+
+如未来引入新增主体场景（例如"画面中再出现一只猫"），可作为 P1 扩展项重新评估。
+
 ---
 
 ## 6. 各模块技术原理
@@ -576,6 +586,17 @@ long_tail: cum > 0.85
 
 Phase 2 用途：控制 80/20 的 common/rare 采样比例，避免 benchmark 全集中在高频概念上。
 
+**关于 WordNet 同义归一化的取舍说明**（P1 优化项，P0 不做）：
+
+当前实现把 `target_subject` 当成裸字符串计频，`dog` / `puppy` / `golden retriever` 会被算成三个不同概念，导致 head/torso 切分被同义词稀释——真实分布上属于同一 head 概念，统计上却被分散到 torso/long_tail。
+
+**P1 引入方案**：用 NLTK WordNet 做轻量名词归一化
+- 对 `target_subject` 取 `wn.synsets(word, pos='n')[0].lemma_names()[0]` 作为 canonical lemma；
+- 对 `action_verb` 同理走 `pos='v'`；
+- 频率统计基于 canonical lemma，原始 surface form 仍保留在 recipe 用于 prompt 还原。
+
+**为什么 P0 不做**：现阶段 manifest 体量约 1k 量级，长尾噪声不致命；引入 WordNet 会带来一次性词典加载（~30 MB）和 lemma 歧义消解的复杂度，性价比不高。等 manifest 规模上 5k+ 时再启用。
+
 #### 5.5.2 subject_pair_distribution.json — 多主体共现频谱
 
 **算法**（`build_subject_pair_distribution`）：
@@ -607,6 +628,28 @@ Phase 2 用途：组合多图题时参考实际共现分布，避免拼出训练
 | `"incompatible"` | 绝不允许同时作为主维度+附加维度 |
 
 矩阵对称填充：`matrix[d1][d2] = COMPAT_MATRIX.get(d1,{}).get(d2) or COMPAT_MATRIX.get(d2,{}).get(d1) or "compatible"`。
+
+#### 5.5.5 thing_vocabulary.json — thing/stuff 词汇过滤（P1 优化项）
+
+**目标**：识别 `target_subject` 中的"stuff 类抽象主体"（sky、clouds、water、grass、smoke 等无明确边界的连续介质），避免它们进入需要 bbox/tracking 的 `motion_binding` / `spatial_composition` recipe。
+
+**词典来源**（按 COCO-Stuff / ADE20K 的 thing-stuff 分类标准）：
+- `THING_NOUNS`：可被 bbox 包围的可数实体（person、car、cup、dog、…）
+- `STUFF_NOUNS`：连续介质或抽象背景（sky、grass、water、wall、road、cloud、smoke、…）
+- `AMBIGUOUS`：依语境而定（fire、light、shadow），默认按 stuff 处理
+
+**Phase 1 用途**：
+- recipes 模块在生成 `motion_binding` / `spatial_composition` recipe 时，若 `target_subject` 命中 `STUFF_NOUNS` 直接拒绝（写入 `skip_reason="stuff_subject_in_geometric_dim"`）；
+- `attribute_binding` / `background_dynamics` 不受影响，stuff 主体可参与（"sky turns red"、"water becomes turbulent"）。
+
+**为什么 P0 不做**：当前 9-grid mock 几何不区分 thing/stuff，所有主体都会被分配到 bbox；只有接入真实 GroundingDINO/SAM2 后，stuff 类输入会暴露为低 grounding confidence——届时再做硬过滤更高效。
+
+**关于 COCO 数据集的取舍说明**：
+
+本框架**不引入 COCO 数据集**，原因：
+1. **prompt 数据源已自给**：题目 100% 源自 TIP-I2V 真实分布，引入 COCO captions 会破坏"评测 vs 真实用户分布对齐"的核心承诺；
+2. **类别词表不依赖**：评测端用 GroundingDINO（开放词表），不限制在 COCO 80 类；
+3. **唯一边际价值**：audit 阶段可统计 `target_subject` 与 COCO 80 类的覆盖重叠率，作为分布健康度指标——但这是诊断指标而非数据来源，优先级低。
 
 ---
 
@@ -665,11 +708,15 @@ else:  // attribute / action / motion
 
 #### 5.6.4 contrastive_spec
 
-固定 4 种对照 baseline（所有 recipe 相同）：
+固定 5 种对照 baseline：前 4 种为通用 anti-shortcut baseline（所有 recipe 相同），第 5 种为 **subject_swap_inverse 反向对照对**，仅对 `motion_binding` / `spatial_composition` / `interaction_reasoning` 三个有方向性/角色性的维度生成：
+
 1. `static_copy`：首帧静态复制
 2. `random_motion`：随机运动
 3. `global_filter`：全局滤镜（不产生主维度变化）
 4. `camera_pan_cheat`：用运镜伪造主体运动
+5. `subject_swap_inverse`（条件生成）：把 prompt 中的"主体 A 在主体 B 左侧"改为"主体 B 在主体 A 左侧"、"球向左移动"改为"球向右移动"、"A 把杯子递给 B"改为"B 把杯子递给 A"——首帧资产不变，仅指令反向。该 baseline 与原题构成**配对样本**（共享 `pair_id`），Phase 3 必须比对模型在两题上的 E 分差异：方向/角色正确的模型应该原题高分、反向题低分；如果两题分数接近，说明模型无视指令只在跑视觉先验。
+
+**为什么需要 subject_swap_inverse**：T2I-CompBench 的对照设计只覆盖了"shortcut 防御"（前 4 种），但没有覆盖"指令遵循的方向性"。T2V-CompBench 在 Spatial / Motion 上明确指出，模型对"A 在 B 左"和"B 在 A 左"经常给出几乎相同的视频——这种 shortcut 用 4 种通用 baseline 抓不到，必须用同首帧+反向指令的配对题才能暴露。
 
 #### 5.6.5 expected_difficulty
 
@@ -883,8 +930,13 @@ python main.py --step phase1 --config configs/config.yaml
 
 **P0 已完成**：六个增强步骤全部实现并集成到 CLI，`--step phase1` 可一键顺序执行。
 
-**后续扩展方向**：
-- 接入 SAM / Grounding-DINO 替换 mock_9grid，获取像素级 mask 和精确 bbox
-- 实现 `scene_reference_inpainted`（主体抹除后的纯背景图）
-- 基于实际运行数据动态更新 compatibility_matrix
-- evaluator_feasibility 的 image_support 判定改为对接 Step 4 真实指标
+**P1 扩展方向（按优先级）**：
+
+1. **subject_swap_inverse contrastive baseline 落地**（高）：在 recipes 模块对 motion / spatial / interaction 三维度自动生成反向对照题，写入 `contrastive_spec[].contrast_type="subject_swap_inverse"`，并通过 `pair_id` 与原题配对。Phase 3 评测器必须读取 `pair_id` 计算配对分差。
+2. **WordNet 同义归一化**（中）：对 `target_subject` / `action_verb` 做 NLTK WordNet lemma 归一化，frequency_tiers 基于 canonical lemma 重算，避免同义词稀释 head 档（详见 §5.5.1 取舍说明）。
+3. **thing/stuff 词汇过滤**（中）：引入 `thing_vocabulary.json` 在 motion / spatial recipe 生成阶段过滤 stuff 主体（详见 §5.5.5）。
+4. **接入 SAM / Grounding-DINO** 替换 mock_9grid，获取像素级 mask 和精确 bbox。
+5. **实现 `scene_reference_inpainted`**（主体抹除后的纯背景图）。
+6. **基于实际运行数据动态更新 compatibility_matrix**。
+7. **evaluator_feasibility 的 image_support 判定** 改为对接 Step 4 真实指标。
+8. **COCO 80 类覆盖率诊断**（低）：audit 阶段输出 `target_subject` 与 COCO 80 类的重叠率作为分布健康度指标。仅作为诊断信号，**不引入 COCO 作为数据源**（详见 §5.5.5 取舍说明）。
