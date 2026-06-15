@@ -20,7 +20,7 @@
 
 1. 在 `I2V-CompBench/` 子目录拉取 T2V-CompBench 上游代码（**当前仅有 `.gitattributes`，源码尚未克隆**），按 §3.1 fork 清单改造若干文件。
 2. 在 `I2V-CompBench/i2v_eval/` 下从零实现 Phase 3 的 11 个模块（§4）。
-3. §2.3 的 7 处衔接适配层已在 Phase 1/2 文档全面落实（Phase 1 §5.6.4 + Phase 2 §3.2/§4.3/§4.4/§4.6/§4.7/§7.2/§8/附录 A/附录 C）；Phase 3 代码**只需直接消费 BenchmarkSample**，遇到违规字段一律 fail-fast，不允许在 Phase 3 内部写运行时适配代码。
+3. §2.3 的 7 处衔接适配层已在 Phase 1/2 文档全面落实（Phase 1 §5.6.4 + Phase 2 §6.3/§6.4/§6.6/§6.7/§8/附录 A/附录 C）；Phase 3 代码**只需直接消费 BenchmarkSample**，遇到违规字段一律 fail-fast，不允许在 Phase 3 内部写运行时适配代码。
 4. 提供端到端 CLI（§7）+ pytest 单测（§8）。
 
 ### 1.2 不要做（Out-of-Scope）
@@ -37,11 +37,11 @@
 | Phase 1 上游 step1-5 | `tip_i2v_data_analysis/src/step{1..5}_*.py` | **已实施且能跑** | 间接（产物喂 Phase 2） |
 | Phase 1 schema v2 | `tip_i2v_data_analysis/src/utils/schema_phase1.py` | **类已定义，但尚未被 step1-5 使用** | 间接 |
 | Phase 1 增强模块（mock_geometry / align_instances / reference_bank / recipes / audit） | `tip_i2v_data_analysis/src/phase1/` | **目录不存在，未实施** | 间接 |
-| Phase 2 全部模块 | `tip_i2v_data_analysis/src/phase2/` | **目录不存在，未实施** | **直接，必须先有 BenchmarkSample 产物才能评测** |
+| Phase 2 全部模块 | `i2v_compbench/src/i2vcompbench/phase2/` | **已部分实施** | **直接，必须先有 BenchmarkSample 产物才能评测** |
 | T2V-CompBench fork | `I2V-CompBench/` | **只有 .gitattributes，源码未拉取** | **直接，必须先克隆** |
 | Phase 3 全部代码 | `I2V-CompBench/i2v_eval/` | **未实施** | **直接** |
 
-**给 Agent 的提示**：如果你被指派只做 Phase 3，那么你需要在 `data/benchmark/`（约定路径，见 §2.2）放一份**人工或脚本伪造的 BenchmarkSample 样例 JSONL**（≥10 条覆盖 7 维 + 双 input_mode + contrastive_pair），用来跑通 Phase 3 流水线。**真实 BenchmarkSample 由 Phase 2 产出**，但这是另一组任务。
+**给 Agent 的提示**：如果你被指派只做 Phase 3，那么你需要在 `data/benchmark_dataset/`（约定路径，见 §2.2）放一份**人工或脚本伪造的 BenchmarkSample 样例 JSONL**（≥10 条覆盖 7 维 + 双 input_mode + contrastive_pair），用来跑通 Phase 3 流水线。**真实 BenchmarkSample 由 Phase 2 产出**，但这是另一组任务。
 
 ---
 
@@ -77,16 +77,16 @@
 
 ### 2.2 Phase 2 应产出的 BenchmarkSample（Phase 3 唯一入口）
 
-**约定路径**：`data/benchmark/`（与 T2V-CompBench fork 同级，避免污染）
+**约定路径**：`data/benchmark_dataset/`（与 Phase 2 输出目录一致）
 
 ```
-data/benchmark/
-├── benchmark.jsonl                             # 全部样本，每行 1 条 BenchmarkSample
-├── first_frames/                               # 单图模式 / 多图模式都会有的"实际首帧"
-│   └── {question_id}.jpg
+data/benchmark_dataset/
+├── phase3_manifest.jsonl                      # Phase 3 唯一入口，每行 1 条 BenchmarkSample
+├── first_frames/                               # 单图模式 / 多图模式都会有的“实际首帧”
+│   └── {question_id}.png
 ├── ref_images/                                 # 仅 multi_image 模式：参考图集合
-│   └── {question_id}_ref{k}.jpg
-├── contrastive_pairs.jsonl                     # 配对索引（pair_id → [original_qid, baseline_qid]）
+│   └── {question_id}_ref{k}.png
+├── contrastive_pairs.jsonl                     # 配对索引（pair_id → original_qids + baseline_qids）
 └── manifest.json                               # 数据集元信息 + evaluator_version 哈希
 ```
 
@@ -94,17 +94,17 @@ data/benchmark/
 
 ### 2.3 七处衔接适配层（已落实于 Phase 1/2 文档，Phase 3 直接消费）
 
-> 以下 7 处衔接缺口已于本仓库 `三阶段实现需求/Phase1_先验数据准备.md` §5.6.4 与 `Phase2_Benchmark数据集合成.md` §3.2/§4.3/§4.4/§4.6/§4.7/§7.2/§8/附录 A/附录 C 全面修订落实。**Phase 3 代码在全部 Phase 2 输出上只需直接消费，不应再出现任何运时适配代码**；benchmark loader 遇到下表任一违规现象均应 fail-fast。
+> 以下 7 处衔接缺口已于本仓库 `三阶段实现需求/Phase1_先验数据准备.md` §5.6.4 与 `Phase2_Benchmark数据集合成.md` §6.3/§6.4/§6.6/§6.7/§8/附录 A/附录 C 全面修订落实。**Phase 3 代码在全部 Phase 2 输出上只需直接消费，不应再出现任何运时适配代码**；benchmark loader 遇到下表任一违规现象均应 fail-fast。
 
 | # | 衔接点 | Phase 3 期望 | 落实位置 |
 |---|---|---|---|
-| 1 | 目录命名 | `first_frames/` 与 `ref_images/` | Phase 2 §3.2 输出目录 + §4.4 step 6 路径约定（禁止 `images/` `references/`） |
-| 2 | 字段扁平化 | 17 个顶层字段、`prompt` 不是 `i2v_prompt`、禁止 `metadata.*` 嵌套 | Phase 2 §4.6 finalize_prompts（`prompt`） + §4.7 step 4（顶层拼装） |
-| 3 | target_subjects 稳定 id 与 ref_image_idx | `[{id:"s1", noun:..., ref_image_idx:k}, ...]` | Phase 2 §4.3 step 6（赋值） + §4.4 step 6（与 ref 文件名 k 对齐） + §4.7 step 4（透传） |
-| 4 | contrastive 顶层透传 | 顶层 `contrastive_pair_id` + `contrastive_role` + `contrastive_pairs.jsonl` | Phase 1 §5.6.4（配对透传约束）+ Phase 2 §4.7 step 4/5（顶层透传与 pairs 索引产出） |
-| 5 | evaluator_tools 强枚举 | ⊂ 9 项工具枚举 | Phase 2 §4.3 step 7 + 附录 A.1 `_TOOLS_BY_DIM` |
-| 6 | expected_failure_modes 默认填充 | ⊂ §2.5 的 15 种 FAILURE_MODES | Phase 2 §4.3 step 8 + 附录 A.2 `_FAILURES_BY_DIM` |
-| 7 | source_type 词汇转换 | ⊂ `{tip_i2v_real, tip_i2v_synthetic_first_frame, external_real, external_synthetic}` | Phase 2 §4.7 step 4（映射写入）+ 附录 C `_LEGACY_SOURCE_MAP` |
+| 1 | 目录命名 | `first_frames/` 与 `ref_images/`，后缀 `.png` | Phase 2 §6.4 step 5（PNG）+ step 6 路径约定（禁止 `images/` `references/`） |
+| 2 | 字段扁平化 | 17 个顶层字段、`prompt` 不是 `i2v_prompt`、禁止 `metadata.*` 嵌套 | Phase 2 §6.6 finalize_prompts（`prompt`） + §6.7 step 4（顶层拼装） |
+| 3 | target_subjects 稳定 id 与 ref_image_idx | `[{id:"s1", noun:..., ref_image_idx:k}, ...]` | Phase 2 §6.3 step 6（赋值） + §6.4 step 6（与 ref 文件名 k 对齐） + §6.7 step 4（透传） |
+| 4 | contrastive 顶层透传 | 顶层 `contrastive_pair_id` + `contrastive_role` + `contrastive_pairs.jsonl` | Phase 1 §5.6.4（配对透传约束）+ Phase 2 §6.7 step 4/5（顶层透传与 pairs 索引产出） |
+| 5 | evaluator_tools 强枚举 | ⊂ 9 项工具枚举 | Phase 2 §6.3 step 7 + 附录 A.1 `_TOOLS_BY_DIM` |
+| 6 | expected_failure_modes 默认填充 | ⊂ §2.5 的 15 种 FAILURE_MODES | Phase 2 §6.3 step 8 + 附录 A.2 `_FAILURES_BY_DIM` |
+| 7 | source_type 词汇转换 | ⊂ `{tip_i2v_real, tip_i2v_synthetic_first_frame, external_real, external_synthetic}` | Phase 2 §6.7 step 4（映射写入）+ 附录 C `_LEGACY_SOURCE_MAP` |
 
 **约束**：Phase 3 代码读到 BenchmarkSample 后**只允许**用顶层字段；遇到任何未适配字段（嵌套 `metadata`、旧字段名 `i2v_prompt`、旧目录 `images/` / `references/`、旧 source_type 词汇、`evaluator_tools` 越枚举、`expected_failure_modes` 为空、顶层出现 `_audit` 等）应**直接报错**，不能容忍。`_audit.*` 是 Phase 2 调试子节点，Phase 3 evaluator **禁止**读取。
 
@@ -115,19 +115,22 @@ data/benchmark/
   "question_id": "spatial_0042",
   "dimension": "spatial_composition",
   "input_mode": "multi_image",                 // single_image | multi_image
-  "first_frame_path": "first_frames/spatial_0042.jpg",
-  "input_image_paths": ["ref_images/spatial_0042_ref0.jpg",
-                        "ref_images/spatial_0042_ref1.jpg"],   // multi_image 时 ≥2，single_image 时为空数组
+  "first_frame_path": "first_frames/spatial_0042.png",
+  "input_image_paths": ["ref_images/spatial_0042_ref0.png",
+                        "ref_images/spatial_0042_ref1.png"],   // multi_image 时 ≥2，single_image 时为空数组
   "prompt": "The cat jumps on the chair while looking at the camera",
   "target_subjects": [
     {"id": "s1", "noun": "cat",   "ref_image_idx": 0},
     {"id": "s2", "noun": "chair", "ref_image_idx": 1}
   ],
   "target_relation": {"type": "spatial", "value": "on", "subj": "s1", "obj": "s2"},
-  "preservation_set": ["s2.appearance", "background.global"],
+  "preservation_set": [
+    {"scope": "s2", "constraint": "appearance"},
+    {"scope": "background", "constraint": "global"}
+  ],
   "contrastive_pair_id": "spatial_pair_0021",
-  "contrastive_role": "original",              // 或 baseline_random_motion / baseline_subject_swap / ...
-  "evaluator_tools": ["grounding", "depth", "vlm_existence"],
+  "contrastive_role": "original",              // 或 baseline_subject_swap（曾用 "inverse"，已废弃）
+  "evaluator_tools": ["grounding", "depth", "vlm_relation"],
   "expected_failure_modes": ["wrong_relation", "object_missing"],
   "subtype": "static_relation",
   "difficulty": "medium",
@@ -136,14 +139,23 @@ data/benchmark/
 }
 ```
 
-### 2.5 失败模式枚举（共 15 种，全局共享）
+## 2.5 失败模式枚举（共 15 种，全局共享）
 
 ```
-object_missing | wrong_attribute | wrong_action | wrong_motion_direction |
-wrong_relation | view_collapse | identity_drift | non_target_drift |
-background_drift | tool_uncertain | low_confidence | invalid_input |
-camera_pan_cheat | static_copy | global_filter
+static_copy | global_filter | camera_pan_cheat | object_missing |
+wrong_attribute | wrong_direction | wrong_relation | wrong_camera |
+identity_lost | non_target_drift | background_drift | artifact_severe |
+timing_wrong | identity_unbound | tool_uncertain
 ```
+
+词汇变更说明（与早期草案差异）：
+
+- `identity_drift` → `identity_lost`（与 identity_binding 软因子的判失语义对齐）
+- `wrong_motion_direction` → `wrong_direction`（缩短 + 涵盖运动/视角方向）
+- `view_collapse` → `wrong_camera`（直接表达"相机意图错"）
+- `wrong_action` 拆解：由 `static_copy`（动作未发生）或 `timing_wrong`（动作时序错）覆盖
+- 新增 `artifact_severe / timing_wrong / identity_unbound`（覆盖伪影 / 时序错 / 多图身份未绑定）
+- 移除 `low_confidence / invalid_input`（已并入 `tool_uncertain` 单一不确定标签）
 
 ---
 
@@ -213,14 +225,13 @@ I2V-CompBench/
 │   │   ├── random_motion.py
 │   │   ├── global_filter.py
 │   │   ├── camera_pan_cheat.py
-│   │   ├── subject_swap.py
 │   │   └── run_all.py                          # 独立 CLI：`python -m i2v_eval.baselines.run_all`
 │   └── tests/
 │       ├── test_scoring.py                     # E·(0.6P+0.4C) 边界
 │       ├── test_killer1_depth.py               # 必跑：放一张已知 GT 的图，断言"值大=离相机近"
 │       ├── test_killer2_fps.py                 # 必跑：1 个 30fps 视频→重采样后 fps==8
 │       ├── test_killer3_frame_video.py
-│       ├── test_baselines.py                   # 5 个 baseline 必须显著低于 original（pair_E_diff > 0）
+│       ├── test_baselines.py                   # 4 个动态 baseline 必须显著低于 original（paired_E_diff > 0）
 │       └── fixtures/                           # 10 条 BenchmarkSample mock + 几个 5s 视频
 ├── configs/
 │   ├── evaluator_weights.yaml                  # 7 维 P/C 子项权重 + λ + 软惩罚阈值（哈希进 evaluator_version）
@@ -261,7 +272,7 @@ class BenchmarkSample(BaseModel):
     prompt: str
     target_subjects: List[TargetSubject]
     target_relation: TargetRelation
-    preservation_set: List[str] = Field(default_factory=list)
+    preservation_set: List[Dict[str, str]] = Field(default_factory=list)
     contrastive_pair_id: Optional[str] = None
     contrastive_role: Optional[str] = None
     evaluator_tools: List[Literal[*TOOL_NAMES]]
@@ -280,7 +291,7 @@ class DimensionScore(BaseModel):
     S: float                  # 主分 = E·(0.6P + 0.4C)
     track_a_t2v_score: Optional[float] = None   # 兼容 T2V-CompBench CSV 的旧分（轨道 A）
     failure_modes: List[str] = Field(default_factory=list)
-    tool_status: Literal["valid","low_confidence","tool_uncertain","invalid_input"]
+    tool_status: Literal["valid","tool_uncertain"]
     debug: Dict = Field(default_factory=dict)   # 工具命中率、子项分、识别失败原因等
 ```
 
@@ -346,14 +357,14 @@ def temporal_order(events: List[Tuple[str,int]]) -> float:
 - **E**：GroundingDINO 在末帧能定位到所有 target_subjects（IoU≥0.3）→ 1，否则 0；`identity_factor` < 0.5 时强制 E=0。
 - **P**：VLM 多选题 `What is the {attr_type} of the {noun}? A/B/C/D` × 重复 3 次取 majority；正确率。
 - **C**：`frame_yes_ratio(逐帧 VLM 二值"Is the {attr} of {noun} correct? Yes/No")`。
-- **失败模式**：wrong_attribute / object_missing / identity_drift。
+- **失败模式**：wrong_attribute / object_missing / identity_lost。
 
 #### B. action_binding
 
 - **E**：GroundingDINO 命中 target_subject + 该主体在 16 帧上有>3 帧出现。
 - **P**：VLM 16 帧序列 + 拆问 `Is the {subj} performing {action_verb}? Yes/No` × 3。
 - **C**：`signal_stable(per_frame_action_logit, expected=action_verb)` + `non_target_drift` 约束。
-- **失败模式**：wrong_action / static_copy / non_target_drift。
+- **失败模式**：static_copy / object_missing / timing_wrong。
 
 #### C. motion_binding
 
@@ -361,35 +372,35 @@ def temporal_order(events: List[Tuple[str,int]]) -> float:
 - **E**：DOT 在前景能输出有效运动向量 + 强度 > 阈值。
 - **P**：DOT 方向分类 vs `motion_slot.direction`（leftward / rightward / upward / ...）。
 - **C**：方向稳定性（`signal_stable`）+ baseline `random_motion` 必须 P 显著低于 original。
-- **失败模式**：wrong_motion_direction / static_copy / camera_pan_cheat（如果 fg motion 与 bg motion 高度相关）。
+- **失败模式**：wrong_direction / static_copy / camera_pan_cheat（如果 fg motion 与 bg motion 高度相关）。
 
 #### D. spatial_composition
 
 - **E**：调用 `tools_t2v/spatial.py:spatial_judge`（L222）确认两个主体都在末帧被定位。
 - **P**：复用 `pick_max_2d`（L259, 用于 left/right/above/below）+ `pick_max_3d`（L295, 用于 in_front_of / behind 需要 depth）；**对 `pick_max_3d` 必须传入 KILLER-1 修正后的 depth**（值大=近）。
 - **C**：`combine_frame`（L304）逐帧聚合后取均值（**注意：丢弃 `combine_csv_and_cal_model_score` L357 的输出，那是轨道 A**）。
-- **失败模式**：wrong_relation / object_missing。
+- **失败模式**：wrong_relation / object_missing / identity_lost。
 
 #### E. background_dynamics
 
 - **E**：`background_drift` > 阈值（背景"应该"变化）+ 前景主体 identity 不漂移。
 - **P**：VLM 3×2 grid 提问 `Is the {bg_change_type} happening (e.g., raining → not raining)? Yes/No` × 3。
 - **C**：optical_flow 背景区域有持续运动信号 + 前景区域运动不显著。
-- **失败模式**：global_filter（前景背景被一起改色调）/ background_drift_missing。
+- **失败模式**：background_drift / non_target_drift / global_filter（前景背景被一起改色调）。
 
 #### F. view_transformation
 
 - **E**：grounding 确认主体在首帧/末帧都能找到（容许位置变化）。
 - **P**：VLM 末帧 + 首帧对比 `Has the camera performed {camera_command}? Yes/No`；同时光流全局向量必须与 camera_command 方向一致。
 - **C**：optical_flow 全局运动方向稳定（`signal_stable`）。
-- **失败模式**：camera_pan_cheat / view_collapse。
+- **失败模式**：wrong_camera / camera_pan_cheat / identity_lost。
 
 #### G. interaction_reasoning
 
 - **E**：grounding 命中 agent + patient 主体；两主体在 16 帧序列上至少有 ≥3 帧重叠或邻接（IoU 或距离阈值）。
 - **P**：VLM 16 帧序列 + disentangled 三轮：① agent 在做什么 ② patient 状态变化 ③ 因果链是否成立。
 - **C**：`temporal_order(events, expected=interaction_slot.expected_outcome)`。
-- **失败模式**：wrong_relation / static_copy / object_missing。
+- **失败模式**：wrong_relation / timing_wrong / object_missing。
 
 #### H. identity_binding（仅 multi_image，不计入 7 维主分）
 
@@ -420,7 +431,7 @@ def temporal_order(events: List[Tuple[str,int]]) -> float:
 
 ```python
 def main():
-    samples = load_jsonl("data/benchmark/benchmark.jsonl", BenchmarkSample)
+    samples = load_jsonl("data/benchmark_dataset/phase3_manifest.jsonl", BenchmarkSample)
     for model_name in cfg.models_to_eval:
         results = []
         for s in samples:
@@ -439,26 +450,29 @@ def main():
 ### 4.9 `i2v_eval/pipeline/aggregate.py`
 
 - λ ablation：从 `configs/lambda_ablation.yaml` 读 {0.4, 0.5, 0.6, 0.7}，对每个 λ 重算 S，输出按维度 ranking 是否稳定。
-- contrastive pair：按 `contrastive_pair_id` 聚合，要求 `S_original − S_baseline > 0` 在 ≥80% pair 上成立（**KILLER 验收**）。
+- contrastive pair：按 `contrastive_pair_id` 聚合，要求 `E_original − E_baseline > 0` 在 ≥80% pair 上成立（**KILLER 验收**）。
 
 ### 4.10 `i2v_eval/pipeline/human_validation.py`
 
-- 每模型每维抽 30 样本（共 7×30=210），让人工打 0/1。
-- 计算 Spearman ρ(human, S) per-dim；**所有 7 维 ρ ≥ 0.5 才算评测系统达标**（`§9 验收门槛`）。
+- 每模型每维抽 ≥50 样本（共 7×50=350 条起），common/rare 按 80/20 分层抽样。人工打分 0/0.5/1 三级，每样本 ≥3 名标注员取中位数。
+- 计算 Spearman ρ(human, S) per-dim；**所有 7 维 ρ ≥ 0.5 才算评测系统达标**（`§8 验收门槛`）。
+- **执行 lambda ablation**：在人评子集上扫 `lambda ∈ {0.4, 0.5, 0.6, 0.7}`，取使 Spearman ρ(S, human_S) 最大者作为最终 lambda。
+- Human validation **前置于 aggregate**——必须先通过 Spearman ρ ≥ 0.5 的可信门控，aggregate 才被允许把该维度写入论文主表。
 
 ### 4.11 `i2v_eval/baselines/`
 
-5 种合成基线（每条 original 配 1 条 baseline，共享 contrastive_pair_id）：
+4 种动态合成基线（由评测端生成，不进入 `phase3_manifest.jsonl`）：
 
 | baseline 名 | 视频生成方式 | 期望失败 |
 |---|---|---|
 | static_copy | 把首帧直接复制 16 帧 | static_copy |
-| random_motion | 加噪声光流 / 随机平移 | wrong_motion_direction |
+| random_motion | 加噪声光流 / 随机平移 | wrong_direction |
 | global_filter | 给原视频套全局色调滤镜 | global_filter |
-| camera_pan_cheat | 把首帧平移生成假"运镜" | camera_pan_cheat |
-| subject_swap_inverse | 交换 ref_images 顺序（multi_image 专属） | identity_drift |
+| camera_pan_cheat | 把首帧平移生成假“运镜” | camera_pan_cheat |
 
-每个 baseline 必须有独立 CLI：`python -m i2v_eval.baselines.run_all --models <m1,m2>`。
+第 5 种对照 `baseline_subject_swap`（交换 ref_images 顺序 / 主体，multi_image 专属）由 Phase 2 在数据合成阶段已落盘为独立 BenchmarkSample 行，通过 `contrastive_pairs.jsonl` 索引与 original 配对，Phase 3 直接读取计算 `paired_E_diff`，不需动态合成。
+
+每个动态 baseline 必须有独立 CLI：`python -m i2v_eval.baselines.run_all --models <m1,m2>`。
 
 ---
 
@@ -561,20 +575,20 @@ clip:              {model: "ViT-L-14"}
 ## §7 CLI 流水线（按顺序）
 
 ```
-# 1) Phase 2 已经产出 benchmark.jsonl
-python -m i2v_eval.cli generate_videos     --models cogvideox-i2v,seine,dynamicrafter --benchmark data/benchmark/benchmark.jsonl --out videos/
+# 1) Phase 2 已经产出 phase3_manifest.jsonl
+python -m i2v_eval.cli generate_videos     --models cogvideox-i2v,seine,dynamicrafter --benchmark data/benchmark_dataset/phase3_manifest.jsonl --out videos/
 
 # 2) KILLER-2 + KILLER-3 预处理
 python -m i2v_eval.cli preprocess_videos   --in videos/ --out videos_8fps/ --target_fps 8
 
 # 3) 一次性提取所有工具特征
-python -m i2v_eval.cli extract_tool_features --videos videos_8fps/ --bench data/benchmark/benchmark.jsonl --out tool_features/
+python -m i2v_eval.cli extract_tool_features --videos videos_8fps/ --bench data/benchmark_dataset/phase3_manifest.jsonl --out tool_features/
 
 # 4) 主分评测（七维 + identity）
-python -m i2v_eval.cli evaluate            --bench data/benchmark/benchmark.jsonl --features tool_features/ --models all --out results/
+python -m i2v_eval.cli evaluate            --bench data/benchmark_dataset/phase3_manifest.jsonl --features tool_features/ --models all --out results/
 
 # 5) 抽样人工标注 + Spearman 计算
-python -m i2v_eval.cli human_validation    --results results/ --sample_per_dim 30 --out results/human/
+python -m i2v_eval.cli human_validation    --results results/ --sample_per_dim 50 --out results/human/
 
 # 6) λ ablation + contrastive pair 聚合
 python -m i2v_eval.cli aggregate           --results results/ --lambdas 0.4,0.5,0.6,0.7 --out results/aggregated/
@@ -582,8 +596,8 @@ python -m i2v_eval.cli aggregate           --results results/ --lambdas 0.4,0.5,
 # 7) 报告
 python -m i2v_eval.cli report              --aggregated results/aggregated/ --human results/human/ --out reports/
 
-# 旁路：跑 5 种 baseline
-python -m i2v_eval.baselines.run_all       --bench data/benchmark/benchmark.jsonl --models all --out results_baseline/
+# 旁路：跑 4 种动态 baseline
+python -m i2v_eval.baselines.run_all       --bench data/benchmark_dataset/phase3_manifest.jsonl --models all --out results_baseline/
 ```
 
 ---
@@ -593,7 +607,7 @@ python -m i2v_eval.baselines.run_all       --bench data/benchmark/benchmark.json
 | 门槛 | 验收方式 | 阈值 |
 |---|---|---|
 | 7 维 human-vs-S Spearman ρ | `human_validation.py` | **每维 ρ ≥ 0.5** |
-| 5 baseline 配对差异 | `aggregate.py` `pair_E_diff > 0` 占比 | **≥ 80%** |
+| 5 baseline 配对差异 | `aggregate.py` `paired_E_diff > 0` 占比 | **≥ 80%** |
 | KILLER-1 单测 | `pytest tests/test_killer1_depth.py` | 必须 PASS |
 | KILLER-2 单测 | `pytest tests/test_killer2_fps.py` | 必须 PASS |
 | KILLER-3 单测 | `pytest tests/test_killer3_frame_video.py` | 必须 PASS |
@@ -617,7 +631,7 @@ python -m i2v_eval.baselines.run_all       --bench data/benchmark/benchmark.json
 ### P1（功能完整）
 
 7. 补完剩余 5 个维度 + `identity_binding`。
-8. 实现 5 种 baseline + `baselines/run_all.py`。
+8. 实现 4 种动态 baseline + `baselines/run_all.py`。
 9. 实现 `human_validation.py` + Spearman 计算。
 10. 实现 `aggregate.py` 的 λ ablation 和 contrastive pair 聚合。
 
@@ -638,15 +652,15 @@ python -m i2v_eval.baselines.run_all       --bench data/benchmark/benchmark.json
 5. **每个 evaluator 都必须显式给出 failure_modes**（即使为空数组也要赋值）；遇到工具不可用返回 `tool_status="tool_uncertain"` + S=0，**不要伪造分数**。
 6. **不要在 `i2v_eval/` 内编辑 `_t2v_upstream/`**，所有改造走复制+patch；保留上游 git history 便于追溯。
 7. **不要创建 `images/` `references/` 这类旧名目录**；目录命名严格按 §2.2。
-8. **所有 yaml 配置改动必须同步更新 `evaluator_version` 哈希**；hash 写入 `data/benchmark/manifest.json` 与 `results/{model}/eval.jsonl` 顶部一行。
+8. **所有 yaml 配置改动必须同步更新 `evaluator_version` 哈希**；hash 写入 `data/benchmark_dataset/manifest.json` 与 `results/{model}/eval.jsonl` 顶部一行。
 9. 遇到 BenchmarkSample 字段缺失或类型不符——**直接 raise**，不要静默跳过；这是 Phase 2 没做适配层的强信号，必须暴露。
-10. **遇到 Phase 2 还未实施**（默认不会发生，Phase 2 §4.3/§4.7 已落实）：如需赶工，可按 §9 P2 第 13 项描述暂用 §C.2 应急脚本。Phase 3 代码库本身**不允许**调用该脚本；遇到任何不符 §2.4 schema 的 BenchmarkSample 只能 fail-fast。
+10. **遇到 Phase 2 还未实施**（默认不会发生，Phase 2 §6.3/§6.7 已落实）：如需赶工，可按 §9 P2 第 13 项描述暂用 §C.2 应急脚本。Phase 3 代码库本身**不允许**调用该脚本；遇到任何不符 §2.4 schema 的 BenchmarkSample 只能 fail-fast。
 
 ---
 
 ## §A 附录：维度 → evaluator_tools / expected_failure_modes 强制映射表（§2.3 #5 #6）
 
-> 本附录与 Phase 2 `Phase2_Benchmark数据集合成.md` 附录 A.1 / A.2 **逐字一致**，是上下游共享的权威枚举表。Phase 2 §4.3 step 7/8 在写入 BenchmarkSample 前已按表强制覆写，Phase 3 只需验证取值仍⊂表内枚举。
+> 本附录与 Phase 2 `Phase2_Benchmark数据集合成.md` 附录 A.1 / A.2 **逐字一致**，是上下游共享的权威枚举表。Phase 2 §6.3 step 7/8 在写入 BenchmarkSample 前已按表强制覆写，Phase 3 只需验证取值仍⊂表内枚举。
 
 ### A.1 `_TOOLS_BY_DIM`（required evaluator_tools）
 
@@ -669,15 +683,15 @@ python -m i2v_eval.baselines.run_all       --bench data/benchmark/benchmark.json
 
 | dimension | default expected_failure_modes |
 |-----------|--------------------------------|
-| attribute_binding | `wrong_attribute`, `object_missing`, `identity_drift` |
-| action_binding | `wrong_action`, `object_missing`, `static_copy` |
-| motion_binding | `wrong_motion_direction`, `static_copy`, `camera_pan_cheat` |
-| spatial_composition | `wrong_relation`, `view_collapse`, `object_missing` |
+| attribute_binding | `wrong_attribute`, `object_missing`, `identity_lost` |
+| action_binding | `static_copy`, `object_missing`, `timing_wrong` |
+| motion_binding | `wrong_direction`, `static_copy`, `camera_pan_cheat` |
+| spatial_composition | `wrong_relation`, `object_missing`, `identity_lost` |
 | background_dynamics | `background_drift`, `non_target_drift`, `global_filter` |
-| view_transformation | `view_collapse`, `camera_pan_cheat`, `identity_drift` |
-| interaction_reasoning | `wrong_relation`, `wrong_action`, `object_missing` |
+| view_transformation | `wrong_camera`, `camera_pan_cheat`, `identity_lost` |
+| interaction_reasoning | `wrong_relation`, `timing_wrong`, `object_missing` |
 
-**强枚举值域**：必须 ⊂ §2.5 FAILURE_MODES 15 种枚举。LLM 在 Phase 2 §4.6 polish 阶段可追加更具体的失败模式，但仍须保持在 15 项内。
+**强枚举值域**：必须 ⊂ §2.5 FAILURE_MODES 15 种枚举。LLM 在 Phase 2 §6.6 polish 阶段可追加更具体的失败模式，但仍须保持在 15 项内。
 
 ---
 
@@ -695,10 +709,10 @@ TOOL_NAMES = [
     "dinov2", "clip",
 ]
 FAILURE_MODES = [
-    "object_missing", "wrong_attribute", "wrong_action", "wrong_motion_direction",
-    "wrong_relation", "view_collapse", "identity_drift", "non_target_drift",
-    "background_drift", "tool_uncertain", "low_confidence", "invalid_input",
-    "camera_pan_cheat", "static_copy", "global_filter",
+    "static_copy", "global_filter", "camera_pan_cheat", "object_missing",
+    "wrong_attribute", "wrong_direction", "wrong_relation", "wrong_camera",
+    "identity_lost", "non_target_drift", "background_drift", "artifact_severe",
+    "timing_wrong", "identity_unbound", "tool_uncertain",
 ]
 SOURCE_TYPES = [
     "tip_i2v_real", "tip_i2v_synthetic_first_frame",
@@ -712,7 +726,7 @@ SOURCE_TYPES = [
 
 ### C.1 `_LEGACY_SOURCE_MAP`（Phase 1 词汇 → Phase 3 枚举）
 
-与 Phase 2 `Phase2_Benchmark数据集合成.md` 附录 C 一致。Phase 2 §4.7 step 4 已按表写入 BenchmarkSample 顶层 `source_type`；Phase 3 loader 遇到任何旧词汇直接 fail-fast。
+与 Phase 2 `Phase2_Benchmark数据集合成.md` 附录 C 一致。Phase 2 §6.7 step 4 已按表写入 BenchmarkSample 顶层 `source_type`；Phase 3 loader 遇到任何旧词汇直接 fail-fast。
 
 | Phase 1 source_type（旧） | Phase 3 source_type（顶层枚举） |
 |--------------------------|----------------------------------|
@@ -726,7 +740,7 @@ SOURCE_TYPES = [
 
 ### C.2 应急适配脚本（§9 P2 兜底，**默认不启用**）
 
-> Phase 2 已在 §4.3/§4.7 完成 7 处适配，**本脚本仅在 Phase 2 交付之前需要赶工跑通 Phase 3 水线时使用**；一旦 Phase 2 产出可用，需从流线中移除，Phase 3 代码库不允许在运行时调用。
+> Phase 2 已在 §6.3/§6.7 完成 7 处适配，**本脚本仅在 Phase 2 交付之前需要赶工跑通 Phase 3 水线时使用**；一旦 Phase 2 产出可用，需从流线中移除，Phase 3 代码库不允许在运行时调用。
 
 ```python
 # scripts/adapt_phase2_to_phase3.py  （应急，默认不启用）

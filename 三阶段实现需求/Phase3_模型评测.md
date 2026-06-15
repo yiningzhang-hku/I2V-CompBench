@@ -182,18 +182,21 @@ FAILURE_MODES = [
   "question_id": "spatial_0042",
   "dimension": "spatial_composition",
   "input_mode": "multi_image",
-  "first_frame_path": "first_frames/spatial_0042.jpg",
-  "input_image_paths": ["ref_images/spatial_0042_ref0.jpg", "ref_images/spatial_0042_ref1.jpg"],
+  "first_frame_path": "first_frames/spatial_0042.png",
+  "input_image_paths": ["ref_images/spatial_0042_ref0.png", "ref_images/spatial_0042_ref1.png"],
   "prompt": "A cat sits on a sofa.",
   "target_subjects": [
     {"id": "s1", "noun": "cat",  "ref_image_idx": 0},
     {"id": "s2", "noun": "sofa", "ref_image_idx": 1}
   ],
   "target_relation": {"type": "spatial", "value": "on", "subj": "s1", "obj": "s2"},
-  "preservation_set": ["s2.appearance", "background.global"],
+  "preservation_set": [
+    {"scope": "s2", "constraint": "appearance"},
+    {"scope": "background", "constraint": "global"}
+  ],
   "contrastive_pair_id": "spatial_pair_0021",
-  "contrastive_role": "original",   // or "inverse"
-  "evaluator_tools": ["grounding", "depth", "vlm_existence"],
+  "contrastive_role": "original",   // or "baseline_subject_swap"（曾用 "inverse"，已废弃）
+  "evaluator_tools": ["grounding", "depth", "vlm_relation"],
   "expected_failure_modes": ["wrong_relation", "object_missing"],
   "subtype": "static_relation",
   "difficulty": "medium",
@@ -205,8 +208,10 @@ FAILURE_MODES = [
 **硬约束**：
 
 - `target_subjects` / `target_relation` / `preservation_set` 是三个必须字段。evaluator **不允许从 prompt 猜实体与关系**，只能读这三个结构化字段。
-- `evaluator_tools` 不是提示，是**调度列表**：extract_tool_features 只跳它里面的工具，节省 GPU。
-- `contrastive_pair_id` 非空时，original/inverse 两条 sample 必须同时评测才能计 `paired_E_diff`（§4.5.4）。
+- `preservation_set` 严格为 `[{scope: str, constraint: str}]` 字典列表（与 Phase 2 §8 BenchmarkSample / QuestionPlan.preserve_plan 同形）；**禁止字符串列表**（旧形态 `"s2.appearance"` 已废弃）。
+- `evaluator_tools` 不是提示，是**调度列表**：extract_tool_features 只跳它里面的工具，节省 GPU。强枚举值域 9 项（`grounding / depth / dot_motion / optical_flow / vlm_existence / vlm_attribute / vlm_relation / dinov2 / clip`）以 Phase 2 附录 A.1 `_TOOLS_BY_DIM` 为权威源；Phase 3 §A 仅负责记录各工具的 backbone / weight hash，不重复枚举定义。
+- `contrastive_role` 取值必须 ⊂ Phase 2 §8 ContrastiveRole 6 项枚举（`original / baseline_static_copy / baseline_random_motion / baseline_global_filter / baseline_camera_pan_cheat / baseline_subject_swap`）。本文档历史版本中的 `inverse` 一词与 `baseline_subject_swap` **同义**（保留作 alias，新代码统一写 `baseline_subject_swap`）。
+- `contrastive_pair_id` 非空时，同 pair 的 `original` 与对应 `baseline_subject_swap` 两条 sample 必须同时评测才能计 `paired_E_diff`（§4.5.4）；其他 4 类 baseline 由 §4.7 baselines.py 在评测端动态合成，不进入 `phase3_manifest.jsonl`。
 
 ---
 
@@ -217,12 +222,17 @@ FAILURE_MODES = [
 ```text
 data/benchmark_dataset/
   phase3_manifest.jsonl       # 每行一条 BenchmarkSample（schema 见 §2.6）
-  first_frames/               # 首帧图，与 question_id 对齐
-  ref_images/                 # multi_image 参考图
+  contrastive_pairs.jsonl     # ★ pair_id 聚合索引（§4.8 swap_sensitivity 必读）
+  first_frames/               # 首帧图（.png），与 question_id 对齐
+  ref_images/                 # multi_image 参考图（.png）
 model_adapter config
 ```
 
-**字段完整性验收**：Phase 3 启动时必须先验证 manifest 每行含 §2.6 列出的全部必须字段，缺字段直接 abort。
+**字段完整性验收**：Phase 3 启动时必须先验证：
+
+1. `phase3_manifest.jsonl` 每行含 §2.6 列出的全部必须字段，缺字段直接 abort；
+2. `contrastive_pairs.jsonl` 存在且每条 pair 至少 1 original + ≥1 baseline_qid；缺失则 §4.8 `swap_sensitivity` 跳过并在 report 中标注；
+3. `first_frames/{qid}.png` / `ref_images/{qid}_ref{k}.png` 后缀为 `.png`（与 Phase 2 §6.4 硬约束一致），使用 `.jpg` 直接 FileNotFound。
 
 ### 3.2 输出
 
@@ -732,7 +742,7 @@ C = C_yes_ratio × C_signal_stable
 # 在后 50% 帧上采样 5 帧；若高于 4/5 帧维持判定，C_yes_ratio = 1。
 ```
 
-**Subject swap inverse 配对处理**：若样本 `contrastive_pair_id` 非空，evaluator 必须输出 `paired_E_diff = E_original - E_inverse`。Phase 3 aggregate 阶段计算模型在该维度上的 `swap_sensitivity = mean(max(0, paired_E_diff))`，低于 0.2 认为模型在该维度上不遵循方向/角色指令。Motion / Interaction evaluator 同样要求输出 `paired_E_diff`。
+**Subject swap 配对处理**：若样本 `contrastive_pair_id` 非空，evaluator 必须输出 `paired_E_diff = E(role=original) - E(role=baseline_subject_swap)`（历史文本中 `E_inverse` 等价于 `E(role=baseline_subject_swap)`）。Phase 3 aggregate 阶段计算模型在该维度上的 `swap_sensitivity = mean(max(0, paired_E_diff))`，低于 0.2 认为模型在该维度上不遵循方向/角色指令。Motion / Interaction evaluator 同样要求输出 `paired_E_diff`。
 
 工具：
 
@@ -942,13 +952,23 @@ def exec_gated_score(E: float, P: float, C: float, lam: float = 0.6) -> float:
 **`swap_sensitivity` 计算规则**（仅 contrastive_pair_id 非空的样本参与）：
 
 ```text
+# 读 contrastive_pairs.jsonl 并 join 回 phase3_manifest.jsonl
 for pair in contrastive_pairs:
-    paired_E_diff = E(pair.original) - E(pair.inverse)
-    swap_sensitivity_per_dim = mean(max(0, paired_E_diff))
+    # pair.original_qids: [str]——该 pair 下 role="original" 的 question_id 列表
+    # pair.baseline_qids: [{"qid": str, "role": str}]——baseline 落盘行
+    for orig_qid in pair.original_qids:
+        sample_original = lookup(orig_qid)
+        swap_entry = next(e for e in pair.baseline_qids if e["role"] == "baseline_subject_swap")
+        sample_swap = lookup(swap_entry["qid"])
+        paired_E_diff = E(sample_original) - E(sample_swap)
+
+    swap_sensitivity_per_dim = mean(max(0, paired_E_diff) for all pairs in dim)
 
 direction_blind_dimensions = [dim for dim in DIMENSIONS
                               if swap_sensitivity[dim] < 0.2]
 ```
+
+**说明**：本计算只消费 `baseline_qids[*].role == "baseline_subject_swap"` 的项（Phase 2 唯一落盘成行的 baseline 类型），其它 4 类 baseline 由 §4.7 评测端动态合成，不在 `contrastive_pairs.jsonl` 内。
 
 论文表格里被标 `direction_blind_dimensions` 的维度建议用红字标记。
 

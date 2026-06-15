@@ -68,6 +68,18 @@ Step 4 不再调用外部 API，但执行了大量统计计算。核心功能模
 
 对每个样本的 6 个维度（attribute_binding / motion_binding / spatial_relation / action_binding / scene_dynamics / camera_transformation）分别判定：文本是否请求 × 图像是否支持 → 是否可评测。
 
+> ⚠️ **维度名空间说明**：Step 4 产出的是**旧 6 维**，处理后 Phase 1 增强阶段会转为§5 定义的**新 7 维**：
+>
+> | Step 4 旧名 | Phase 1 §5 新名 | 转换方式 |
+> |--------|--------|---------|
+> | `spatial_relation` | `spatial_composition` | `align_instances.py` 重命名 |
+> | `scene_dynamics` | `background_dynamics` | `align_instances.py` 重命名 |
+> | `camera_transformation` | `view_transformation` | `align_instances.py` 重命名 |
+> | 不存在 | `interaction_reasoning` | `align_instances.py` 动态派生（§5.3.3 推断规则：`distinct_actors ≥ 2` 且 `spatial_relation_slots` 非空时插入）。该维度的 `concept_distributions / seed_examples` 从 `action_binding` + `spatial_relation` 两维取并集填充。 |
+> | 其余 3 维（attribute / action / motion）| 同名 | 直连 |
+>
+> §2.5 / §2.6 中出现的 "7 维 dimension_priors" 均必须理解为以上转换后的结果，interaction 维 priors 为派生产物。
+
 **B. 维度级概念分布提取**
 
 对每个维度筛选出可评测样本，统计该维度下各概念的频率（top-30）：
@@ -708,13 +720,13 @@ else:  // attribute / action / motion
 
 #### 5.6.4 contrastive_spec
 
-固定 5 种对照 baseline：前 4 种为通用 anti-shortcut baseline（所有 recipe 相同），第 5 种为 **subject_swap_inverse 反向对照对**，仅对 `motion_binding` / `spatial_composition` / `interaction_reasoning` 三个有方向性/角色性的维度生成：
+固定 5 种对照 baseline：前 4 种为通用 anti-shortcut baseline（所有 recipe 相同），第 5 种为 **subject_swap 反向对照对**（历史名 "subject_swap_inverse"，与 `baseline_subject_swap` 同义），仅对 `motion_binding` / `spatial_composition` / `interaction_reasoning` 三个有方向性/角色性的维度生成：
 
 1. `static_copy`：首帧静态复制
 2. `random_motion`：随机运动
 3. `global_filter`：全局滤镜（不产生主维度变化）
 4. `camera_pan_cheat`：用运镜伪造主体运动
-5. `subject_swap_inverse`（条件生成）：把 prompt 中的"主体 A 在主体 B 左侧"改为"主体 B 在主体 A 左侧"、"球向左移动"改为"球向右移动"、"A 把杯子递给 B"改为"B 把杯子递给 A"——首帧资产不变，仅指令反向。
+5. `subject_swap`（条件生成）：把 prompt 中的"主体 A 在主体 B 左侧"改为"主体 B 在主体 A 左侧"、"球向左移动"改为"球向右移动"、"A 把杯子递给 B"改为"B 把杯子递给 A"——首帧资产不变，仅指令反向。
 
 **配对透传约束（Phase 3 衔接）**：
 
@@ -722,22 +734,71 @@ else:  // attribute / action / motion
   - `original`：原题；
   - `baseline_static_copy` / `baseline_random_motion` / `baseline_global_filter` / `baseline_camera_pan_cheat` / `baseline_subject_swap` 五种 baseline 角色之一。
 - 通用 4 种 baseline 在 Phase 3 由 `i2v_eval/baselines/*.py` 在评测端动态合成视频；它们的 `contrastive_pair_id` 与原题共享，`contrastive_role` 标记 baseline 类型。
-- `subject_swap_inverse` 是**唯一在 Phase 1/2 阶段产出独立 BenchmarkSample 行**的 baseline——它需要单独的反向 prompt 与同首帧资产；其余 4 种不在 Phase 2 落盘成行，仅在 recipe.contrastive_spec 中声明。
+- `subject_swap` 是**唯一在 Phase 1/2 阶段产出独立 BenchmarkSample 行**的 baseline——它需要单独的反向 prompt 与同首帧资产；其余 4 种不在 Phase 2 落盘成行，仅在 recipe.contrastive_spec 中声明。
+- **Phase 1 schema 透传要求**：subject_swap recipe 必须在 CandidateRecipe **顶层**写入 `contrastive_pair_id` 与 `contrastive_role="baseline_subject_swap"`（§8 schema）；其原题 recipe 顶层写 `contrastive_pair_id` 与 `contrastive_role="original"`。其余 4 种 baseline 只在 `contrastive_spec` 列表中声明，不占用顶层 contrastive 字段。
 - Phase 3 的 `aggregate.py` 按 `contrastive_pair_id` 聚合 pair_E_diff（参见 Phase 3 §5 KILLER-3 与 §8 验收门槛 "5 baseline 配对差异 ≥ 80%"）。
 
-**为什么需要 subject_swap_inverse**：T2I-CompBench 的对照设计只覆盖了"shortcut 防御"（前 4 种），但没有覆盖"指令遵循的方向性"。T2V-CompBench 在 Spatial / Motion 上明确指出，模型对"A 在 B 左"和"B 在 A 左"经常给出几乎相同的视频——这种 shortcut 用 4 种通用 baseline 抓不到，必须用同首帧+反向指令的配对题才能暴露。
+**为什么需要 subject_swap**：T2I-CompBench 的对照设计只覆盖了"shortcut 防御"（前 4 种），但没有覆盖"指令遵循的方向性"。T2V-CompBench 在 Spatial / Motion 上明确指出，模型对"A 在 B 左"和"B 在 A 左"经常给出几乎相同的视频——这种 shortcut 用 4 种通用 baseline 抓不到，必须用同首帧+反向指令的配对题才能暴露。
 
 #### 5.6.5 expected_difficulty
 
 ```
-tool_status = "valid"          → "medium"
-tool_status = "low_confidence" → "hard"
-其他                           → "hard"
+tool_status = "valid"      ∧ image_quality_score ≥ 0.85 → "easy"
+tool_status = "valid"      ∧ image_quality_score <  0.85 → "medium"
+tool_status = "low_confidence"                              → "hard"
+其他                                                           → "hard"
 ```
+
+其中 `image_quality_score` 取主体 reference asset 的 `quality.quality_score`（`assets.jsonl`）；multi_image 取参与 asset 的均值。该规则使 Phase 1 能合法产出 `easy` 档，完整覆盖 Phase 2 §9 的 `difficulty_ratio: {easy: 0.30, medium: 0.50, hard: 0.20}`。
 
 #### 5.6.6 base_prompt_draft
 
 格式：`"[dim={primary_dimension}] {clean_prompt_text}"`
+
+> **Phase 2 读者注**：`[dim=xxx]` 前缀仅供 Phase 1 audit 清班使用；Phase 2 §6.6 在 LLM polish 后必须 strip 该前缀后再入库（`re.sub(r'^\[dim=[^\]]+\]\s*', '', prompt)`），避免 fallback path 带到最终 BenchmarkSample.prompt。
+
+#### 5.6.7 subtype、semantic_rarity、quality_flags（顶层字段）
+
+这三个字段由 Phase 2 §6.2 桶化与质量门控直接消费，必须在 CandidateRecipe 顶层产出。
+
+**· subtype 推导**（面向 Phase 2 motion / interaction 维度桶化）
+
+```
+if primary == "motion_binding":
+    actors = distinct(action_slots[*].target_subject)
+    moving = [s for s in actors if has_directed_motion(s)]
+    if   |moving| == 1 ∧ |actors| == 1: subtype = "type_a_absolute_single"   # 单主体绝对运动
+    elif |moving| == 1 ∧ |actors|  > 1: subtype = "type_b_relative_single"    # 多体中单运动体
+    else                              : subtype = "type_c_multi_motion"        # 多运动体
+elif primary == "interaction_reasoning":
+    subtype = "causal" if has_causal_marker(prompt) else "cooperative"
+elif primary == "spatial_composition":
+    subtype = "static_relation" if predicate ∈ STATIC_PRED else "directional_relation"
+else:
+    subtype = input_mode      # attribute / action / background / view 复用 input_mode 作为 subtype
+```
+
+**· semantic_rarity 推导**（面向 Phase 2 桶化与 Phase 3 诊断）
+
+```
+查 priors/frequency_tiers.json[primary][concept]中主体 / attribute / verb / predicate 的档位:
+  head      → "common"
+  torso     → "common"
+  long_tail → "rare"
+多概念取最稀划分（例如主体 head、谓词 long_tail → rare）。
+```
+
+**· quality_flags 推导**（面向 Phase 2 §6.2 `_BLOCKING_QUALITY_FLAGS` 过滤）
+
+```
+flags = []
+if min(asset.quality.quality_score for asset in reference_assets) < 0.5: flags.append("low_alignment")
+if primary == "background_dynamics" ∧ lacks_inpainted_scene_asset:        flags.append("missing_inpainted_scene")
+if aligned_subjects 是空:                                                 flags.append("subject_not_visible")
+if evaluator_feasibility[primary].tool_status == "tool_uncertain":         flags.append("evaluator_infeasible")
+```
+
+以上均为顶层 `quality_flags: List[str]`（§8 schema）。存在任一 `_BLOCKING_QUALITY_FLAGS` 中的标记者，Phase 2 §6.2 会在桌化阶段直接剔除。
 
 ---
 
@@ -780,7 +841,17 @@ for recipe in recipes:
 ├── text_analysis/
 │   ├── text_parse.jsonl             # Step 3 原始（不改动）
 │   └── text_parse_v2.jsonl          # patch 后
+├── joint_analysis/                  # Step 4 产物（§2.4）
+│   ├── joint_analysis.jsonl
+│   ├── dimension_priors.jsonl       # 6 维原始，interaction 在 align 阶段派生
+│   ├── global_distributions.jsonl
+│   ├── global_visual_prior.json
+│   ├── pika_distributions.json
+│   ├── dimension_cooccurrence.json
+│   └── seed_examples/
+├── prior_package.json               # Step 5 打包产物（§2.5）——Phase 2 直接读
 └── phase1/
+    ├── manifest_clean.jsonl         # 从 raw_dir 复制进来供 Phase 2 construct_inputs 使用
     ├── aligned_instances.jsonl      # 图文对齐 + 七维诊断
     ├── assets.jsonl                 # 资产元数据
     ├── reference_bank/              # 资产图像
@@ -796,6 +867,22 @@ for recipe in recipes:
     ├── candidate_recipes.jsonl      # Phase 2 唯一入口
     └── phase1_audit_report.md       # 审计报告
 ```
+
+**Phase 2 衔接打包（phase1_bundle）**：以上原始树中 **5 个文件 + 1 个目录**需重组为 Phase 2 §2 期望的 `data/phase1_bundle/` 布局，由 `tools/pack_phase1_bundle.py` 实现（映射表同时出现于 Phase 2 §2）：
+
+```text
+phase1/priors/compatibility_matrix.json   → phase1_bundle/compatibility_matrix.json    # 提升一级
+phase1/assets.jsonl                       → phase1_bundle/reference_bank/assets.jsonl  # 与资产图同目录
+phase1/reference_bank/                    → phase1_bundle/reference_bank/              # 原样拷贝
+phase1/candidate_recipes.jsonl            → phase1_bundle/candidate_recipes.jsonl     # 原样拷贝
+prior_package.json                        → phase1_bundle/prior_package.json          # 原样拷贝
+phase1/manifest_clean.jsonl               → phase1_bundle/manifest_clean.jsonl        # 原样拷贝
+image_analysis/image_parse_v2.jsonl       → phase1_bundle/image_parse_v2.jsonl        # construct_inputs 依赖
+text_analysis/text_parse_v2.jsonl         → phase1_bundle/text_parse_v2.jsonl         # construct_inputs 依赖
+phase1/aligned_instances.jsonl            → phase1_bundle/aligned_instances.jsonl     # construct_inputs 依赖
+```
+
+Phase 2 §2 仅从 `phase1_bundle/` 读取。未进入打包表中的资产（如 Step 4 原始 `dimension_priors.jsonl`）不会被 Phase 2 消费。
 
 ---
 
@@ -834,13 +921,11 @@ for recipe in recipes:
             "required_tools": [str]
         }
     ],  # 共 7 条
-    "dimension_isolation": [
-        {
-            "primary_dimension": str,
-            "forbidden_dimensions": [str],
-            "leakage_risk_notes": str
-        }
-    ]
+    "dimension_isolation": {
+        "primary_dimension": str,
+        "forbidden_dimensions": [str],
+        "leakage_risk_notes": str
+    }
 }
 ```
 
@@ -890,7 +975,14 @@ for recipe in recipes:
         "forbidden_dimensions": [str],
         "leakage_risk_notes": str
     },
-    "expected_difficulty": str,         # medium | hard
+    # —— 面向 Phase 2 §6.2 桶化与质量门控的顶层字段（§5.6.7 推导） ——
+    "subtype": str,                     # 见 §5.6.7。Motion: type_a/b/c ・Interaction: causal/cooperative ・Spatial: static/directional ・其余 = input_mode
+    "semantic_rarity": str,             # "common" | "rare"（查 frequency_tiers 档位合并）
+    "quality_flags": [str],             # §5.6.7。枚举集：low_alignment / missing_inpainted_scene / subject_not_visible / evaluator_infeasible / …
+    "contrastive_pair_id": Optional[str],   # subject_swap 双方与原题共享；其他 recipe 为 null
+    "contrastive_role": str,                # original | baseline_subject_swap（顶层仅这两种）；默认 "original"
+    # —— 难度 ——
+    "expected_difficulty": str,         # easy | medium | hard（§5.6.5）
     "notes": str
 }
 ```
@@ -937,15 +1029,14 @@ python main.py --step phase1 --config configs/config.yaml
 
 ## 11. 实现状态与扩展计划
 
-**P0 已完成**：六个增强步骤全部实现并集成到 CLI，`--step phase1` 可一键顺序执行。
+**P0 已完成**：六个增强步骤全部实现并集成到 CLI，`--step phase1` 可一键顺序执行。`subject_swap` 反向对照对生成与顶层 `contrastive_pair_id / contrastive_role` 透传已在 `recipes.py` 中集成。
 
 **P1 扩展方向（按优先级）**：
 
-1. **subject_swap_inverse contrastive baseline 落地**（高）：在 recipes 模块对 motion / spatial / interaction 三维度自动生成反向对照题，写入 `contrastive_spec[].contrast_type="subject_swap_inverse"`，并通过 `pair_id` 与原题配对。Phase 3 评测器必须读取 `pair_id` 计算配对分差。
-2. **WordNet 同义归一化**（中）：对 `target_subject` / `action_verb` 做 NLTK WordNet lemma 归一化，frequency_tiers 基于 canonical lemma 重算，避免同义词稀释 head 档（详见 §5.5.1 取舍说明）。
-3. **thing/stuff 词汇过滤**（中）：引入 `thing_vocabulary.json` 在 motion / spatial recipe 生成阶段过滤 stuff 主体（详见 §5.5.5）。
-4. **接入 SAM / Grounding-DINO** 替换 mock_9grid，获取像素级 mask 和精确 bbox。
-5. **实现 `scene_reference_inpainted`**（主体抹除后的纯背景图）。
-6. **基于实际运行数据动态更新 compatibility_matrix**。
-7. **evaluator_feasibility 的 image_support 判定** 改为对接 Step 4 真实指标。
-8. **COCO 80 类覆盖率诊断**（低）：audit 阶段输出 `target_subject` 与 COCO 80 类的重叠率作为分布健康度指标。仅作为诊断信号，**不引入 COCO 作为数据源**（详见 §5.5.5 取舍说明）。
+1. **WordNet 同义归一化**（中）：对 `target_subject` / `action_verb` 做 NLTK WordNet lemma 归一化，frequency_tiers 基于 canonical lemma 重算，避免同义词稀释 head 档（详见 §5.5.1 取舍说明）。
+2. **thing/stuff 词汇过滤**（中）：引入 `thing_vocabulary.json` 在 motion / spatial recipe 生成阶段过滤 stuff 主体（详见 §5.5.5）。
+3. **接入 SAM / Grounding-DINO** 替换 mock_9grid，获取像素级 mask 和精确 bbox。
+4. **实现 `scene_reference_inpainted`**（主体抹除后的纯背景图）。
+5. **基于实际运行数据动态更新 compatibility_matrix**。
+6. **evaluator_feasibility 的 image_support 判定** 改为对接 Step 4 真实指标。
+7. **COCO 80 类覆盖率诊断**（低）：audit 阶段输出 `target_subject` 与 COCO 80 类的重叠率作为分布健康度指标。仅作为诊断信号，**不引入 COCO 作为数据源**（详见 §5.5.5 取舍说明）。
