@@ -53,7 +53,7 @@ i2v_compbench/
       interaction.yaml
   data/
     phase1_bundle/        # Phase 1 输出，作为 Phase 2 输入
-    benchmark_dataset/
+    benchmark_dataset/         # 产出目录结构见 §3.2，顶层使用 first_frames/ 与 ref_images/（不是 images/ 和 references/）
   src/
     i2vcompbench/
       phase2/
@@ -140,10 +140,11 @@ data/benchmark_dataset/
     background_dynamics.jsonl
     view_transformation.jsonl
     interaction_reasoning.jsonl
-  images/
-  references/
+  first_frames/                 # 单图首帧、多图模式的"实际首帧"。Phase 3 指定路径，禁止使用旧名 images/
+  ref_images/                   # multi_image 参考图集合。Phase 3 指定路径，禁止使用旧名 references/
   prompts/
   phase3_manifest.jsonl
+  contrastive_pairs.jsonl       # 配对索引：pair_id → [original_qid, baseline_qid]
   qc_reports/
   dataset_card.md
 ```
@@ -233,11 +234,14 @@ build_quota → sample_recipes → build_question_plan → construct_inputs
 2. **subtype 解析**：优先用 recipe 上显式声明的 subtype；缺失时按 `input_mode` 在模板库 `subtypes` 列表里匹配（如 `multi_image → attribute_transfer`），再缺就退到该维度第一个可用 subtype。
 3. **question_id 生成**：`{dim_short}_{mode_short}_{seq:04d}`，其中 `DIM_SHORT` 把长维度名缩成 attr / action / motion / spatial / bg / view / inter；`mode_short` 是 single / multi。
 4. **模板渲染**：用 `prompt_pattern`（Jinja-like）渲染 `prompt_draft`；若槽位缺失导致渲染失败，回退到 recipe 自带的 `base_prompt_draft`，并在 risk_flags 里记 `template_render_failed`。
-5. **结构化字段填充**：从模板拷贝 `target_plan / preserve_plan / dimension_isolation / evaluator_plan`，把里面的槽位占位符替换成实际值（`ref:target_subject` 之类指代保持原样，等 Step 4.4 落实到 asset_id）。
+5. **结构化字段填充**：从模板拷贝 `target_plan / preserve_plan / dimension_isolation / evaluator_tools / expected_failure_modes`，把里面的槽位占位符替换成实际值（`ref:target_subject` 之类指代保持原样，等 Step 4.4 落实到 asset_id）。
+6. **target_subjects 稳定 id 与 ref_image_idx 分配**（Phase 3 衔接硬约束）：`target_plan.target_subjects[]` 必须按 plan 内出现顺序补 `id = "s{i+1}"`（s1, s2, …）；当 `input_mode == multi_image` 时，每个 target_subject 必须额外带 `ref_image_idx`，与 Step 4.4 写入 `ref_images/{question_id}_ref{k}.jpg` 的下标一一对齐（同一角色多张参考时取该角色的首张 ref_image_idx）。Phase 3 evaluator 直接通过 `target_subjects[i].ref_image_idx` 索引参考图。
+7. **evaluator_tools 强枚举映射**：依据 `target_dimension` 查 `_TOOLS_BY_DIM` 表（§A 附录），结果必须 ⊂ `{grounding, depth, dot_motion, optical_flow, vlm_existence, vlm_attribute, vlm_relation, dinov2, clip}`；任何模板自由文本会被强制覆写。`multi_image` 样本额外追加 `dinov2, clip, grounding`（用于 Phase 3 identity_binding 软因子）。
+8. **expected_failure_modes 默认填充**：依据 `target_dimension` 查 `_FAILURES_BY_DIM` 表（§A 附录）取默认值；若 LLM 在 Step 4.6 polish 阶段进一步标注更具体的失败模式，可追加，但所有取值必须 ⊂ Phase 3 §2.5 的 15 种 FAILURE_MODES 枚举。
 
 **输出**
 
-- `benchmark_dataset/question_plans.jsonl`：每条 `QuestionPlan` 包含 question_id、recipe_id、维度五元组、`input_plan` / `target_plan` / `preserve_plan` / `dimension_isolation` / `evaluator_plan` / `prompt_draft`。
+- `benchmark_dataset/question_plans.jsonl`：每条 `QuestionPlan` 包含 question_id、recipe_id、维度五元组、`input_plan` / `target_plan`（含 `target_subjects[]` 的稳定 id + 多图模式的 ref_image_idx）/ `preserve_plan` / `dimension_isolation` / `evaluator_tools`（强枚举列表）/ `expected_failure_modes`（15 种枚举之子集）/ `prompt_draft`。
 
 **关键设计与底层原理**
 
@@ -245,7 +249,10 @@ build_quota → sample_recipes → build_question_plan → construct_inputs
 - **为什么 subtype 走三级回退而不是直接抛错**：模板库不可能枚举所有真实分布的 subtype 组合（例如某些罕见 subtype 在 pilot 里恰好没被 Phase 1 标出来），让 input_mode 一致即可，再不行退到该维度第一个可用 subtype。这种"宽松匹配"比"严格匹配整桶失败"更利于 pilot 跑通。
 - **为什么 question_id 用 DIM_SHORT + mode_short 而不是哈希**：人工排查时第一眼就能从 ID 看出维度与模式（`attr_multi_0001` 一眼就知道是属性绑定的多图题），比纯哈希 ID 友好；同时短前缀避免文件名超长，也方便按前缀做 grep / 分桶统计。
 - **为什么 prompt_pattern 渲染失败要回退到 base_prompt_draft 而不是丢弃**：渲染失败的真因往往是某个槽位缺值（例如 attribute_change_slots 没标全）。但 recipe 自带的 `base_prompt_draft` 已经是 Phase 1 用真实 caption 拼出的可读句子，留作兜底比让整道题失败更划算——QC 仍能跑、polish 仍能改写，只是 risk_flags 多一条 `template_render_failed` 提示人工抽查。
-- **为什么 evaluator_plan 必须在 Phase 2 落定**：如果 Phase 3 才反向解析自然语言 prompt 推工具集，会引入 NLU 误差且不可复现——同一道题在不同次评测里调用的工具栈可能不一样，分数也就不能横向比。把工具集合编码进 evaluator_plan 是把"评测目标"从自然语言搬到结构化字段，让 Phase 3 变成纯执行器。
+- **为什么 evaluator_tools 必须在 Phase 2 落定且强枚举**：如果 Phase 3 才反向解析自然语言 prompt 推工具集，会引入 NLU 误差且不可复现——同一道题在不同次评测里调用的工具栈可能不一样，分数也就不能横向比。把工具集合编码进 `evaluator_tools`（且取值受 `_TOOLS_BY_DIM` 强约束）是把"评测目标"从自然语言搬到结构化字段，让 Phase 3 变成纯执行器。**注意原稿中的 `evaluator_plan` 自由文本字段已废弃**——Phase 3 只读 `evaluator_tools` 强枚举列表。
+- **为什么 expected_failure_modes 必须在 Phase 2 写定**：Phase 3 的 baseline 验收门槛要求"5 种 baseline 配对差异 ≥ 80%"，这意味着每条原题都必须**预先告诉评测器**它期望暴露哪些失败模式，否则 baseline 命中后无法对照。`_FAILURES_BY_DIM` 默认表（§A）保证每条样本至少有 2 个 expected_failure_modes，避免空数组导致 baseline 配对失效。
+- **为什么 target_subjects 必须有稳定 id**：Phase 3 的 `target_relation.subj/obj` 需要引用主体（如 `subj="s1", obj="s2"`），依赖于稳定 id 而不是 noun（noun 可能重复，例如两只 cat）。在 Phase 2 落定 `s1/s2/...` 顺序，Phase 3 才能正确做 grounding 与配对。
+- **为什么 multi_image 必须强制 ref_image_idx**：Phase 3 的 identity_binding 软因子按主体逐个比对 ref_image vs 视频帧；如果 `ref_image_idx` 缺失或与文件名顺序不一致，会把 cat 的参考图误比给 chair 的视频帧，DINOv2 cosine 必然崩盘。这是 multi_image 最容易翻车且最难调试的地方，Phase 2 必须保证文件名下标 = ref_image_idx。
 - **为什么 prompt_draft 不能直接当 final**：draft 是结构化模板渲染的产物，并未"看图说话"过。如果首帧实际状态与模板槽位有出入（例如模板写"a woman"，但首帧实际是"两个人，左边是女士"），prompt 与图就会错位。最终 prompt 必须经过 Step 4.6 的 VLM 描述对齐才能保证 prompt 与起始状态自洽。
 
 ### 4.4 `construct_inputs.py` — 把题目计划落实成真正的输入图像
@@ -265,7 +272,7 @@ build_quota → sample_recipes → build_question_plan → construct_inputs
    - 缺位时调用 `Phase2SiliconFlowClient.call_t2i`（Kwai-Kolors/Kolors，1024×1024）按角色描述合成；
    - T2I 失败则在 `quality.notes` 写 `t2i_generated` 或 `t2i_failed`，由 QC 决定是否丢弃。
 5. **统一规格化**：所有图像用 PIL resize 到 `long_edge=1024`，保持宽高比，统一存为 PNG。
-6. **路径约定**：单图首帧 `images/{question_id}.png`；多图参考 `references/{question_id}__{role}.png`。
+6. **路径约定**（Phase 3 衔接硬约束）：单图首帧 `first_frames/{question_id}.png`；多图参考 `ref_images/{question_id}_ref{k}.png`，其中 `k` **等于** `target_subjects[i].ref_image_idx`（在 Step 4.3 已绑定）。同一角色可能多张参考时拼接后缀：`{question_id}_ref{k}_v{j}.png`，Phase 3 只读 v0 作为主参考。**禁止使用旧名 `images/` `references/`**。
 7. **资产质量元数据**：每张图记录 `identity_visibility / crop_leakage_risk / resolution_ok`，这些字段在 QC 与最终多图聚合中被反复消费。
 
 **输出**
@@ -331,8 +338,8 @@ build_quota → sample_recipes → build_question_plan → construct_inputs
 **处理**（仅处理 `qc_status=pass` 的题目）
 
 1. **VLM 描述首帧**：调用 VLM 把首帧描述成中性 caption，作为定稿时的视觉锚点。
-2. **LLM polish**：把 caption + question_plan 的 `target_plan / preserve_plan / dimension_isolation` 拼进 `prompt_polish.txt`，要求模型返回 JSON：`{i2v_prompt, reasoning}`。
-3. **解析与校验**：先剥 fenced ``` 代码块再做括号扫描提取 JSON；然后对 `i2v_prompt` 做：
+2. **LLM polish**：把 caption + question_plan 的 `target_plan / preserve_plan / dimension_isolation` 拼进 `prompt_polish.txt`，要求模型返回 JSON：`{prompt, reasoning}`（**字段名 `prompt`，不是原稿中的 `i2v_prompt`**，与 Phase 3 BenchmarkSample 顶层字段名一致）。
+3. **解析与校验**：先剥 fenced ``` 代码块再做括号扫描提取 JSON；然后对 `prompt` 做：
    - **禁词检查**：命中 `dimension_isolation.forbidden_words` 任一词即失败；
    - **字数检查**：常规维度 8–25 词，`interaction_reasoning` 放宽到 30 词；
    - **active verb 硬约束**（除 `view_transformation` 外的六个维度）：prompt 必须至少包含一个 active verb（SpaCy POS 标为 `VERB` 且 lemma 不在隐含静态集 `{be, have, exist, remain, stay, look, seem, appear}` 中）。`view_transformation` 题仅要求包含 camera 动作词（`zoom`/`pan`/`tilt`/`dolly`/`orbit` 任一）。未命中记 `failed_check="missing_active_verb"`。
@@ -341,7 +348,7 @@ build_quota → sample_recipes → build_question_plan → construct_inputs
 
 **输出**
 
-- `benchmark_dataset/prompts/final_prompts.jsonl`：`FinalPromptEntry { question_id, i2v_prompt, polish_attempts, used_fallback, vlm_caption }`。
+- `benchmark_dataset/prompts/final_prompts.jsonl`：`FinalPromptEntry { question_id, prompt, polish_attempts, used_fallback, vlm_caption }`（**字段名 `prompt`，不是 `i2v_prompt`**）。
 
 **关键设计与底层原理**
 
@@ -362,27 +369,33 @@ build_quota → sample_recipes → build_question_plan → construct_inputs
 **处理**
 
 1. **四源 join**：以 `question_id` 为主键，把 question_plan、input_assets、qc_report、final_prompt 内连接。
-2. **门控筛选**：仅保留 `qc_status=pass` 且有非空 `i2v_prompt` 且 manifest 非空的样本。
+2. **门控筛选**：仅保留 `qc_status=pass` 且有非空 `prompt`（原名 `i2v_prompt` 已废弃）且 manifest 非空的样本。
 3. **多图质量聚合 `_aggregate_multi_quality`**（worst-case 策略）：
    - `crop_leakage_risk` 取所有 reference 中的最大值（最差）；
    - `identity_visibility` 取最小值（最弱）；
-   - `scale_compatibility` 由 bbox 面积比换算后取最小。
-4. **拼装 BenchmarkSample**：
-   - 维度五元组直接搬；`input_images[]` 来自 manifest；`i2v_prompt` 来自 final_prompts；
-   - `metadata` 由 question_plan 的 target/preserve/evaluator_plan 翻译而来；
-   - `source_trace` 含 `recipe_id / source_type / phase1_sample_ids / phase1_asset_ids`，全程可追溯到 TIP 原始首帧；
-   - `qc.status / qc.risk_flags` 直接从 QCReport 拷贝。
-5. **分维度落盘**：按 dimension 写到 `samples/{dimension}.jsonl`（共 7 个文件），同时把每条样本的精简版本写入 `phase3_manifest.jsonl`。
+   - `scale_compatibility` 由 bbox 面积比换算后取最小值。
+4. **拼装 BenchmarkSample（顶层字段全部扶平，禁止 `metadata` 嵌套）**：
+   - **顶层字段**：`question_id / dimension / input_mode / first_frame_path / input_image_paths / prompt / target_subjects / target_relation / preservation_set / contrastive_pair_id / contrastive_role / evaluator_tools / expected_failure_modes / subtype / difficulty / semantic_rarity / source_type` —— 严格对齐 Phase 3 §2.4 schema；
+   - `first_frame_path` 指向 `first_frames/{question_id}.png`（**不是 `images/`**）；
+   - `input_image_paths` 为 multi_image 时 ≥2、single_image 时为空数组，顺序笥同 `target_subjects[i].ref_image_idx`；
+   - `target_subjects` 透传 Step 4.3 已分配的 `id`(s1/s2/...) + `ref_image_idx`；
+   - `contrastive_pair_id` / `contrastive_role` 从 SampledRecipe 透传到顶层（**原稿中位于 metadata 内嵌套的位置已废弃**）；
+   - `evaluator_tools` 「强枚举」透传 question_plan；`expected_failure_modes` 透传 question_plan（必 ⊂ 15 种 FAILURE_MODES）；
+   - `source_type` 走 `_LEGACY_SOURCE_MAP` 转换（§C 附录）：Phase 1 的 `observed_single_image / derived_single_image / derived_multi_reference / external_*` → Phase 3 枚举 `tip_i2v_real / tip_i2v_synthetic_first_frame / external_real / external_synthetic`；
+   - **调试辅助字段**（不进顶层 schema，另存于 `_audit` 子节点）：`source_trace`（`recipe_id / phase1_sample_ids / phase1_asset_ids`）、`qc.status / qc.risk_flags`、`multi_reference_quality`——仅供 Phase 2 audit 与人工查验使用，Phase 3 evaluator **禁止**读取 `_audit.*` 字段。
+5. **contrastive_pairs.jsonl 产出**：按 `contrastive_pair_id` 聚合为 `{pair_id, dimension, original_qid, baseline_qids:[...], baseline_role_list:[...]}` 写入 `benchmark_dataset/contrastive_pairs.jsonl`，Phase 3 `aggregate.py` 直接读取这份索引计算 pair_E_diff。
+6. **分维度落盘**：按 dimension 写到 `samples/{dimension}.jsonl`（共 7 个文件），同时把每条样本的精简版本（等价于 BenchmarkSample 顶层视图，**不包含 `_audit`**）写入 `phase3_manifest.jsonl`。
 
 **输出**
 
-- `benchmark_dataset/samples/{dimension}.jsonl` × 7。
-- `benchmark_dataset/phase3_manifest.jsonl`：Phase 3 唯一入口。
+- `benchmark_dataset/samples/{dimension}.jsonl` × 7（顶层字段严格对齐 Phase 3 §2.4，含 `_audit` 子节点供内部查验）。
+- `benchmark_dataset/phase3_manifest.jsonl`：Phase 3 唯一入口（不含 `_audit`）。
+- `benchmark_dataset/contrastive_pairs.jsonl`：`contrastive_pair_id` 聚合索引，Phase 3 `aggregate.py` 计算 pair_E_diff 使用。
 
 **关键设计与底层原理**
 
 - **为什么以 question_id 落盘 join 而不是内存串接**：四个上游模块各自独立写 jsonl，如果靠内存对象串接，一旦中间任何一步崩溃就要从头重跑。落盘 + 文件 join 是流水线最稳的串接方式——任何一步失败都可以单独重跑该步，前后产物保留可复查。
-- **为什么三重门控（pass + 非空 prompt + 非空 manifest）**：三种空值各自代表不同的失败模式——`qc_status≠pass` 是质量否决，`i2v_prompt 空` 是 polish 失败且未 fallback（理论上不应发生，是兜底），`manifest 空` 是构图失败。任何一项缺失都会让 Phase 3 报错，三重门控能在 export 阶段就把这些样本滤掉，比让 Phase 3 模型跑完才发现问题节省至少一个量级的算力。
+- **为什么三重门控（pass + 非空 prompt + 非空 manifest）**：三种空值各自代表不同的失败模式——`qc_status≠pass` 是质量否决，`prompt 空` 是 polish 失败且未 fallback（理论上不应发生，是兜底），`manifest 空` 是构图失败。任何一项缺失都会让 Phase 3 报错，三重门控能在 export 阶段就把这些样本滤掉，比让 Phase 3 模型跑完才发现问题节省至少一个量级的算力。
 - **为什么多图质量按 worst-case 聚合**：评测可信度的关键是"任何一张参考的弱点都会被模型利用"——三张参考里有一张背景脏，模型可能就靠那张背景做空间推断；最高/平均聚合会掩盖这种风险。worst-case 标记最保守，让 audit 能精准识别出"看似合格但有薄弱点"的多图样本。
 - **为什么 phase3_manifest 是 BenchmarkSample 的视图而不是独立结构**：保证两份产物 schema 同源——manifest 字段调整时直接从 Sample 派生，不会出现"加了字段但忘了同步 manifest"的下游事故。如果用独立 schema，schema drift 是迟早的事。
 - **为什么按 dimension 分文件而不是单一大文件**：Phase 3 评测器是按维度调度的（Step 5 `evaluators/{dimension}.py`），分文件让"只跑某维度"成为零开销操作（直接读对应 jsonl），不必每次过滤；论文统计也需要按维度切片，分文件让 wc -l 就能统计每维度规模。
@@ -463,11 +476,23 @@ i2vcompbench phase2 --config configs/phase2.yaml --mode pilot
 
 ## 7. Phase 2 最小验收标准
 
+### 7.1 体量与覆盖
+
 - pilot 输出 7×20=140 条样本。
 - 每个维度同时包含 single_image 和 multi_image，View 可少量 multi_image。
-- 每条样本有完整 `metadata.expected_change`、`preserve_constraints`、`evaluator_hints`。
-- 每条 multi_image 样本有 `reference_assets` 与 `multi_reference_quality`。
-- `phase3_manifest.jsonl` 与 samples 数量一致。
+- 每条 multi_image 样本必须落盘 `ref_images/{question_id}_ref{k}.png`（k 与 `target_subjects[i].ref_image_idx` 对齐），并在 `_audit.multi_reference_quality` 留痕。
+- `phase3_manifest.jsonl` 与 `samples/{dimension}.jsonl` 总条数一致。
+
+### 7.2 Phase 3 衔接硬约束（7 项必检，违反任一即不可进入 Phase 3）
+
+- **目录命名**：必须使用 `first_frames/` 与 `ref_images/`，**禁止**出现 `images/` 或 `references/`。
+- **字段扁平化**：BenchmarkSample 顶层必须包含 `question_id / dimension / input_mode / first_frame_path / input_image_paths / prompt / target_subjects / target_relation / preservation_set / contrastive_pair_id / contrastive_role / evaluator_tools / expected_failure_modes / subtype / difficulty / semantic_rarity / source_type` 全部 17 个字段，**禁止**出现 `metadata.*` 嵌套；`prompt` 字段名是 `prompt`，**不是** `i2v_prompt`。
+- **target_subjects 稳定 id**：每条样本的 `target_subjects[i].id` 必须形如 `s1, s2, ...`，按 question_plan 出现顺序赋值；multi_image 样本必须额外带 `ref_image_idx` 且与 `ref_images/{qid}_ref{k}.png` 中的 k 一一对齐。
+- **evaluator_tools 强枚举**：取值必须 ⊂ `{grounding, depth, dot_motion, optical_flow, vlm_existence, vlm_attribute, vlm_relation, dinov2, clip}`（9 项），由 `_TOOLS_BY_DIM`（§A）按 dimension 强制覆写，禁止自由文本。
+- **expected_failure_modes 非空**：必须默认填充（`_FAILURES_BY_DIM`，§A）且取值 ⊂ Phase 3 §2.5 的 15 种 FAILURE_MODES 枚举。
+- **source_type 新词汇**：必须 ⊂ `{tip_i2v_real, tip_i2v_synthetic_first_frame, external_real, external_synthetic}`，Phase 1 旧词汇必须经 `_LEGACY_SOURCE_MAP`（§C）转换；**禁止**直接透传 `observed_single_image / derived_single_image / derived_multi_reference / external_*` 等 Phase 1 内部词汇。
+- **contrastive 顶层透传**：`contrastive_pair_id` / `contrastive_role` 必须出现在顶层；同 pair 的 original 与 baseline 行的 `contrastive_pair_id` 必须一致；`contrastive_pairs.jsonl` 必须存在且每条 pair 至少包含 1 original + ≥1 baseline。
+- **_audit 隔离**：`source_trace` / `qc` / `multi_reference_quality` 等调试字段只允许出现在 `_audit` 子节点；`phase3_manifest.jsonl` 中**禁止**包含 `_audit`。
 
 ---
 
@@ -477,9 +502,14 @@ i2vcompbench phase2 --config configs/phase2.yaml --mode pilot
 2. 不要把多图样本标成 stress-only；当前主线要求多图进入主维度。
 3. 不要把 Spatial prompt 写成 "move/reposition/shift"。Spatial 是静态组装。
 4. 不要让 `qc_status=needs_manual_review` 的样本未经人工确认就进入 `phase3_manifest.jsonl`。
-5. 不要让 multi_image 样本只填 prompt 而忘记 `reference_assets` 与 `multi_reference_quality`。
-6. 不要让 Phase 3 反向解析自然语言 prompt 才能知道评测目标——所有 metadata 在 Phase 2 必须填好。
+5. 不要让 multi_image 样本只填 prompt 而忘记 `ref_images/{qid}_ref{k}.png` 落盘 + `_audit.multi_reference_quality` 留痕。
+6. 不要让 Phase 3 反向解析自然语言 prompt 才能知道评测目标——所有结构化字段（target_subjects / target_relation / preservation_set / evaluator_tools / expected_failure_modes）在 Phase 2 必须填好。
 7. 不要静默降级 input_mode（例如某维度多图不够时偷偷转成单图），应写入 `quota_unfilled_report.json`。
+8. **不要保留 `metadata` 嵌套结构**——Phase 3 §2.4 要求 17 个字段全部扁平到 BenchmarkSample 顶层；`expected_change / preserve_constraints / evaluator_hints` 等旧设计必须拆扁平为 `target_subjects / target_relation / preservation_set / evaluator_tools / expected_failure_modes`。
+9. **不要使用 Phase 1 旧 source_type 词汇**——`observed_single_image / derived_single_image / derived_multi_reference / external_real / external_synthetic` 必须经 `_LEGACY_SOURCE_MAP`（§C）映射到 Phase 3 的 `tip_i2v_real / tip_i2v_synthetic_first_frame / external_real / external_synthetic` 后再写入顶层 `source_type`。
+10. **不要在 `evaluator_tools` 中写自由文本**——必须 ⊂ 9 项工具枚举（见 §A `_TOOLS_BY_DIM`）；同样**不要把 `expected_failure_modes` 留空**——必须按 dimension 默认填充（见 §A `_FAILURES_BY_DIM`）。
+11. **不要使用旧目录名 `images/` `references/`**——Phase 3 硬编码读取 `first_frames/` 与 `ref_images/`，旧名会让 evaluator 直接 FileNotFound。
+12. **不要把调试字段混入顶层**——`source_trace / qc / multi_reference_quality` 等 Phase 1/2 内部审计字段只能出现在 `_audit` 子节点，且 `phase3_manifest.jsonl` 必须剔除 `_audit`。
 
 ---
 
@@ -491,3 +521,58 @@ i2vcompbench phase2 --config configs/phase2.yaml --mode pilot
 4. 验证 `phase3_manifest.jsonl` schema 合法、metadata 完整。
 
 完成 Phase 2 闭环后，再进入 Phase 3（详见 `Phase3_模型评测.md`）。
+
+---
+
+## 附录 A. dimension → evaluator_tools / expected_failure_modes 映射表
+
+本附录被 §4.3 build_question_plan 与 §4.7 export_dataset 引用，是 Phase 2 → Phase 3 衔接的强枚举权威表。**任何与下表不一致的 evaluator_tools / expected_failure_modes 取值都必须在 §4.3 step 7/8 被覆写为下表值**。
+
+### A.1 `_TOOLS_BY_DIM`（dimension → required evaluator_tools）
+
+| dimension | required evaluator_tools |
+|-----------|--------------------------|
+| attribute_binding | `grounding, vlm_attribute, vlm_existence` |
+| action_binding | `grounding, vlm_existence, optical_flow` |
+| motion_binding | `grounding, dot_motion, optical_flow` |
+| spatial_composition | `grounding, depth, vlm_relation` |
+| background_dynamics | `grounding, optical_flow, vlm_existence` |
+| view_transformation | `depth, optical_flow, vlm_existence` |
+| interaction_reasoning | `grounding, vlm_relation, optical_flow` |
+
+**multi_image 加挂工具**：当 `input_mode == multi_image` 时，无论 dimension 为何，都额外追加 `dinov2, clip, grounding`（用于身份保持与外观一致性度量）。
+
+**强枚举值域**：`{grounding, depth, dot_motion, optical_flow, vlm_existence, vlm_attribute, vlm_relation, dinov2, clip}` 共 9 项，与 Phase 3 §A 附录工具表一致。
+
+### A.2 `_FAILURES_BY_DIM`（dimension → 默认 expected_failure_modes）
+
+| dimension | default expected_failure_modes |
+|-----------|--------------------------------|
+| attribute_binding | `wrong_attribute, object_missing, identity_drift` |
+| action_binding | `wrong_action, object_missing, static_copy` |
+| motion_binding | `wrong_motion_direction, static_copy, camera_pan_cheat` |
+| spatial_composition | `wrong_relation, view_collapse, object_missing` |
+| background_dynamics | `background_drift, non_target_drift, global_filter` |
+| view_transformation | `view_collapse, camera_pan_cheat, identity_drift` |
+| interaction_reasoning | `wrong_relation, wrong_action, object_missing` |
+
+**强枚举值域**：必须 ⊂ Phase 3 §2.5 FAILURE_MODES 15 种枚举：
+`object_missing / wrong_attribute / wrong_action / wrong_motion_direction / wrong_relation / view_collapse / identity_drift / non_target_drift / background_drift / tool_uncertain / low_confidence / invalid_input / camera_pan_cheat / static_copy / global_filter`。
+
+LLM 在 §4.6 finalize_prompts polish 阶段如能识别更具体的失败模式可追加，但仍必须在上述 15 项内。
+
+---
+
+## 附录 C. `_LEGACY_SOURCE_MAP`（Phase 1 source_type → Phase 3 source_type）
+
+本附录被 §4.7 export_dataset step 4 引用。Phase 1 的 `source_type` 取值是为先验数据准备阶段设计的（描述 "这条 recipe 的图像/题面是怎么来的"），与 Phase 3 evaluator 期望的 "数据集分布标签" 词汇不一致；Phase 2 export 时必须按下表强制转换：
+
+| Phase 1 source_type（旧） | Phase 3 source_type（新，写入 BenchmarkSample 顶层） |
+|--------------------------|----------------------------------------------------|
+| `observed_single_image` | `tip_i2v_real` |
+| `derived_single_image` | `tip_i2v_synthetic_first_frame` |
+| `derived_multi_reference` | `tip_i2v_synthetic_first_frame` |
+| `external_real` | `external_real` |
+| `external_synthetic` | `external_synthetic` |
+
+**Phase 3 顶层 source_type 强枚举值域**：`{tip_i2v_real, tip_i2v_synthetic_first_frame, external_real, external_synthetic}` 共 4 项。任何旧词汇直接透传都视为衔接违规（见 §7.2 与 §8 第 9 条）。

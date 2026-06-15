@@ -714,7 +714,16 @@ else:  // attribute / action / motion
 2. `random_motion`：随机运动
 3. `global_filter`：全局滤镜（不产生主维度变化）
 4. `camera_pan_cheat`：用运镜伪造主体运动
-5. `subject_swap_inverse`（条件生成）：把 prompt 中的"主体 A 在主体 B 左侧"改为"主体 B 在主体 A 左侧"、"球向左移动"改为"球向右移动"、"A 把杯子递给 B"改为"B 把杯子递给 A"——首帧资产不变，仅指令反向。该 baseline 与原题构成**配对样本**（共享 `pair_id`），Phase 3 必须比对模型在两题上的 E 分差异：方向/角色正确的模型应该原题高分、反向题低分；如果两题分数接近，说明模型无视指令只在跑视觉先验。
+5. `subject_swap_inverse`（条件生成）：把 prompt 中的"主体 A 在主体 B 左侧"改为"主体 B 在主体 A 左侧"、"球向左移动"改为"球向右移动"、"A 把杯子递给 B"改为"B 把杯子递给 A"——首帧资产不变，仅指令反向。
+
+**配对透传约束（Phase 3 衔接）**：
+
+- **所有 5 种 baseline 都必须分配 `contrastive_pair_id`**（命名 `{dim}_pair_{NNNN}`，NNNN 在维度内全局递增），并通过 `contrastive_role` 标识本条样本在 pair 中的角色：
+  - `original`：原题；
+  - `baseline_static_copy` / `baseline_random_motion` / `baseline_global_filter` / `baseline_camera_pan_cheat` / `baseline_subject_swap` 五种 baseline 角色之一。
+- 通用 4 种 baseline 在 Phase 3 由 `i2v_eval/baselines/*.py` 在评测端动态合成视频；它们的 `contrastive_pair_id` 与原题共享，`contrastive_role` 标记 baseline 类型。
+- `subject_swap_inverse` 是**唯一在 Phase 1/2 阶段产出独立 BenchmarkSample 行**的 baseline——它需要单独的反向 prompt 与同首帧资产；其余 4 种不在 Phase 2 落盘成行，仅在 recipe.contrastive_spec 中声明。
+- Phase 3 的 `aggregate.py` 按 `contrastive_pair_id` 聚合 pair_E_diff（参见 Phase 3 §5 KILLER-3 与 §8 验收门槛 "5 baseline 配对差异 ≥ 80%"）。
 
 **为什么需要 subject_swap_inverse**：T2I-CompBench 的对照设计只覆盖了"shortcut 防御"（前 4 种），但没有覆盖"指令遵循的方向性"。T2V-CompBench 在 Spatial / Motion 上明确指出，模型对"A 在 B 左"和"B 在 A 左"经常给出几乎相同的视频——这种 shortcut 用 4 种通用 baseline 抓不到，必须用同首帧+反向指令的配对题才能暴露。
 
