@@ -1,0 +1,68 @@
+dimension: motion_binding
+description: |
+  Subject displacement / trajectory in the scene.
+  Type A: absolute direction (move to the right); Type B: relative displacement
+  (move to the right of the box); Type C: multi-subject motions (rare).
+
+subtypes:
+  - id: type_a_absolute_single
+    input_mode: single_image
+    required_images:
+      - role: first_frame
+        source_preference: [tip_derived_reference, t2i_generated]
+        description: "scene with the moving subject at its starting position"
+    prompt_pattern: "The {target_subject} moves {direction}."
+    t2i_prompt_pattern: "Photo of {target_subject} positioned at the {start_position} of the frame, plain scene"
+    forbidden_words: ["pan", "zoom", "tilt", "camera moves", "color", "wear"]
+    camera_constraint: forbidden
+    evaluator_tools: [grounding, tracking, flow]
+    evaluator_E_target_pattern: "{target_subject} displaces in direction '{direction}'"
+    evaluator_P_constraints:
+      - "identity of {target_subject} preserved"
+      - "background stable"
+      - "camera fixed"
+    evaluator_C_criteria:
+      - "smooth trajectory"
+      - "no teleport / discontinuity"
+
+  - id: type_b_relative_single
+    input_mode: single_image
+    required_images:
+      - role: first_frame
+        source_preference: [tip_derived_reference, t2i_generated]
+        description: "scene containing both target_subject and reference_subject"
+    prompt_pattern: "The {target_subject} moves to the {target_relation} of the {reference_subject}."
+    t2i_prompt_pattern: "Photo of {target_subject} and {reference_subject} both visible, plain scene"
+    forbidden_words: ["pan", "zoom", "tilt", "camera moves", "color"]
+    camera_constraint: forbidden
+    evaluator_tools: [grounding, tracking, flow]
+    evaluator_E_target_pattern: "{target_subject} ends up {target_relation} of {reference_subject}"
+    evaluator_P_constraints:
+      - "identity of both subjects preserved"
+      - "{reference_subject} appearance and position stable"
+      - "background stable"
+    evaluator_C_criteria:
+      - "smooth trajectory"
+      - "no flicker"
+
+  - id: type_c_multi_motion
+    input_mode: multi_image
+    required_images:
+      - role: target_subject
+        source_preference: [tip_derived_reference, t2i_generated]
+        description: "subject A that should move"
+      - role: reference_subject
+        source_preference: [tip_derived_reference, t2i_generated]
+        description: "subject B providing relative anchor"
+    prompt_pattern: "In the composed scene, the {target_subject} moves {direction} relative to the {reference_subject}."
+    t2i_prompt_pattern: "Isolated photo of {role_subject}, plain neutral background"
+    forbidden_words: ["pan", "zoom", "tilt", "camera moves", "color"]
+    camera_constraint: forbidden
+    evaluator_tools: [grounding, tracking, flow]
+    evaluator_E_target_pattern: "{target_subject} displaces relative to {reference_subject}"
+    evaluator_P_constraints:
+      - "identity of both subjects preserved"
+      - "background stable"
+    evaluator_C_criteria:
+      - "smooth trajectory"
+      - "no identity drift"

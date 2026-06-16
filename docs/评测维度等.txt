@@ -1,0 +1,1166 @@
+你说得对。上一轮我虽然补了“难度分级”和“评测哪些”，但还缺一个更工程化的层次：
+
+> **每个维度下，到底输入什么图像？图像怎么生成？I2V prompt 怎么写？这些输入和难度桶、评测指标之间怎么对应？**
+
+这一步非常重要，因为 I2V-CompBench 不是单纯写 prompt，而是一个 **image + prompt + metadata + evaluator** 四件套。你的合作者真正落地时，需要看到每类任务的“样本长什么样”。
+
+下面我把上一轮内容重新整合，形成一版更完整的**合作者可执行稿**。这版的组织方式是：
+
+```text
+每个维度：
+1. 评测目标
+2. 任务子类型
+3. 输入图像设计
+4. T2I prompt 设计
+5. I2V prompt 设计
+6. 难度分级
+7. 评测 E/P/C
+8. metadata 需要记录什么
+```
+
+原始依据来自你给的两份文档：一份是 I2V-CompBench 的评测框架，里面已经定义了 Preserve–Transform 三轴、Exec-gated scoring、六维度 evaluator 设计；另一份是 Benchmark 合成流水线，里面定义了 Stage 0–6、各维度题型、输入模式、数据配额和 prompt 规则。 
+
+---
+
+# I2V-CompBench v1 整合方案：输入图像、Prompt、难度分级与评测框架
+
+## 0. 总体原则
+
+I2V-CompBench 每一道题都不是单独的一句 prompt，而是一个结构化样本：
+
+```json
+{
+  "input_images": "...",
+  "i2v_prompt": "...",
+  "dimension": "...",
+  "difficulty_bucket": "...",
+  "target_subjects": "...",
+  "expected_change": "...",
+  "preserve_constraints": "...",
+  "evaluation_metadata": "..."
+}
+```
+
+每个样本的生成逻辑是：
+
+```text
+Question Plan
+→ T2I prompt 生成输入图像
+→ 图像质检
+→ 基于实际图像定稿 I2V prompt
+→ 输出结构化 metadata
+→ 用 E/P/C 三轴评测生成视频
+```
+
+这里要特别注意：
+
+> **T2I prompt 只负责生成静态首帧或参考图，不能包含变化、动作、视频、镜头运动语义。**
+> **I2V prompt 才负责描述模型需要执行的变化。**
+
+例如：
+
+```text
+T2I prompt:
+Two dogs standing side by side in a park. The dog on the left is white, the dog on the right is brown.
+
+I2V prompt:
+The white dog turns black while the brown dog remains unchanged.
+```
+
+---
+
+# 1. Attribute Binding：属性 / 状态绑定
+
+## 1.1 评测目标
+
+评测模型是否能把指定属性或状态变化准确施加到输入图像中的目标主体上，同时保持非目标主体和未指定属性不变。
+
+核心问题是：
+
+> 指定主体的指定属性有没有变对？
+> 其他主体有没有被误改？
+> 属性变化过程是否稳定？
+
+---
+
+## 1.2 任务子类型
+
+Attribute Binding 建议保留两类任务：
+
+| 任务类型           | 输入模式         | 主要测试能力            |
+| -------------- | ------------ | ----------------- |
+| A. 单图属性 / 状态变化 | single image | 图中已有主体的属性或状态变化    |
+| B. 多图属性迁移      | multi-image  | 从参考图中提取属性并迁移到目标主体 |
+
+---
+
+## 1.3 A 类：单图属性 / 状态变化
+
+### 输入图像应该是什么
+
+输入图像是一张首帧图，里面已经有目标主体和必要的干扰主体。
+
+首帧必须满足：
+
+1. 目标主体清楚可见；
+2. 初始属性明确；
+3. 终态属性不能已经出现；
+4. 如果有多个主体，主体之间必须能通过位置、颜色、类别或服装区分；
+5. 非目标主体需要作为 preserve constraint。
+
+### 输入图像示例
+
+```text
+两只狗并排站在公园草地上：
+- 左边狗是白色
+- 右边狗是棕色
+- 两只狗同品种，构图清楚
+```
+
+### T2I prompt 示例
+
+```text
+Two dogs standing side by side on green grass in a park.
+The dog on the left is white, and the dog on the right is brown.
+Both dogs are the same breed. Medium shot, eye level, daylight, photorealistic.
+```
+
+注意：T2I prompt 不能写 “turns black”。
+
+### I2V prompt 示例
+
+```text
+The white dog turns black while the brown dog remains unchanged.
+```
+
+### metadata 需要记录
+
+```json
+{
+  "dimension": "attribute_binding",
+  "input_mode": "single_image",
+  "target_subjects": [
+    {
+      "id": "s1",
+      "description": "white dog on the left"
+    }
+  ],
+  "expected_change": {
+    "type": "color",
+    "from": "white",
+    "to": "black"
+  },
+  "preserve_constraints": [
+    {
+      "id": "s2",
+      "description": "brown dog on the right",
+      "constraint": "appearance unchanged"
+    }
+  ]
+}
+```
+
+---
+
+## 1.4 B 类：多图属性迁移
+
+### 输入图像应该是什么
+
+多图模式中，输入图像不是一张，而是一组参考图。
+
+常见结构是：
+
+| 图像   | 作用               |
+| ---- | ---------------- |
+| ref1 | 目标主体图，例如一个女人     |
+| ref2 | 属性来源图，例如红色连衣裙    |
+| ref3 | 另一个属性来源图，例如白色运动鞋 |
+
+每张参考图应该尽量只承载一个目标信息，避免混淆。
+
+### 输入图像示例
+
+```text
+ref1: 一个年轻女性，站立姿态，干净背景
+ref2: 一件红色连衣裙，产品照，白底
+ref3: 一双白色运动鞋，产品照，白底
+```
+
+### T2I prompt 示例
+
+```text
+ref1:
+A young woman standing in a neutral pose, full body visible, clean white background, photorealistic.
+
+ref2:
+A red dress displayed on a white background, product photography, high detail.
+
+ref3:
+A pair of white sneakers displayed on a white background, product photography, high detail.
+```
+
+### I2V prompt 示例
+
+```text
+The woman wears the red dress and white sneakers.
+```
+
+### metadata 需要记录
+
+```json
+{
+  "dimension": "attribute_binding",
+  "input_mode": "multi_image",
+  "target_subjects": [
+    {
+      "id": "ref1",
+      "description": "young woman"
+    }
+  ],
+  "attribute_transfers": [
+    {
+      "source": "ref2",
+      "type": "clothing",
+      "item": "red dress"
+    },
+    {
+      "source": "ref3",
+      "type": "clothing",
+      "item": "white sneakers"
+    }
+  ]
+}
+```
+
+---
+
+## 1.5 难度分级
+
+Attribute 的单图任务使用 **S × A 矩阵**：
+
+```text
+S = 主体数量
+A = 每个主体变化属性数量
+```
+
+| 难度桶  | 输入图像设计      | I2V prompt 示例                                                              | 主要难点   |
+| ---- | ----------- | -------------------------------------------------------------------------- | ------ |
+| S1A1 | 一个主体，一个清楚初态 | The empty cup slowly becomes full of water.                                | 基础状态变化 |
+| S1A2 | 一个主体，两个属性可变 | The white door opens and turns blue.                                       | 双属性同步  |
+| S2A1 | 两个主体，一个目标变化 | The white dog turns black while the brown dog remains unchanged.           | 主体绑定   |
+| S2A2 | 两个主体，各自变化   | The red balloon turns green and the blue balloon turns yellow.             | 双绑定    |
+| S3A1 | 三个主体，一个变化   | The red cup in the middle becomes empty while the others remain unchanged. | 多干扰主体  |
+| S3A2 | 三个主体，两个变化   | The black cat turns gray and the orange cat turns white.                   | 高绑定负载  |
+
+多图任务使用参考图数量分级：
+
+| 难度桶 | 输入图像               | I2V prompt 示例                                    |
+| --- | ------------------ | ------------------------------------------------ |
+| R2  | 目标主体图 + 一个属性来源图    | The woman puts on the red dress.                 |
+| R3  | 目标主体图 + 两个属性来源图    | The man wears the striped shirt and black hat.   |
+| R3+ | 目标主体图 + 三个及以上属性来源图 | The woman wears the hoodie, jeans, and sneakers. |
+
+---
+
+## 1.6 评测 E/P/C
+
+| 分数     | 评测内容               |
+| ------ | ------------------ |
+| E_attr | 目标主体是否达到目标属性或状态    |
+| P_attr | 非目标主体、背景、未指定属性是否保持 |
+| C_attr | 属性变化是否平滑，无闪烁、无来回跳变 |
+
+---
+
+# 2. Action Binding：动作绑定
+
+## 2.1 评测目标
+
+评测模型是否能让输入图像中的指定主体执行指定动作，并且动作不串到其他主体身上。
+
+核心问题是：
+
+> 谁该动？
+> 做什么动作？
+> 其他人是否不该做这个动作？
+> 动作是否连续完整？
+
+---
+
+## 2.2 任务子类型
+
+| 任务类型             | 输入模式         | 主要测试能力            |
+| ---------------- | ------------ | ----------------- |
+| A. 单图动作分配        | single image | 图中已有多个主体，各自执行不同动作 |
+| B. 多图人物 / 场景动作合成 | multi-image  | 参考人物被放入指定场景并执行动作  |
+
+---
+
+## 2.3 A 类：单图动作分配
+
+### 输入图像应该是什么
+
+首帧中应包含一个或多个处于 neutral pose 的主体。
+
+首帧要求：
+
+1. 主体动作部位无遮挡；
+2. 手、头、身体关键区域不能出框；
+3. 初始姿态不能已经完成目标动作；
+4. 多主体时需要用位置、衣服颜色、性别或类别区分；
+5. 强制固定镜头，避免 camera motion 干扰动作判断。
+
+### 输入图像示例
+
+```text
+两个人站在广场上：
+- 左边女人穿白衣，手臂自然下垂
+- 右边男人穿黑衣，手臂自然下垂
+- 两人全身可见
+```
+
+### T2I prompt 示例
+
+```text
+A woman in a white shirt and a man in a black shirt standing side by side in a public square.
+Both are in a neutral standing pose with arms relaxed at their sides.
+Medium-wide shot, eye level, daylight, photorealistic.
+```
+
+### I2V prompt 示例
+
+```text
+The woman on the left waves while the man on the right stays still.
+The camera remains fixed.
+```
+
+---
+
+## 2.4 B 类：多图人物 / 场景动作合成
+
+### 输入图像应该是什么
+
+多图模式可以包含：
+
+| 图像   | 作用                     |
+| ---- | ---------------------- |
+| ref1 | 人物 A                   |
+| ref2 | 人物 B                   |
+| ref3 | 场景，例如 café、office、park |
+
+### 输入图像示例
+
+```text
+ref1: 一个男性半身或全身照，干净背景
+ref2: 一个女性半身或全身照，干净背景
+ref3: 一个空咖啡厅场景
+```
+
+### T2I prompt 示例
+
+```text
+ref1:
+A man standing in a neutral pose, full body visible, clean background.
+
+ref2:
+A woman standing in a neutral pose, full body visible, clean background.
+
+ref3:
+An empty cozy café interior with wooden tables and warm lighting, no people.
+```
+
+### I2V prompt 示例
+
+```text
+In the café, the man waves while the woman nods.
+The camera remains fixed.
+```
+
+---
+
+## 2.5 难度分级
+
+Action 使用 **S × D 矩阵**：
+
+```text
+S = 主体绑定负载
+D = 动作区分难度
+```
+
+| 难度桶  | 输入图像设计          | I2V prompt 示例                                                                    | 主要难点    |
+| ---- | --------------- | -------------------------------------------------------------------------------- | ------- |
+| S1D1 | 单人 neutral pose | The woman waves her hand.                                                        | 基础动作生成  |
+| S2D1 | 两人，一动一静         | The woman on the left waves while the man on the right stays still.              | 动作不泄漏   |
+| S2D2 | 两人，两个不同动作       | The man in blue claps while the man in gray nods.                                | 双动作绑定   |
+| S2D3 | 两个相似主体，对称布局     | The woman on the left bows while the woman on the right raises her hand.         | 高混淆绑定   |
+| S3D2 | 三主体，三动作分配       | The person in red waves, the person in white claps, and the person in blue nods. | 多主体动作分配 |
+
+---
+
+## 2.6 metadata 需要记录
+
+```json
+{
+  "dimension": "action_binding",
+  "input_mode": "single_image",
+  "target_actions": [
+    {
+      "subject_id": "s1",
+      "description": "woman on the left",
+      "action": "wave"
+    },
+    {
+      "subject_id": "s2",
+      "description": "man on the right",
+      "action": "stay still"
+    }
+  ],
+  "preserve_constraints": [
+    {
+      "subject_id": "s2",
+      "constraint": "must not wave"
+    }
+  ],
+  "camera_constraint": "fixed"
+}
+```
+
+---
+
+## 2.7 评测 E/P/C
+
+| 分数    | 评测内容                       |
+| ----- | -------------------------- |
+| E_act | 指定主体是否执行正确动作               |
+| P_act | 非目标主体是否没有错误执行目标动作，是否没有动作互换 |
+| C_act | 动作是否完整、连续，不是一帧伪成功          |
+
+---
+
+# 3. Motion Binding：主体整体运动绑定
+
+## 3.1 评测目标
+
+评测输入图像中的指定主体是否沿正确的**整体轨迹方向**运动。
+
+这里建议采用我们后面收敛后的边界：
+
+> Motion Binding v1 只测单主体、整体轨迹级、绝对方向运动。
+> 不测局部动作，也不测多主体相对空间关系。
+
+这个边界很重要：如果 prompt 是“狗移动到猫左边”，那应该属于 Spatial Composition，不属于 Motion Binding。你之前的 Motion 最终稿也明确强调 Motion 只保留单主体六方向，关系变化归 Spatial。
+
+---
+
+## 3.2 任务子类型
+
+Motion v1 建议只保留一类主任务：
+
+| 任务类型          | 输入模式         | 主要测试能力                                    |
+| ------------- | ------------ | ----------------------------------------- |
+| A. 单主体六方向整体运动 | single image | 目标主体是否按 left/right/up/down/toward/away 运动 |
+
+如果保留多图飞机飞过城市这类任务，建议放入 stress subset，不放主榜。
+
+---
+
+## 3.3 输入图像应该是什么
+
+首帧需要包含一个可清晰 tracking 的目标主体，并且给运动方向留出空间。
+
+首帧要求：
+
+1. 至少一个可清晰 grounding 的主体；
+2. 主体边界清楚，不能太小；
+3. 背景和主体可分；
+4. left/right/up/down 题要留出对应运动空间；
+5. toward/away 题需要透视或尺度线索；
+6. 避免强动态背景，避免镜头运动诱发歧义。
+
+你之前的 Motion 方案里也提到，图像池应至少有一个可清晰 grounding 的主体，主体边界要清楚，toward/away 题不能是深度模糊目标，首帧中目标和背景要有足够可分性。
+
+---
+
+## 3.4 T2I prompt 示例
+
+### left/right
+
+```text
+A small brown dog sitting on grass, positioned in the right third of the frame.
+The left side of the frame shows open grass.
+Medium shot, eye level, daylight, photorealistic.
+```
+
+### upward
+
+```text
+A red balloon floating near the lower center of the frame against a clear blue sky.
+There is open sky above the balloon.
+Photorealistic, high quality.
+```
+
+### toward camera
+
+```text
+A red toy car positioned at the far end of a hallway with clear perspective lines.
+The car is facing the camera. Medium shot, indoor lighting, photorealistic.
+```
+
+---
+
+## 3.5 I2V prompt 示例
+
+```text
+The small brown dog moves to the left.
+```
+
+```text
+The red balloon moves upward.
+```
+
+```text
+The red toy car moves toward the camera.
+```
+
+```text
+The bicycle moves away from the camera.
+```
+
+---
+
+## 3.6 难度分级
+
+Motion 使用 **场景复杂度 × 方向类型 × 目标可追踪性** 来分级。
+
+| 难度桶   | 输入图像设计          | I2V prompt 示例                                | 主要难点     |
+| ----- | --------------- | -------------------------------------------- | -------- |
+| S1-D1 | 简单背景，大目标，2D 方向  | The red balloon moves to the left.           | 基础方向     |
+| S2-D1 | 中等背景，有干扰物，2D 方向 | The small brown dog moves to the left.       | 目标跟踪     |
+| S2-D2 | 中等背景，深度方向       | The red toy car moves toward the camera.     | 深度运动     |
+| S3-D1 | 复杂背景，小目标，2D 方向  | The white paper airplane moves to the right. | 小目标追踪    |
+| S3-D2 | 复杂背景，小目标，深度方向   | The small bird moves away from the camera.   | 深度 + 小目标 |
+
+---
+
+## 3.7 metadata 需要记录
+
+```json
+{
+  "dimension": "motion_binding",
+  "input_mode": "single_image",
+  "target_subject": {
+    "id": "s1",
+    "description": "small brown dog"
+  },
+  "expected_motion": {
+    "type": "absolute_direction",
+    "direction": "left"
+  },
+  "preserve_constraints": [
+    {
+      "region": "background",
+      "constraint": "no global dragging"
+    }
+  ],
+  "camera_constraint": "fixed_or_camera_compensated"
+}
+```
+
+---
+
+## 3.8 评测 E/P/C
+
+Motion 的主评估器应是 tracking / optical flow / relative-motion analysis，而不是 MLLM。前景相对背景运动需要通过 `Δp_rel = Δp_fg - Δp_bg` 来抵消相机运动；这也是你 Motion 最终稿强调的关键步骤。
+
+| 分数    | 评测内容              |
+| ----- | ----------------- |
+| E_mot | 主体是否沿正确方向发生足够明显位移 |
+| P_mot | 非目标主体和背景是否没有被误带动  |
+| C_mot | 路径是否平滑，无瞬移、无强抖动   |
+
+---
+
+# 4. Spatial Composition：空间关系 / 布局组合
+
+## 4.1 评测目标
+
+评测输入图像中的多个主体实例，是否被正确编辑到 prompt 指定的目标相对空间状态。
+
+这里也建议采用我们后面收敛后的边界：
+
+> Spatial Composition 主测关系重排 / 关系编辑，而不是简单关系保持。
+> 如果 prompt 约束的是多个主体之间的相对关系，它就属于 Spatial。
+
+---
+
+## 4.2 任务子类型
+
+建议分两类：
+
+| 任务类型      | 输入模式         | 主要测试能力               |
+| --------- | ------------ | -------------------- |
+| A. 单图关系转移 | single image | 图中已有多个主体，从起始关系变到目标关系 |
+| B. 多图空间组装 | multi-image  | 把参考图中的主体/物体放到指定空间关系中 |
+
+---
+
+## 4.3 A 类：单图关系转移
+
+### 输入图像应该是什么
+
+首帧中已经有至少两个可清晰 grounding 的对象，并且它们存在一个可判定的起始关系。
+
+首帧要求：
+
+1. 至少两个清楚实例；
+2. 起始关系明确，例如球在盒子左边；
+3. 两个对象边界清楚；
+4. 前后关系题需要深度线索；
+5. 不能遮挡过强；
+6. 要记录起始关系和目标关系。
+
+这与之前 Spatial 正式稿中的图像池要求一致：至少两个可清晰 grounding 的实例，主体边界清楚，前后关系遮挡不要过强，两个实例在初始图中要可区分。
+
+### T2I prompt 示例
+
+```text
+A red ball placed on the left side of a blue box on a wooden table.
+There is clear separation between the ball and the box.
+Medium shot, slightly elevated angle, indoor soft lighting, photorealistic.
+```
+
+### I2V prompt 示例
+
+```text
+The red ball moves from the left of the blue box to its right side.
+```
+
+或者：
+
+```text
+The woman moves from behind the car to in front of it.
+```
+
+你之前的 Spatial 稿中也给过类似 pairwise transition prompt，例如 ball 从 box 左侧移动到右侧、woman 从 car 后方到前方。
+
+---
+
+## 4.4 B 类：多图空间组装
+
+### 输入图像应该是什么
+
+多图模式中，输入通常包含：
+
+| 图像        | 作用               |
+| --------- | ---------------- |
+| ref1      | 目标物体 A           |
+| ref2      | 目标物体 B           |
+| ref3      | 可选目标物体 C         |
+| scene_ref | 目标场景，例如客厅、办公桌、卧室 |
+
+每张物体参考图应只包含一个清楚物体，背景干净。场景图要有足够空间容纳物体。
+
+### 输入图像示例
+
+```text
+ref1: 红色花瓶，白底产品图
+ref2: 蓝色书架，白底产品图
+ref3: 客厅一角，空间清楚，无杂乱物体
+```
+
+### T2I prompt 示例
+
+```text
+ref1:
+A red vase displayed on a clean white background, product photography.
+
+ref2:
+A blue bookshelf displayed on a clean white background, product photography.
+
+scene_ref:
+An empty corner of a living room with enough space for furniture, photorealistic.
+```
+
+### I2V prompt 示例
+
+```text
+Place the red vase to the left of the blue bookshelf in the living room.
+```
+
+---
+
+## 4.5 难度分级
+
+Spatial 使用 **对象数量 × 2D/3D 关系复杂度** 分级。
+
+| 难度桶   | 输入图像设计        | I2V prompt 示例                                                      | 主要难点      |
+| ----- | ------------- | ------------------------------------------------------------------ | --------- |
+| C2-2D | 两个物体，左右/上下关系  | Place the red vase to the left of the blue bookshelf.              | 基础 2D 关系  |
+| C2-3D | 两个物体，前后关系     | Place the white cup in front of the laptop.                        | 深度关系      |
+| C3-2D | 三个物体，多个关系     | Place the cat on the sofa and the plant to the right of the sofa.  | 多关系组合     |
+| C3-3D | 三个物体，含前后 + on | Place the chair in front of the table, with the vase on the table. | 3D + 表面关系 |
+| C4+   | 四个及以上物体复杂布局   | Arrange the bed, nightstand, desk, and chair in the room.          | 复杂布局      |
+
+---
+
+## 4.6 metadata 需要记录
+
+```json
+{
+  "dimension": "spatial_composition",
+  "input_mode": "single_image",
+  "target_relations": [
+    {
+      "subject": "red ball",
+      "reference": "blue box",
+      "start_relation": "left_of",
+      "target_relation": "right_of"
+    }
+  ],
+  "preserve_constraints": [
+    {
+      "scope": "other_objects_and_background",
+      "constraint": "layout should not be corrupted"
+    }
+  ]
+}
+```
+
+---
+
+## 4.7 评测 E/P/C
+
+Spatial 应使用 detection / segmentation / depth-based geometry analysis，而不是 MLLM 主判。你之前的 Spatial 方案也明确提出，这一维本质是几何关系判定，left/right/above/below 用 2D 几何，in front of / behind 用 depth 几何。
+
+| 分数    | 评测内容                    |
+| ----- | ----------------------- |
+| E_rel | 目标空间关系是否最终成立            |
+| P_rel | 非目标对象、未指定 pair、背景布局是否保持 |
+| C_rel | 关系变化是否稳定，不来回翻转          |
+
+---
+
+# 5. Background Dynamics：背景动态 / 场景变化
+
+## 5.1 评测目标
+
+评测背景区域是否发生指定变化，同时前景主体和非目标背景区域保持稳定。
+
+核心问题是：
+
+> 背景是否按要求变化？
+> 变化是否发生在正确区域？
+> 前景主体有没有被污染？
+> 是真实区域变化，还是全图滤镜伪成功？
+
+---
+
+## 5.2 任务子类型
+
+| 任务类型             | 输入模式         | 主要测试能力          |
+| ---------------- | ------------ | --------------- |
+| A. 单图背景动态 / 状态变化 | single image | 在已有场景中让背景区域变化   |
+| B. 多图背景迁移 / 替换   | multi-image  | 保持主体，将背景替换为参考场景 |
+
+---
+
+## 5.3 A 类：单图背景动态 / 状态变化
+
+### 输入图像应该是什么
+
+首帧是一张包含前景主体和背景区域的图。
+
+首帧要求：
+
+1. 背景目标区域足够大，建议占画面 15%–60%；
+2. 前景主体清楚，是 preserve object；
+3. 初始背景状态不能接近终态；
+4. 目标区域和非目标区域要能区分；
+5. v1 建议强制 camera fixed，避免背景运动和镜头运动混淆。
+
+### 输入图像示例
+
+```text
+一个人站在海边，天空晴朗开阔，前景只有这个人。
+```
+
+### T2I prompt 示例
+
+```text
+A person standing on a beach facing the ocean.
+The sky is clear blue with no clouds.
+The person is in the lower third of the frame.
+Medium shot, eye level, daylight, photorealistic.
+```
+
+### I2V prompt 示例
+
+```text
+Clouds slowly gather and drift across the sky while the person remains still.
+The camera remains fixed.
+```
+
+---
+
+## 5.4 B 类：多图背景迁移 / 替换
+
+### 输入图像应该是什么
+
+多图模式通常包含：
+
+| 图像   | 作用    |
+| ---- | ----- |
+| ref1 | 前景主体图 |
+| ref2 | 目标背景图 |
+
+### 输入图像示例
+
+```text
+ref1: 一个男人站在伦敦街头
+ref2: 巴黎街景，远处有埃菲尔铁塔
+```
+
+### T2I prompt 示例
+
+```text
+ref1:
+A man standing on a London street, full body visible, photorealistic.
+
+ref2:
+A Parisian street with the Eiffel Tower visible in the background, no people, photorealistic.
+```
+
+### I2V prompt 示例
+
+```text
+The man is now on a Parisian street with the Eiffel Tower in the background.
+The camera remains fixed.
+```
+
+---
+
+## 5.5 难度分级
+
+Background Type A 使用三轴难度：
+
+```text
+场景复杂度 × 变化复杂度 × reasoning 负载
+```
+
+| 难度               | 输入图像设计        | I2V prompt 示例                                                        | 主要难点          |
+| ---------------- | ------------- | -------------------------------------------------------------------- | ------------- |
+| Easy             | 开阔背景，少前景      | The clouds slowly drift while the person remains still.              | 局部背景动态        |
+| Medium           | 有前景干扰，有树/水/天空 | The leaves on the trees gradually sway and some fall.                | 动态纹理          |
+| Medium-Reasoning | 需要区分局部变化和全图滤镜 | The sky gradually darkens as clouds gather in the distance.          | anti-shortcut |
+| Hard             | 多区域、多因果链      | Dark clouds gather, streetlights turn on, and puddles begin to form. | 复合环境变化        |
+
+Background Type B 使用背景迁移难度：
+
+| 难度桶 | 输入图像             | I2V prompt 示例                                      |
+| --- | ---------------- | -------------------------------------------------- |
+| B1  | 主体 + 相似室内背景      | The woman is now in the new room.                  |
+| B2  | 主体 + 跨城市 / 跨场景背景 | The man is now on a Parisian street.               |
+| B3  | 多主体 + 光照差异大的背景   | The two people are now walking on the sunny beach. |
+
+---
+
+## 5.6 metadata 需要记录
+
+```json
+{
+  "dimension": "background_dynamics",
+  "input_mode": "single_image",
+  "target_region": {
+    "type": "background",
+    "description": "sky"
+  },
+  "expected_change": {
+    "type": "weather_state",
+    "from": "clear sky",
+    "to": "clouds gathering and drifting"
+  },
+  "preserve_constraints": [
+    {
+      "subject": "person",
+      "constraint": "appearance and position unchanged"
+    }
+  ],
+  "camera_constraint": "fixed"
+}
+```
+
+---
+
+## 5.7 评测 E/P/C
+
+| 分数   | 评测内容             |
+| ---- | ---------------- |
+| E_bg | 目标背景区域是否发生指定变化   |
+| P_bg | 前景主体、非目标背景区域是否保持 |
+| C_bg | 背景变化是否渐进、无闪烁、无回退 |
+
+---
+
+# 6. View Transformation：镜头 / 视角变换
+
+## 6.1 评测目标
+
+评测模型是否正确执行镜头运动或视角变化，同时保持主体身份、主体属性和场景内容不被额外改写。
+
+核心问题是：
+
+> 镜头有没有按要求动？
+> 方向是否正确？
+> 主体和背景是不是只发生了投影变化，而不是内容被改写？
+
+---
+
+## 6.2 任务子类型
+
+| 任务类型                 | 输入模式                  | 主要测试能力               |
+| -------------------- | --------------------- | -------------------- |
+| A. 单图单镜头命令           | single image          | zoom/pan/tilt/static |
+| B. 镜头 + 构图约束         | single image          | 运镜同时保持主体居中           |
+| C. static camera 负控制 | single image          | 主体或背景可动，但镜头必须静止      |
+| D. 少量多图视角合成          | multi-image, optional | 作为 stress subset     |
+
+---
+
+## 6.3 输入图像应该是什么
+
+View 的输入图像非常关键，因为运镜评估依赖刚性背景和透视线索。
+
+首帧要求：
+
+1. 主体清楚；
+2. 背景最好是刚性结构，例如走廊、房间、街道、建筑；
+3. 有明确透视线或几何结构；
+4. 避免大面积水面、树叶、烟雾等动态背景；
+5. zoom in/out 需要主体居中或有明确尺度参照；
+6. pan/tilt 需要画面两侧或上下有可见空间；
+7. static 对照题必须和运镜题共享类似图像分布。
+
+---
+
+## 6.4 T2I prompt 示例
+
+### zoom in
+
+```text
+A woman standing in a long indoor corridor with rigid walls and clear perspective lines.
+The woman is centered and shown at medium distance.
+Medium shot, eye level, indoor lighting, photorealistic.
+```
+
+### pan right
+
+```text
+A dog standing on grass with trees and a wooden fence in the background.
+There is visible space on both sides of the frame.
+Medium shot, eye level, daylight, photorealistic.
+```
+
+### static camera
+
+```text
+A dog standing on a grassy field with a clear background.
+Medium shot, eye level, daylight, photorealistic.
+```
+
+---
+
+## 6.5 I2V prompt 示例
+
+```text
+The camera slowly zooms in.
+```
+
+```text
+The camera slowly pans right.
+```
+
+```text
+The camera slowly pans right while keeping the woman near the center of the frame.
+```
+
+```text
+The camera remains completely static.
+```
+
+---
+
+## 6.6 难度分级
+
+View 使用 **S × C 矩阵**：
+
+```text
+S = 场景复杂度
+C = 运镜命令复杂度
+```
+
+| 难度桶    | 输入图像设计         | I2V prompt 示例                                                               | 主要难点         |
+| ------ | -------------- | --------------------------------------------------------------------------- | ------------ |
+| S1C1   | 简单刚性背景，单主体     | The camera slowly zooms in.                                                 | 基础运镜         |
+| S2C1   | 中等场景，有主体和背景层次  | The camera slowly pans right.                                               | 背景运动估计       |
+| S1C2   | 简单场景 + 构图约束    | The camera pans right while keeping the woman centered.                     | 运镜 + framing |
+| S2C2   | 中等场景 + 双镜头约束   | The camera pushes in while tilting slightly downward.                       | 复合约束         |
+| S3C3   | 复杂刚性场景 + 多阶段运镜 | The camera pans left, then zooms in while keeping the fruit stand centered. | 复杂运镜         |
+| static | 固定镜头负控制        | The camera remains completely static.                                       | 防假运镜         |
+
+---
+
+## 6.7 metadata 需要记录
+
+```json
+{
+  "dimension": "view_transformation",
+  "input_mode": "single_image",
+  "camera_command": {
+    "type": "zoom_in",
+    "direction": "in",
+    "speed": "slow"
+  },
+  "framing_constraint": {
+    "target_subject": "woman",
+    "constraint": "keep near center"
+  },
+  "preserve_constraints": [
+    {
+      "scope": "subject_identity_and_attributes",
+      "constraint": "unchanged except projection change"
+    },
+    {
+      "scope": "rigid_background",
+      "constraint": "no semantic rewriting"
+    }
+  ]
+}
+```
+
+---
+
+## 6.8 评测 E/P/C
+
+| 分数    | 评测内容                                    |
+| ----- | --------------------------------------- |
+| E_cam | 运镜类型、方向、趋势、构图约束是否正确                     |
+| P_cam | 主体身份、属性、刚性背景内容是否保持                      |
+| C_cam | 镜头是否平滑，无 jitter、abrupt jump、trend break |
+
+---
+
+# 7. 六维度输入设计总表
+
+| 维度         | 任务类型       | 输入图像               | T2I prompt 重点           | I2V prompt 重点                | 难度分级                 |
+| ---------- | ---------- | ------------------ | ----------------------- | ---------------------------- | -------------------- |
+| Attribute  | 单图属性变化     | 已有主体 + 初始属性 + 干扰主体 | 静态属性清楚，不写变化             | 指定主体属性变化 + preserve          | S×A                  |
+| Attribute  | 多图属性迁移     | 目标主体图 + 属性来源图      | 每图只承载一个属性               | 迁移属性到目标主体                    | R2/R3/R3+            |
+| Action     | 单图动作分配     | neutral pose 多主体   | 动作部位无遮挡，不出现动作           | 主体锚定 + 动作分配 + fixed camera   | S×D                  |
+| Action     | 多图人物场景     | 人物参考图 + 场景图        | 人物干净，场景无人               | 人物在场景中执行动作                   | 人数 × 动作数             |
+| Motion     | 单主体六方向     | 一个可追踪主体 + 运动空间     | 预留方向空间，深度题有透视           | The target moves [direction] | 场景复杂度 × 方向           |
+| Spatial    | 单图关系转移     | 多主体 + 起始关系明确       | 起始关系清楚                  | 从起始关系变到目标关系                  | pairwise / groupwise |
+| Spatial    | 多图空间组装     | 物体参考图 + 场景图        | 物体单独清楚，场景有空间            | Place A [relation] B         | C2/C3/C4+            |
+| Background | 单图背景动态     | 前景主体 + 可分背景区域      | 初始背景状态清楚                | 背景区域变化 + 前景保持                | 场景 × 变化 × reasoning  |
+| Background | 多图背景替换     | 主体图 + 目标背景图        | 主体清楚，背景无人/可容纳           | 主体进入新背景                      | B1/B2/B3             |
+| View       | 单图运镜       | 主体 + 刚性背景 + 透视线    | 不写 camera move，只构造可运镜场景 | The camera [verb]            | S×C                  |
+| View       | static 负控制 | 与运镜题相似图像           | 静态场景                    | camera remains static        | static contrast      |
+
+---
+
+# 8. 推荐最终主榜设置
+
+为了让 v1 清楚、可评估、不互相混淆，我建议最终主榜这样收敛：
+
+| 维度         | 主榜保留                      | Stress subset / v2           |
+| ---------- | ------------------------- | ---------------------------- |
+| Attribute  | 单图属性变化 + 多图属性迁移           | 复杂材质、细粒度纹理                   |
+| Action     | 单图动作分配 + 多图人物场景           | 交互动作                         |
+| Motion     | 单主体六方向整体运动                | 多主体独立方向、多图飞机/热气球             |
+| Spatial    | 单图关系转移 + 多图空间组装           | 复杂 groupwise reconfiguration |
+| Background | 背景动态 + 背景替换               | 强因果链场景变化                     |
+| View       | 单镜头命令 + 构图约束 + static 负控制 | 多阶段复杂运镜                      |
+
+特别是 Motion 和 Spatial 的边界要明确：
+
+```text
+Motion:
+The dog moves left.
+→ 单主体绝对方向运动
+
+Spatial:
+The dog moves to the left of the cat.
+→ 多主体相对关系编辑
+```
+
+这样合作者在写题、生成图像和实现评估器时不会混乱。
+
+---
+
+# 9. 一道完整样本应该长什么样
+
+以 Spatial 单图关系转移为例：
+
+```json
+{
+  "question_id": "spatial_042",
+  "dimension": "spatial_composition",
+  "input_mode": "single_image",
+  "difficulty_bucket": "C2-2D",
+  "input_images": [
+    {
+      "path": "spatial_composition/spatial_042_frame.png",
+      "role": "first_frame"
+    }
+  ],
+  "t2i_prompt_used": "A red ball placed on the left side of a blue box on a wooden table. There is clear separation between the ball and the box. Medium shot, slightly elevated angle, indoor soft lighting, photorealistic.",
+  "i2v_prompt": "The red ball moves from the left of the blue box to its right side.",
+  "metadata": {
+    "target_subjects": [
+      {
+        "id": "s1",
+        "description": "red ball"
+      },
+      {
+        "id": "s2",
+        "description": "blue box"
+      }
+    ],
+    "expected_change": {
+      "type": "relation_transition",
+      "subject": "s1",
+      "reference": "s2",
+      "from_relation": "left_of",
+      "to_relation": "right_of"
+    },
+    "preserve_constraints": [
+      {
+        "scope": "background",
+        "constraint": "unchanged"
+      }
+    ],
+    "camera_constraint": "fixed"
+  },
+  "evaluation": {
+    "E": "target relation reaches right_of",
+    "P": "other layout and background preserved",
+    "C": "relation transition stable without oscillation"
+  }
+}
+```
+
+这个格式比单纯写 prompt 更适合合作者理解，因为它直接说明：
+
+1. 输入图像是什么；
+2. 这张图是怎么生成的；
+3. I2V prompt 要求什么；
+4. 哪些内容要变；
+5. 哪些内容不能变；
+6. 最后怎么评测。
+
+---
+
+# 10. 合作者版一句话说明
+
+可以这样总结给合作者：
+
+> I2V-CompBench 的每道题由输入图像、I2V prompt 和结构化 metadata 共同定义。不同维度下的输入图像设计不同：Attribute 需要清楚的初始属性和干扰主体，Action 需要 neutral pose 和无遮挡动作部位，Motion 需要单个可追踪主体和运动空间，Spatial 需要明确的起始空间关系或多图物体参考，Background 需要可分割的背景区域和前景 preserve 主体，View 需要刚性背景和透视线索。评测时，每道题统一计算 E/P/C：目标变化是否执行、非目标内容是否保持、变化过程是否连贯。这样才能真正评估 I2V 模型在图像锚定条件下的组合性变化控制能力。

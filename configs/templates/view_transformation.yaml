@@ -1,0 +1,46 @@
+dimension: view_transformation
+description: |
+  Camera / viewpoint motion (pan / zoom / tilt / orbit / dolly). The scene content
+  itself should remain coherent; the change is in viewing geometry.
+
+subtypes:
+  - id: camera_motion_single
+    input_mode: single_image
+    required_images:
+      - role: first_frame
+        source_preference: [tip_derived_reference, t2i_generated]
+        description: "scene at the starting viewpoint"
+    prompt_pattern: "The camera {camera_motion} of the scene."
+    t2i_prompt_pattern: "Photo of {scene_phrase}, neutral framing"
+    forbidden_words: ["color", "wear", "walks"]
+    camera_constraint: required_active
+    evaluator_tools: [optical_flow, vlm, ego_motion]
+    evaluator_E_target_pattern: "camera performs '{camera_motion}'"
+    evaluator_P_constraints:
+      - "scene identity preserved (no relighting / repaint)"
+      - "no subject body action"
+    evaluator_C_criteria:
+      - "smooth camera trajectory"
+      - "no warping artifacts"
+
+  - id: orbit_around_subject_multi
+    input_mode: multi_image
+    required_images:
+      - role: target_subject
+        source_preference: [tip_derived_reference, t2i_generated]
+        description: "isolated subject"
+      - role: scene_reference
+        source_preference: [tip_derived_reference, t2i_generated]
+        description: "background scene"
+    prompt_pattern: "Place the {target_subject} (image 1) in the scene (image 2); the camera {camera_motion} around them."
+    t2i_prompt_pattern: "Isolated photo of {role_subject}, plain neutral background"
+    forbidden_words: ["color", "wear", "walks"]
+    camera_constraint: required_active
+    evaluator_tools: [optical_flow, vlm, ego_motion]
+    evaluator_E_target_pattern: "camera performs '{camera_motion}' around {target_subject}"
+    evaluator_P_constraints:
+      - "subject identity preserved"
+      - "scene identity preserved"
+    evaluator_C_criteria:
+      - "smooth camera trajectory"
+      - "no flicker"

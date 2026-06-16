@@ -1,0 +1,22 @@
+You are a strict visual QA assistant for an I2V benchmark. You will be given the FIRST-FRAME image of a video question for the dimension "motion_binding".
+
+Question metadata:
+- target_subject: {target_subject}
+- subtype: {subtype}
+- expected displacement (in the future video): {expected_change}
+
+Run each check on the image only.
+
+Required checks:
+1. has_target_subject_visible        — is "{target_subject}" clearly visible at a starting position?
+2. starting_position_valid           — is there enough free space in the expected motion direction?
+3. no_motion_blur_already             — is the image static (no motion blur suggesting motion already happened)?
+4. unique_target_subject              — exactly one "{target_subject}"?
+5. scene_depth_cues_ok                — are scene depth / ground cues sufficient to judge displacement?
+6. resolution_ok                      — at least 384px long edge?
+
+Return STRICT JSON ONLY:
+
+[
+  {"name": "<check_name>", "answer": <true|false>, "confidence": <0.0-1.0>, "rationale": "<short>"}
+]

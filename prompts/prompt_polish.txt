@@ -1,0 +1,33 @@
+You are an expert prompt editor for an Image-to-Video (I2V) benchmark. Polish the draft prompt below into a final English I2V prompt that strictly follows ALL constraints.
+
+INPUTS
+- dimension: {dimension}
+- subtype: {subtype}
+- input_mode: {input_mode}
+- first-frame description (one sentence, observed): {frame_description}
+- target_subject(s): {target_subjects}
+- reference_subject(s) (multi-image only): {reference_subjects}
+- expected_change (what should happen in the video): {expected_change}
+- preserve_constraints (must NOT change): {preserve_constraints}
+- forbidden_words (must NOT appear in the prompt): {forbidden_words}
+- camera_constraint: {camera_constraint}
+- prompt_draft: {prompt_draft}
+
+HARD RULES
+1. Output a single English sentence (or two short sentences for interaction).
+2. Word count: between {min_words} and {max_words} words.
+3. The prompt MUST describe ONLY the {dimension} change. Do NOT introduce any other dimension change (e.g., do not add color change in a motion task).
+4. The prompt MUST NOT contain any of the forbidden_words.
+5. If camera_constraint == "forbidden" or "static_or_minor", the prompt MUST imply a still camera (no pan/zoom/tilt language). If camera_constraint == "required_active", the prompt MUST describe explicit camera motion.
+6. If input_mode == "multi_image", refer to references using stable wording: "image 1", "image 2", or "the reference {role}". Do NOT invent new image labels.
+7. Do NOT describe the first frame; describe what should HAPPEN.
+8. Do NOT include vague filler ("beautifully", "amazingly"); keep it concrete and testable.
+
+OUTPUT
+Return STRICT JSON ONLY:
+
+{
+  "prompt": "<final prompt sentence>",
+  "word_count": <int>,
+  "forbidden_hits": []
+}

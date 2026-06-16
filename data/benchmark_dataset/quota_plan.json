@@ -1,0 +1,600 @@
+{
+  "mode": "pilot",
+  "num_per_dimension": 20,
+  "buckets": [
+    {
+      "bucket_id": "attribute_binding__single_image__easy__common",
+      "dimension": "attribute_binding",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "easy",
+      "rarity": "common",
+      "target_count": 3,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "attribute_binding__single_image__easy__rare",
+      "dimension": "attribute_binding",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "easy",
+      "rarity": "rare",
+      "target_count": 1,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "attribute_binding__single_image__medium__common",
+      "dimension": "attribute_binding",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "medium",
+      "rarity": "common",
+      "target_count": 5,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "attribute_binding__single_image__medium__rare",
+      "dimension": "attribute_binding",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "medium",
+      "rarity": "rare",
+      "target_count": 1,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "attribute_binding__single_image__hard__common",
+      "dimension": "attribute_binding",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "hard",
+      "rarity": "common",
+      "target_count": 2,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "attribute_binding__multi_image__easy__common",
+      "dimension": "attribute_binding",
+      "input_mode_or_subtype": "multi_image",
+      "difficulty": "easy",
+      "rarity": "common",
+      "target_count": 2,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "attribute_binding__multi_image__medium__common",
+      "dimension": "attribute_binding",
+      "input_mode_or_subtype": "multi_image",
+      "difficulty": "medium",
+      "rarity": "common",
+      "target_count": 3,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "attribute_binding__multi_image__medium__rare",
+      "dimension": "attribute_binding",
+      "input_mode_or_subtype": "multi_image",
+      "difficulty": "medium",
+      "rarity": "rare",
+      "target_count": 1,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "attribute_binding__multi_image__hard__common",
+      "dimension": "attribute_binding",
+      "input_mode_or_subtype": "multi_image",
+      "difficulty": "hard",
+      "rarity": "common",
+      "target_count": 2,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "action_binding__single_image__easy__common",
+      "dimension": "action_binding",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "easy",
+      "rarity": "common",
+      "target_count": 3,
+      "contrastive_pair_required": false
+    },
+    {
+      "bucket_id": "action_binding__single_image__easy__rare",
+      "dimension": "action_binding",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "easy",
+      "rarity": "rare",
+      "target_count": 1,
+      "contrastive_pair_required": false
+    },
+    {
+      "bucket_id": "action_binding__single_image__medium__common",
+      "dimension": "action_binding",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "medium",
+      "rarity": "common",
+      "target_count": 6,
+      "contrastive_pair_required": false
+    },
+    {
+      "bucket_id": "action_binding__single_image__medium__rare",
+      "dimension": "action_binding",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "medium",
+      "rarity": "rare",
+      "target_count": 1,
+      "contrastive_pair_required": false
+    },
+    {
+      "bucket_id": "action_binding__single_image__hard__common",
+      "dimension": "action_binding",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "hard",
+      "rarity": "common",
+      "target_count": 2,
+      "contrastive_pair_required": false
+    },
+    {
+      "bucket_id": "action_binding__single_image__hard__rare",
+      "dimension": "action_binding",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "hard",
+      "rarity": "rare",
+      "target_count": 1,
+      "contrastive_pair_required": false
+    },
+    {
+      "bucket_id": "action_binding__multi_image__easy__common",
+      "dimension": "action_binding",
+      "input_mode_or_subtype": "multi_image",
+      "difficulty": "easy",
+      "rarity": "common",
+      "target_count": 2,
+      "contrastive_pair_required": false
+    },
+    {
+      "bucket_id": "action_binding__multi_image__medium__common",
+      "dimension": "action_binding",
+      "input_mode_or_subtype": "multi_image",
+      "difficulty": "medium",
+      "rarity": "common",
+      "target_count": 2,
+      "contrastive_pair_required": false
+    },
+    {
+      "bucket_id": "action_binding__multi_image__medium__rare",
+      "dimension": "action_binding",
+      "input_mode_or_subtype": "multi_image",
+      "difficulty": "medium",
+      "rarity": "rare",
+      "target_count": 1,
+      "contrastive_pair_required": false
+    },
+    {
+      "bucket_id": "action_binding__multi_image__hard__common",
+      "dimension": "action_binding",
+      "input_mode_or_subtype": "multi_image",
+      "difficulty": "hard",
+      "rarity": "common",
+      "target_count": 1,
+      "contrastive_pair_required": false
+    },
+    {
+      "bucket_id": "motion_binding__type_a_absolute_single__easy__common",
+      "dimension": "motion_binding",
+      "input_mode_or_subtype": "type_a_absolute_single",
+      "difficulty": "easy",
+      "rarity": "common",
+      "target_count": 2,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "motion_binding__type_a_absolute_single__easy__rare",
+      "dimension": "motion_binding",
+      "input_mode_or_subtype": "type_a_absolute_single",
+      "difficulty": "easy",
+      "rarity": "rare",
+      "target_count": 1,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "motion_binding__type_a_absolute_single__medium__common",
+      "dimension": "motion_binding",
+      "input_mode_or_subtype": "type_a_absolute_single",
+      "difficulty": "medium",
+      "rarity": "common",
+      "target_count": 4,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "motion_binding__type_a_absolute_single__medium__rare",
+      "dimension": "motion_binding",
+      "input_mode_or_subtype": "type_a_absolute_single",
+      "difficulty": "medium",
+      "rarity": "rare",
+      "target_count": 1,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "motion_binding__type_a_absolute_single__hard__common",
+      "dimension": "motion_binding",
+      "input_mode_or_subtype": "type_a_absolute_single",
+      "difficulty": "hard",
+      "rarity": "common",
+      "target_count": 2,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "motion_binding__type_b_relative_single__easy__common",
+      "dimension": "motion_binding",
+      "input_mode_or_subtype": "type_b_relative_single",
+      "difficulty": "easy",
+      "rarity": "common",
+      "target_count": 2,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "motion_binding__type_b_relative_single__medium__common",
+      "dimension": "motion_binding",
+      "input_mode_or_subtype": "type_b_relative_single",
+      "difficulty": "medium",
+      "rarity": "common",
+      "target_count": 3,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "motion_binding__type_b_relative_single__medium__rare",
+      "dimension": "motion_binding",
+      "input_mode_or_subtype": "type_b_relative_single",
+      "difficulty": "medium",
+      "rarity": "rare",
+      "target_count": 1,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "motion_binding__type_b_relative_single__hard__common",
+      "dimension": "motion_binding",
+      "input_mode_or_subtype": "type_b_relative_single",
+      "difficulty": "hard",
+      "rarity": "common",
+      "target_count": 1,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "motion_binding__type_c_multi_motion__easy__common",
+      "dimension": "motion_binding",
+      "input_mode_or_subtype": "type_c_multi_motion",
+      "difficulty": "easy",
+      "rarity": "common",
+      "target_count": 1,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "motion_binding__type_c_multi_motion__medium__common",
+      "dimension": "motion_binding",
+      "input_mode_or_subtype": "type_c_multi_motion",
+      "difficulty": "medium",
+      "rarity": "common",
+      "target_count": 1,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "motion_binding__type_c_multi_motion__hard__common",
+      "dimension": "motion_binding",
+      "input_mode_or_subtype": "type_c_multi_motion",
+      "difficulty": "hard",
+      "rarity": "common",
+      "target_count": 1,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "spatial_composition__single_image__easy__common",
+      "dimension": "spatial_composition",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "easy",
+      "rarity": "common",
+      "target_count": 1,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "spatial_composition__single_image__medium__common",
+      "dimension": "spatial_composition",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "medium",
+      "rarity": "common",
+      "target_count": 2,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "spatial_composition__single_image__hard__common",
+      "dimension": "spatial_composition",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "hard",
+      "rarity": "common",
+      "target_count": 1,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "spatial_composition__multi_image__easy__common",
+      "dimension": "spatial_composition",
+      "input_mode_or_subtype": "multi_image",
+      "difficulty": "easy",
+      "rarity": "common",
+      "target_count": 4,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "spatial_composition__multi_image__easy__rare",
+      "dimension": "spatial_composition",
+      "input_mode_or_subtype": "multi_image",
+      "difficulty": "easy",
+      "rarity": "rare",
+      "target_count": 1,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "spatial_composition__multi_image__medium__common",
+      "dimension": "spatial_composition",
+      "input_mode_or_subtype": "multi_image",
+      "difficulty": "medium",
+      "rarity": "common",
+      "target_count": 6,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "spatial_composition__multi_image__medium__rare",
+      "dimension": "spatial_composition",
+      "input_mode_or_subtype": "multi_image",
+      "difficulty": "medium",
+      "rarity": "rare",
+      "target_count": 2,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "spatial_composition__multi_image__hard__common",
+      "dimension": "spatial_composition",
+      "input_mode_or_subtype": "multi_image",
+      "difficulty": "hard",
+      "rarity": "common",
+      "target_count": 2,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "spatial_composition__multi_image__hard__rare",
+      "dimension": "spatial_composition",
+      "input_mode_or_subtype": "multi_image",
+      "difficulty": "hard",
+      "rarity": "rare",
+      "target_count": 1,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "background_dynamics__single_image__easy__common",
+      "dimension": "background_dynamics",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "easy",
+      "rarity": "common",
+      "target_count": 4,
+      "contrastive_pair_required": false
+    },
+    {
+      "bucket_id": "background_dynamics__single_image__easy__rare",
+      "dimension": "background_dynamics",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "easy",
+      "rarity": "rare",
+      "target_count": 1,
+      "contrastive_pair_required": false
+    },
+    {
+      "bucket_id": "background_dynamics__single_image__medium__common",
+      "dimension": "background_dynamics",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "medium",
+      "rarity": "common",
+      "target_count": 6,
+      "contrastive_pair_required": false
+    },
+    {
+      "bucket_id": "background_dynamics__single_image__medium__rare",
+      "dimension": "background_dynamics",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "medium",
+      "rarity": "rare",
+      "target_count": 2,
+      "contrastive_pair_required": false
+    },
+    {
+      "bucket_id": "background_dynamics__single_image__hard__common",
+      "dimension": "background_dynamics",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "hard",
+      "rarity": "common",
+      "target_count": 2,
+      "contrastive_pair_required": false
+    },
+    {
+      "bucket_id": "background_dynamics__single_image__hard__rare",
+      "dimension": "background_dynamics",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "hard",
+      "rarity": "rare",
+      "target_count": 1,
+      "contrastive_pair_required": false
+    },
+    {
+      "bucket_id": "background_dynamics__multi_image__easy__common",
+      "dimension": "background_dynamics",
+      "input_mode_or_subtype": "multi_image",
+      "difficulty": "easy",
+      "rarity": "common",
+      "target_count": 1,
+      "contrastive_pair_required": false
+    },
+    {
+      "bucket_id": "background_dynamics__multi_image__medium__common",
+      "dimension": "background_dynamics",
+      "input_mode_or_subtype": "multi_image",
+      "difficulty": "medium",
+      "rarity": "common",
+      "target_count": 2,
+      "contrastive_pair_required": false
+    },
+    {
+      "bucket_id": "background_dynamics__multi_image__hard__common",
+      "dimension": "background_dynamics",
+      "input_mode_or_subtype": "multi_image",
+      "difficulty": "hard",
+      "rarity": "common",
+      "target_count": 1,
+      "contrastive_pair_required": false
+    },
+    {
+      "bucket_id": "view_transformation__single_image__easy__common",
+      "dimension": "view_transformation",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "easy",
+      "rarity": "common",
+      "target_count": 5,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "view_transformation__single_image__easy__rare",
+      "dimension": "view_transformation",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "easy",
+      "rarity": "rare",
+      "target_count": 1,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "view_transformation__single_image__medium__common",
+      "dimension": "view_transformation",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "medium",
+      "rarity": "common",
+      "target_count": 7,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "view_transformation__single_image__medium__rare",
+      "dimension": "view_transformation",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "medium",
+      "rarity": "rare",
+      "target_count": 2,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "view_transformation__single_image__hard__common",
+      "dimension": "view_transformation",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "hard",
+      "rarity": "common",
+      "target_count": 3,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "view_transformation__single_image__hard__rare",
+      "dimension": "view_transformation",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "hard",
+      "rarity": "rare",
+      "target_count": 1,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "view_transformation__multi_image__medium__common",
+      "dimension": "view_transformation",
+      "input_mode_or_subtype": "multi_image",
+      "difficulty": "medium",
+      "rarity": "common",
+      "target_count": 1,
+      "contrastive_pair_required": true
+    },
+    {
+      "bucket_id": "interaction_reasoning__single_image__easy__common",
+      "dimension": "interaction_reasoning",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "easy",
+      "rarity": "common",
+      "target_count": 2,
+      "contrastive_pair_required": false
+    },
+    {
+      "bucket_id": "interaction_reasoning__single_image__easy__rare",
+      "dimension": "interaction_reasoning",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "easy",
+      "rarity": "rare",
+      "target_count": 1,
+      "contrastive_pair_required": false
+    },
+    {
+      "bucket_id": "interaction_reasoning__single_image__medium__common",
+      "dimension": "interaction_reasoning",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "medium",
+      "rarity": "common",
+      "target_count": 4,
+      "contrastive_pair_required": false
+    },
+    {
+      "bucket_id": "interaction_reasoning__single_image__medium__rare",
+      "dimension": "interaction_reasoning",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "medium",
+      "rarity": "rare",
+      "target_count": 1,
+      "contrastive_pair_required": false
+    },
+    {
+      "bucket_id": "interaction_reasoning__single_image__hard__common",
+      "dimension": "interaction_reasoning",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "hard",
+      "rarity": "common",
+      "target_count": 2,
+      "contrastive_pair_required": false
+    },
+    {
+      "bucket_id": "interaction_reasoning__multi_image__easy__common",
+      "dimension": "interaction_reasoning",
+      "input_mode_or_subtype": "multi_image",
+      "difficulty": "easy",
+      "rarity": "common",
+      "target_count": 2,
+      "contrastive_pair_required": false
+    },
+    {
+      "bucket_id": "interaction_reasoning__multi_image__easy__rare",
+      "dimension": "interaction_reasoning",
+      "input_mode_or_subtype": "multi_image",
+      "difficulty": "easy",
+      "rarity": "rare",
+      "target_count": 1,
+      "contrastive_pair_required": false
+    },
+    {
+      "bucket_id": "interaction_reasoning__multi_image__medium__common",
+      "dimension": "interaction_reasoning",
+      "input_mode_or_subtype": "multi_image",
+      "difficulty": "medium",
+      "rarity": "common",
+      "target_count": 4,
+      "contrastive_pair_required": false
+    },
+    {
+      "bucket_id": "interaction_reasoning__multi_image__medium__rare",
+      "dimension": "interaction_reasoning",
+      "input_mode_or_subtype": "multi_image",
+      "difficulty": "medium",
+      "rarity": "rare",
+      "target_count": 1,
+      "contrastive_pair_required": false
+    },
+    {
+      "bucket_id": "interaction_reasoning__multi_image__hard__common",
+      "dimension": "interaction_reasoning",
+      "input_mode_or_subtype": "multi_image",
+      "difficulty": "hard",
+      "rarity": "common",
+      "target_count": 2,
+      "contrastive_pair_required": false
+    }
+  ]
+}

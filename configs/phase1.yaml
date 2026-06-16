@@ -1,0 +1,43 @@
+paths:
+  raw_dir: "E:/I2V-CompBench/raw"            # 外接硬盘不可用时改为 "data/raw"
+  manifest_dir: "E:/I2V-CompBench/manifest"    # 外接硬盘不可用时改为 "data/manifest"
+  output_dir: "E:/I2V-CompBench/outputs"        # 外接硬盘不可用时改为 "data/outputs"
+  prompt_dir: "prompts"               # prompts 模板保留在工程内
+
+sampling:
+  max_samples: 1000           # 中等规模验证，正式跑设为 null
+  hf_split: "Eval"           # HuggingFace split: "Eval" (10K) / "Full" (1.7M)
+
+prior_package:
+  seed_examples_per_dim: 10   # 每维度种子样例数
+  top_n_concepts: 30          # 概念分布 Top-N
+  template_min_count: 2       # 句式模板最低出现次数
+
+phase1:
+  # Phase 1 增强步骤参数
+  geometry_mode: "mock_9grid"     # mock_9grid | sam (未来可扩展)
+  crop_pad_ratio: 0.05            # mock crop 外扩边距
+  max_assets_per_sample: 10       # 上限（避免某样本产出过多 asset）
+  recipe:
+    enable_multi_image: true      # 是否允许生成 multi_image recipe
+    min_subjects_for_multi: 2     # multi_image 需至少几个 aligned subject
+
+api:
+  base_url: "https://api.siliconflow.cn/v1"
+  api_key_env: "SILICONFLOW_API_KEY"    # 从环境变量读取
+
+  vlm:
+    model: "Qwen/Qwen3-VL-30B-A3B-Instruct"  # 真正的视觉语言模型，支持图像输入
+    max_tokens: 4096
+    temperature: 0.0
+
+  llm:
+    model: "Qwen/Qwen3-30B-A3B-Instruct-2507"  # 非思考模型，响应快
+    max_tokens: 4096           # 非思考模型不需要太大空间
+    temperature: 0.0
+
+  batch_size: 10             # 并发请求数（非思考模型可以更高并发）
+  retry_count: 3
+  retry_delay: 2             # 秒 (指数退避基数)
+  timeout: 120               # 非思考模型响应快，120s足够
+  rate_limit_delay: 0.1      # 请求间隔秒数，防限流

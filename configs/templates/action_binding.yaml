@@ -1,0 +1,49 @@
+dimension: action_binding
+description: |
+  Single-subject body / limb / pose action (no causal interaction with another subject).
+  Boundary vs interaction_reasoning: action = body movement, interaction = multi-object
+  causal/social/functional event.
+
+subtypes:
+  - id: single_subject_action
+    input_mode: single_image
+    required_images:
+      - role: first_frame
+        source_preference: [tip_derived_reference, t2i_generated]
+        description: "scene with the target subject in idle / pre-action pose"
+    prompt_pattern: "The {target_subject} {action_phrase}."
+    t2i_prompt_pattern: "Photo of {target_subject} in a relaxed neutral pose, plain scene"
+    forbidden_words: ["pan", "zoom", "tilt", "color"]
+    camera_constraint: forbidden
+    evaluator_tools: [grounding, tracking, pose, vlm]
+    evaluator_E_target_pattern: "{target_subject} performs '{action_phrase}'"
+    evaluator_P_constraints:
+      - "identity of {target_subject} preserved"
+      - "background stable"
+      - "attributes (color/clothing) stable"
+    evaluator_C_criteria:
+      - "smooth pose transition"
+      - "no identity drift"
+
+  - id: action_with_object_reference_multi
+    input_mode: multi_image
+    required_images:
+      - role: target_subject
+        source_preference: [tip_derived_reference, t2i_generated]
+        description: "subject who will perform the action"
+      - role: object_reference
+        source_preference: [tip_derived_reference, t2i_generated]
+        description: "object the subject will act on (held / touched / lifted)"
+    prompt_pattern: "The {target_subject} {action_phrase} the {object_reference_phrase} from image 2."
+    t2i_prompt_pattern: "Isolated photo of {object_reference_phrase}, plain neutral background"
+    forbidden_words: ["pan", "zoom", "tilt", "color"]
+    camera_constraint: forbidden
+    evaluator_tools: [grounding, tracking, pose, vlm]
+    evaluator_E_target_pattern: "{target_subject} performs '{action_phrase}' on {object_reference_phrase}"
+    evaluator_P_constraints:
+      - "identity of {target_subject} preserved"
+      - "object_reference identity preserved"
+      - "background stable"
+    evaluator_C_criteria:
+      - "smooth pose / contact transition"
+      - "no flicker"

@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Secrets
+.env
+.env.local
+.env.*.local
+
+# Logs / build artifacts
+*.log
+.pytest_cache/
+.mypy_cache/
+
+# IDE
+.idea/
+.vscode/
+
+# Project data outputs (重复/调试产物，不入库)
+data/benchmark_dataset/first_frames/
+data/benchmark_dataset/ref_images/
+data/benchmark_dataset/images/
+data/benchmark_dataset/references/
+data/benchmark_dataset/qc_reports/

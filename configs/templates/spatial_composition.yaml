@@ -1,0 +1,52 @@
+dimension: spatial_composition
+description: |
+  Static layout composition: place subject A in a specific spatial relation to subject B
+  / scene anchor. Spatial = static layout, NOT displacement.
+  Hard rule: forbidden_words MUST include move/shift/reposition.
+
+subtypes:
+  - id: spatial_layout_single
+    input_mode: single_image
+    required_images:
+      - role: first_frame
+        source_preference: [tip_derived_reference, t2i_generated]
+        description: "scene already containing both subjects in starting layout"
+    prompt_pattern: "Show the {target_subject} positioned {target_relation} the {reference_subject}."
+    t2i_prompt_pattern: "Photo of {target_subject} and {reference_subject} both visible"
+    forbidden_words: ["move", "moves", "moving", "shift", "shifts", "reposition", "walk", "walks"]
+    camera_constraint: forbidden
+    evaluator_tools: [grounding, segmentation, vlm]
+    evaluator_E_target_pattern: "{target_subject} is positioned {target_relation} of {reference_subject}"
+    evaluator_P_constraints:
+      - "identities preserved"
+      - "background stable"
+      - "no displacement implied"
+    evaluator_C_criteria:
+      - "stable spatial layout across frames"
+      - "no jitter"
+
+  - id: spatial_compose_multi
+    input_mode: multi_image
+    required_images:
+      - role: subject_a
+        source_preference: [tip_derived_reference, t2i_generated]
+        description: "isolated subject A"
+      - role: subject_b
+        source_preference: [tip_derived_reference, t2i_generated]
+        description: "isolated subject B"
+      - role: scene_reference
+        source_preference: [tip_derived_reference, t2i_generated]
+        description: "background scene"
+    prompt_pattern: "Compose a still scene where the {subject_a_phrase} (image 1) is {target_relation} the {subject_b_phrase} (image 2), placed in the scene from image 3."
+    t2i_prompt_pattern: "Isolated photo of {role_subject}, plain neutral background"
+    forbidden_words: ["move", "moves", "moving", "shift", "shifts", "reposition", "walk", "walks"]
+    camera_constraint: forbidden
+    evaluator_tools: [grounding, segmentation, vlm]
+    evaluator_E_target_pattern: "{subject_a_phrase} is positioned {target_relation} of {subject_b_phrase}"
+    evaluator_P_constraints:
+      - "identities of A and B preserved"
+      - "scene from image 3 used"
+      - "no displacement implied"
+    evaluator_C_criteria:
+      - "stable spatial layout"
+      - "no flicker"

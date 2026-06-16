@@ -1,0 +1,83 @@
+mode: pilot                       # pilot / full
+phase1_bundle_dir: "E:/I2V-CompBench/outputs/phase1"
+output_dir: "data/benchmark_dataset"
+
+quota:
+  num_per_dimension_pilot: 20
+  num_per_dimension_full: 200
+  rarity:
+    common: 0.8
+    rare: 0.2
+  difficulty:
+    easy: 0.30
+    medium: 0.50
+    hard: 0.20
+  input_mode_ratio:
+    attribute_binding:
+      single_image: 0.6
+      multi_image: 0.4
+    action_binding:
+      single_image: 0.70
+      multi_image: 0.30
+    motion_binding:
+      type_a_absolute_single: 0.5
+      type_b_relative_single: 0.35
+      type_c_multi_motion: 0.15
+    spatial_composition:
+      single_image: 0.2
+      multi_image: 0.8
+    background_dynamics:
+      single_image: 0.80
+      multi_image: 0.20
+    view_transformation:
+      single_image: 0.95
+      multi_image: 0.05
+    interaction_reasoning:
+      single_image: 0.5
+      multi_image: 0.5
+  contrastive_pair:
+    enabled_dimensions:
+      - attribute_binding
+      - motion_binding
+      - spatial_composition
+      - view_transformation
+    pair_ratio: 0.5      # 期望成对题占目标桶数的比例
+
+api:
+  base_url: "https://api.siliconflow.cn/v1"
+  api_key_env: "SILICONFLOW_API_KEY"
+  vlm:
+    model: "Qwen/Qwen3-VL-30B-A3B-Instruct"  # 真正的视觉语言模型，支持图像输入
+    max_tokens: 4096
+    temperature: 0.0
+  llm:
+    model: "Qwen/Qwen3-30B-A3B-Instruct-2507"
+    max_tokens: 4096
+    temperature: 0.0
+  t2i:
+    model: "Kwai-Kolors/Kolors"
+    image_size: "1024x1024"
+    n: 1
+  batch_size: 5
+  retry_count: 3
+  retry_delay: 2
+  timeout: 180
+  rate_limit_delay: 0.2
+
+construct:
+  long_edge: 1024
+  multi_reference_min_quality_score: 0.4
+  reference_required_clean_background: true
+  enable_t2i: true                       # 反向题/干净 patch/维度纯净
+
+verify:
+  max_retry_per_question: 3
+  vqa_min_confidence: 0.7
+  needs_manual_review_on:
+    - "low_confidence_consensus"
+
+prompt_finalize:
+  min_words: 8
+  max_words: 25
+  max_words_interaction: 30
+  enforce_dimension_isolation: true

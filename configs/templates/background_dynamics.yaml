@@ -1,0 +1,46 @@
+dimension: background_dynamics
+description: |
+  Scene-level dynamics independent of any single subject motion: weather, lighting,
+  water/fire, foliage, ambient particles. Subject identity must be preserved.
+
+subtypes:
+  - id: background_change_single
+    input_mode: single_image
+    required_images:
+      - role: first_frame
+        source_preference: [tip_derived_reference, t2i_generated]
+        description: "scene with subject + background in current state"
+    prompt_pattern: "The {scene_phrase} {scene_dynamic}, while the {target_subject} stays still."
+    t2i_prompt_pattern: "Photo of {scene_phrase}, plain neutral lighting"
+    forbidden_words: ["walks", "moves", "wear"]
+    camera_constraint: forbidden
+    evaluator_tools: [vlm, optical_flow, clip]
+    evaluator_E_target_pattern: "scene exhibits '{scene_dynamic}'"
+    evaluator_P_constraints:
+      - "{target_subject} identity and pose stable"
+      - "camera fixed"
+    evaluator_C_criteria:
+      - "smooth dynamic without subject artifacts"
+      - "no global flicker"
+
+  - id: subject_into_scene_multi
+    input_mode: multi_image
+    required_images:
+      - role: target_subject
+        source_preference: [tip_derived_reference, t2i_generated]
+        description: "isolated subject"
+      - role: scene_reference
+        source_preference: [tip_derived_reference, t2i_generated]
+        description: "scene without the subject (inpainted clean background)"
+    prompt_pattern: "Place the {target_subject} (image 1) into the scene (image 2); the {scene_dynamic} happens around them."
+    t2i_prompt_pattern: "Empty {scene_phrase}, no person, plain photo"
+    forbidden_words: ["walks", "moves", "wear"]
+    camera_constraint: forbidden
+    evaluator_tools: [vlm, optical_flow, clip]
+    evaluator_E_target_pattern: "scene from image 2 exhibits '{scene_dynamic}'"
+    evaluator_P_constraints:
+      - "{target_subject} identity stable"
+      - "scene composition follows image 2"
+    evaluator_C_criteria:
+      - "smooth scene dynamic"
+      - "no flicker"

@@ -1,0 +1,47 @@
+dimension: interaction_reasoning
+description: |
+  Multi-subject causal / social / functional event (cooperative_action / causal_chain /
+  mutual_motion / contact_event). Boundary vs action_binding: interaction = at least
+  two distinct subjects with a directed event between them.
+
+subtypes:
+  - id: dyadic_interaction_single
+    input_mode: single_image
+    required_images:
+      - role: first_frame
+        source_preference: [tip_derived_reference, t2i_generated]
+        description: "scene with both agent_subject and patient_subject visible, before interaction"
+    prompt_pattern: "The {agent_subject} {interaction_phrase} the {patient_subject}."
+    t2i_prompt_pattern: "Photo of {agent_subject} and {patient_subject} both visible, plain scene"
+    forbidden_words: ["pan", "zoom", "tilt"]
+    camera_constraint: forbidden
+    evaluator_tools: [grounding, tracking, vlm, pose]
+    evaluator_E_target_pattern: "{agent_subject} {interaction_phrase} {patient_subject}; expected_outcome='{expected_outcome}'"
+    evaluator_P_constraints:
+      - "identities of both subjects preserved"
+      - "background stable"
+    evaluator_C_criteria:
+      - "smooth interaction"
+      - "no identity drift"
+
+  - id: dyadic_interaction_multi
+    input_mode: multi_image
+    required_images:
+      - role: agent_subject
+        source_preference: [tip_derived_reference, t2i_generated]
+        description: "isolated agent (initiator)"
+      - role: patient_subject
+        source_preference: [tip_derived_reference, t2i_generated]
+        description: "isolated patient (receiver)"
+    prompt_pattern: "Compose a scene where the {agent_subject} (image 1) {interaction_phrase} the {patient_subject} (image 2)."
+    t2i_prompt_pattern: "Isolated photo of {role_subject}, plain neutral background"
+    forbidden_words: ["pan", "zoom", "tilt"]
+    camera_constraint: forbidden
+    evaluator_tools: [grounding, tracking, vlm, pose]
+    evaluator_E_target_pattern: "{agent_subject} {interaction_phrase} {patient_subject}; expected_outcome='{expected_outcome}'"
+    evaluator_P_constraints:
+      - "identities of both subjects preserved"
+      - "background reasonably stable"
+    evaluator_C_criteria:
+      - "smooth interaction"
+      - "no flicker"

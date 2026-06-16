@@ -1,0 +1,14 @@
+pydantic>=2.0
+openai>=1.30
+loguru>=0.7
+pyyaml>=6.0
+Pillow>=10.0
+tenacity>=8.2
+requests>=2.31
+spacy>=3.6
+# Phase 1 extras
+pandas>=2.0
+datasets>=2.14.0
+tqdm>=4.65.0
+jsonlines>=4.0.0
+python-dotenv>=1.0.0

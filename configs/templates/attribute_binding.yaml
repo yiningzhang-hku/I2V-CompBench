@@ -1,0 +1,48 @@
+dimension: attribute_binding
+description: |
+  Single subject acquires / changes a visible attribute (color / clothing / texture).
+  Multi-image variant: target_subject + attribute_reference -> wear/transfer attribute.
+
+subtypes:
+  - id: attribute_change_single
+    input_mode: single_image
+    required_images:
+      - role: first_frame
+        source_preference: [tip_derived_reference, t2i_generated]
+        description: "scene with the target subject, before the attribute change"
+    prompt_pattern: "The {target_subject} {operation} {attribute_after}."
+    t2i_prompt_pattern: "A clean studio photo of {target_subject}, {attribute_before}, neutral background"
+    forbidden_words: ["pan", "zoom", "tilt", "move left", "move right", "walk to"]
+    camera_constraint: forbidden
+    evaluator_tools: [grounding, segmentation, vlm, clip]
+    evaluator_E_target_pattern: "{target_subject} shows attribute '{attribute_after}'"
+    evaluator_P_constraints:
+      - "identity of {target_subject} preserved"
+      - "background stable"
+      - "no other subject's attributes change"
+    evaluator_C_criteria:
+      - "no flicker / jitter in attribute region"
+      - "transition is smooth"
+
+  - id: attribute_transfer_multi
+    input_mode: multi_image
+    required_images:
+      - role: target_subject
+        source_preference: [tip_derived_reference, t2i_generated]
+        description: "person/animal/object that should receive the attribute"
+      - role: attribute_reference
+        source_preference: [tip_derived_reference, t2i_generated]
+        description: "isolated patch / object showing the attribute (e.g. red jacket)"
+    prompt_pattern: "The {target_subject} wears the {attribute_reference_phrase} from image 2."
+    t2i_prompt_pattern: "Isolated photo of {attribute_reference_phrase}, plain neutral background, no person"
+    forbidden_words: ["pan", "zoom", "tilt", "move left", "move right", "walk to"]
+    camera_constraint: forbidden
+    evaluator_tools: [grounding, segmentation, vlm, clip]
+    evaluator_E_target_pattern: "{target_subject} wears {attribute_reference_phrase}"
+    evaluator_P_constraints:
+      - "identity of {target_subject} preserved"
+      - "no unrelated clothing changes"
+      - "background stable"
+    evaluator_C_criteria:
+      - "stable wearing state across frames"
+      - "no flicker"

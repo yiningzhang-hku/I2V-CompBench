@@ -1,0 +1,5 @@
+{"question_id": "motion_single_0005", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::starting_position_valid", "low_confidence::unique_target_subject"]}
+{"question_id": "bg_single_0010", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0012", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::no_dynamic_already_active", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0013", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0014", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
