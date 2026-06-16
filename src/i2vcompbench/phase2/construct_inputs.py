@@ -25,6 +25,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from loguru import logger
+from PIL import Image
 
 from ..schemas.phase2 import (
     AssetQualityLite,
@@ -40,6 +41,7 @@ from ..utils.image import (
     open_image,
     resize_long_edge,
     save_image,
+    to_16x9_720p,
 )
 from ..utils.io import (
     Phase1Bundle,
@@ -175,16 +177,36 @@ def _resolve_t2i_prompt(
     return render_template(pattern, {**slots, "role_subject": role_subject, "role": role})
 
 
+def _save_inference_companion(img: Image.Image, primary_dst: Path) -> Path:
+    """Produce the strict 1280x720 16:9 companion alongside the native-ratio PNG.
+
+    Path convention (Phase 2 §6.4 dual-track output):
+        first_frame.png             -> first_frame_16x9.png
+        ref0.png                    -> ref0_16x9.png
+        spatial_0042.png            -> spatial_0042_16x9.png
+    Evaluator (Phase 3) keeps reading the native PNG; only the I2V generator wrapper
+    reads the *_16x9.png companion.
+    """
+    companion = primary_dst.with_name(primary_dst.stem + "_16x9" + primary_dst.suffix)
+    img_169 = to_16x9_720p(img)
+    save_image(img_169, companion, fmt="PNG")
+    return companion
+
+
 def _copy_or_save_tip_image(src: Path, dst: Path, long_edge: int) -> None:
     img = open_image(src)
-    img = resize_long_edge(img, long_edge=long_edge)
+    # enlarge=True: TIP-I2V 原图常为 224x126 等低分辨率，必须强制放大到 720P 长边（1280）
+    img = resize_long_edge(img, long_edge=long_edge, enlarge=True)
     save_image(img, dst, fmt="PNG")
+    # 双轨产物：额外产一份 1280x720 严格 16:9 推理伴生文件
+    _save_inference_companion(img, dst)
 
 
 def _save_t2i_bytes(data: bytes, dst: Path, long_edge: int) -> None:
     img = bytes_to_image(data)
-    img = resize_long_edge(img, long_edge=long_edge)
+    img = resize_long_edge(img, long_edge=long_edge, enlarge=True)
     save_image(img, dst, fmt="PNG")
+    _save_inference_companion(img, dst)
 
 
 # ============================================================

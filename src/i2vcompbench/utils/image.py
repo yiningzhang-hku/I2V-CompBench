@@ -15,7 +15,7 @@ from loguru import logger
 from PIL import Image
 
 
-DEFAULT_LONG_EDGE = 1024
+DEFAULT_LONG_EDGE = 1280  # 720P long edge (1280x720); see Phase 2 §6.4
 
 
 def open_image(path: str | Path) -> Image.Image:
@@ -34,14 +34,28 @@ def save_image(img: Image.Image, path: str | Path, fmt: str = "PNG") -> str:
     return str(p)
 
 
-def resize_long_edge(img: Image.Image, long_edge: int = DEFAULT_LONG_EDGE) -> Image.Image:
+def resize_long_edge(
+    img: Image.Image,
+    long_edge: int = DEFAULT_LONG_EDGE,
+    enlarge: bool = False,
+) -> Image.Image:
+    """Resize so that max(W, H) == long_edge, keeping aspect ratio.
+
+    enlarge=False (default): only shrink oversized images, leave small ones intact.
+        Used by Phase 1 API upload path where we just want an upper bound.
+    enlarge=True: force-resize regardless of original size, including upscaling small
+        images (e.g. TIP-I2V 224x126 -> 1280x720). Used by Phase 2 input construction
+        where benchmark assets must be uniformly 720P-class (long edge = 1280).
+    """
     w, h = img.size
     le = max(w, h)
-    if le <= long_edge:
+    if le == long_edge:
+        return img
+    if le < long_edge and not enlarge:
         return img
     scale = long_edge / le
-    new_w = int(round(w * scale))
-    new_h = int(round(h * scale))
+    new_w = max(1, int(round(w * scale)))
+    new_h = max(1, int(round(h * scale)))
     return img.resize((new_w, new_h), Image.LANCZOS)
 
 
@@ -81,6 +95,76 @@ def bytes_to_image(data: bytes) -> Image.Image:
 def image_resolution_ok(img: Image.Image, min_long_edge: int = 384) -> bool:
     w, h = img.size
     return max(w, h) >= min_long_edge
+
+
+# ----------------------------------------------------------------------------
+# 16:9 inference-side adapter (Phase 2 §6.4 dual-track output)
+# ----------------------------------------------------------------------------
+
+DEFAULT_INFERENCE_W = 1280
+DEFAULT_INFERENCE_H = 720
+_NEAR_169_TOLERANCE = 0.04  # ±4% 认为已足够接近 16:9，直接 resize不可见形变
+
+
+def to_16x9_720p(
+    img: Image.Image,
+    target_w: int = DEFAULT_INFERENCE_W,
+    target_h: int = DEFAULT_INFERENCE_H,
+    pad_color: tuple = (0, 0, 0),
+) -> Image.Image:
+    """Adapt arbitrary-aspect image to a strict ``target_w x target_h`` (default 1280x720) canvas.
+
+    Strategy (selected automatically, no bbox required):
+      1. ±4% near 16:9   -> direct resize, distortion <= 4% (imperceptible)
+      2. wider than 16:9 -> center crop left/right, then resize
+      3. else            -> letterbox: equal-ratio scale to fit, center on black canvas
+
+    Used by Phase 2 to produce ``*_16x9.png`` companion files for I2V model inference,
+    while keeping the original ``*.png`` (long-edge=1280, native ratio) intact for
+    evaluator P-axis ground truth.
+    """
+    w, h = img.size
+    if w <= 0 or h <= 0:
+        raise ValueError(f"Invalid image size: {(w, h)}")
+    src_ratio = w / h
+    tgt_ratio = target_w / target_h
+    rel_diff = abs(src_ratio - tgt_ratio) / tgt_ratio
+
+    if rel_diff <= _NEAR_169_TOLERANCE:
+        # case 1: near-16:9, direct resize (≤ 4% stretch)
+        return img.resize((target_w, target_h), Image.LANCZOS)
+
+    if src_ratio > tgt_ratio:
+        # case 2: wider than 16:9 -> center crop left/right
+        new_w = int(round(h * tgt_ratio))
+        x0 = max(0, (w - new_w) // 2)
+        cropped = img.crop((x0, 0, x0 + new_w, h))
+        return cropped.resize((target_w, target_h), Image.LANCZOS)
+
+    # case 3: narrower than 16:9 (incl. 1:1, 9:16) -> letterbox
+    scale = min(target_w / w, target_h / h)
+    new_w = max(1, int(round(w * scale)))
+    new_h = max(1, int(round(h * scale)))
+    scaled = img.resize((new_w, new_h), Image.LANCZOS)
+    canvas = Image.new("RGB", (target_w, target_h), pad_color)
+    x0 = (target_w - new_w) // 2
+    y0 = (target_h - new_h) // 2
+    if scaled.mode == "RGBA":
+        canvas.paste(scaled, (x0, y0), scaled)
+    else:
+        canvas.paste(scaled, (x0, y0))
+    return canvas
+
+
+def classify_16x9_strategy(img: Image.Image) -> str:
+    """Return which strategy ``to_16x9_720p`` would apply: 'resize' / 'crop' / 'letterbox'.
+    Useful for audit / dataset_card stats."""
+    w, h = img.size
+    src_ratio = w / h
+    tgt_ratio = DEFAULT_INFERENCE_W / DEFAULT_INFERENCE_H
+    if abs(src_ratio - tgt_ratio) / tgt_ratio <= _NEAR_169_TOLERANCE:
+        return "resize"
+    return "crop" if src_ratio > tgt_ratio else "letterbox"
 
 
 def fetch_url_to_image(url: str, timeout: int = 30) -> Optional[Image.Image]:

@@ -65,7 +65,7 @@ api:
   rate_limit_delay: 0.2
 
 construct:
-  long_edge: 1024
+  long_edge: 1280                        # 720P long edge; resize_long_edge(enlarge=True) 强制等比放大
   multi_reference_min_quality_score: 0.4
   reference_required_clean_background: true
   enable_t2i: true                       # 反向题/干净 patch/维度纯净
