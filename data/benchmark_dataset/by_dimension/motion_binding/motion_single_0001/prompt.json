@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The fairy gradually moves to the right while remaining in the same pose, with the forest and cottage background staying unchanged.",
+  "prompt": "The subject moves to the right while maintaining its identity, scene context, and camera framing.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

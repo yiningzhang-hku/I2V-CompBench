@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The dancer in the pink dress moves steadily to the right while maintaining her twirling motion.",
+  "prompt": "The young girl with a backpack moves to the right along the forest path as sunlight streams through the trees.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

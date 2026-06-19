@@ -5,6 +5,9 @@ output_dir: "data/benchmark_dataset"
 quota:
   num_per_dimension_pilot: 20
   num_per_dimension_full: 200
+  skip_dimensions:
+    - spatial_composition
+    - interaction_reasoning
   rarity:
     common: 0.8
     rare: 0.2
@@ -60,12 +63,12 @@ api:
     n: 1
   batch_size: 5
   retry_count: 3
-  retry_delay: 2
+  retry_delay: 30
   timeout: 180
-  rate_limit_delay: 0.2
+  rate_limit_delay: 1.0
 
 construct:
-  long_edge: 1280                        # 720P long edge; resize_long_edge(enlarge=True) 强制等比放大
+  long_edge: 854                         # 480P long edge (854x480, 16:9); resize_long_edge(enlarge=True) 强制等比放大
   multi_reference_min_quality_score: 0.4
   reference_required_clean_background: true
   enable_t2i: true                       # 反向题/干净 patch/维度纯净

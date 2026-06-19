@@ -4,8 +4,8 @@
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
-  "prompt": "The camera  of the scene.",
+  "rarity": "common",
+  "prompt": "The camera slowly pans right, maintaining the subject's spatial position and stable background.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

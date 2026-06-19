@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
-  "rarity": "rare",
-  "prompt": "The man in the military camouflage uniform slowly raises his arm while maintaining his serious expression.",
+  "difficulty": "easy",
+  "rarity": "common",
+  "prompt": "The robotic figure raises its golden-jacketed arm slowly while maintaining its position on the red and white striped background.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

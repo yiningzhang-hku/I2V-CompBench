@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The cardinal's feathers shift from red to a deeper crimson, maintaining its position on the branch.",
+  "prompt": "The cartoon elephant gently lifts its trunk higher, showing a subtle change in posture while remaining in the same position.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

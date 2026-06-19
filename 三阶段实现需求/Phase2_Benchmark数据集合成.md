@@ -298,8 +298,8 @@ multi-object causal/social/functional event → interaction_reasoning
    - 缺位时调 `Phase2SiliconFlowClient.call_t2i`（Kwai-Kolors/Kolors，1024×1024）按角色描述合成；
    - T2I 失败则在 `quality.notes` 写 `t2i_generated` 或 `t2i_failed`，由 QC 决定是否丢弃。
 5. **统一规格化（双轨产物）**：每个资产同时产出两份 PNG：
-   - **主产物（`<name>.png`）**：PIL `resize_long_edge(..., enlarge=True)` 强制等比放大到 `long_edge=1280`（720P 长边），**保留原始宽高比**，不裁剪不 letterbox。用途：Phase 3 evaluator 读取作为 P 维度逐帧对齐 / identity_binding 的真值参照。
-   - **16:9 推理伴生件（`<name>_16x9.png`）**：PIL `to_16x9_720p()` 产 **严格 1280×720**，供需要 16:9 输入的 I2V 生成模型（SVD / CogVideoX / HunyuanVideo 等）调用。适配策略按原始比例自动选取：16:9 ±4% 直接 resize；更扁横屏 center crop 左右；偏方/竖屏 letterbox 黑边（保留全部内容不丢主体）。
+   - **主产物（`<name>.png`）**：PIL `resize_long_edge(..., enlarge=True)` 强制等比放大到 `long_edge=854`（480P 长边），**保留原始宽高比**，不裁剪不 letterbox。用途：Phase 3 evaluator 读取作为 P 维度逐帧对齐 / identity_binding 的真值参照。
+   - **16:9 推理伴生件（`<name>_16x9.png`）**：PIL `to_16x9_720p()` 产 **严格 854×480**，供需要 16:9 输入的 I2V 生成模型（SVD / CogVideoX / HunyuanVideo 等）调用。适配策略按原始比例自动选取：16:9 ±4% 直接 resize；更扁横屏 center crop 左右；偏方/竖屏 letterbox 黑边（保留全部内容不丢主体）。
    - 16:9 伴生件在 `_audit` 中记录 `inference_strategy ∈ {"resize", "crop", "letterbox"}`，供 dataset_card 统计。`resize_long_edge(..., enlarge=True)` 强制放大低分辨率上游图（TIP-I2V 抽帧常为 224×126 / 224×224 / 126×224）。
 6. **路径约定**（Phase 3 衔接硬约束）：单图首帧 `first_frames/{question_id}.png`；多图参考 `ref_images/{question_id}_ref{k}.png`，其中 `k` **等于** `target_subjects[i].ref_image_idx`（在 §6.3 已绑定）。**禁止使用旧名 `images/` `references/`**。
    - 同一角色多张参考时的 `{question_id}_ref{k}_v{j}.png` 后缀**当前为设计预留**，pilot 实现仅生成 `_ref{k}.png` 主参考；如未来需要多版本兼容，Phase 3 默认只读 v0（即不带 `_v{j}` 后缀的文件）。
@@ -316,8 +316,8 @@ multi-object causal/social/functional event → interaction_reasoning
 - **为什么单图直接复用 TIP 首帧而不是合成**：这是 benchmark 真实性的根基——单图任务的"起始状态"应当是真实视频首帧，否则评测的就不是"模型对真实首帧的处理能力"，与论文论点错位。Phase 1 已经付出代价做过 manifest 清洗，没必要在这里推倒重来。
 - **为什么同角色多候选挑 quality_score 最高**：quality_score 是 Phase 1 综合 bbox 面积、可见度、完整度算出的代理指标，已融合多个质量信号；用它做启发式比"随机选一张"或"按时间序选最早"都更稳定，且无额外计算成本。
 - **为什么链式回退顺序是 tip → t2i → external**：三级递降的不是只看"清洁度"，更重要的是"reviewer 可审计度"——TIP 资产可追溯到原视频帧（最强）、T2I 可追溯到 prompt+seed（中等）、external 需要单独 provenance 字段（最弱）。把审计成本作为优先级权重，而不是单纯的视觉质量。
-- **为什么 long_edge=1280 + PNG**：1280 是 720P 标准长边（1280×720 progressive），与 SVD / CogVideoX / Sora-class 等主流 I2V 模型常用的 720P 推理档位对齐；再大会让 Phase 3 推理开销陡增；PNG 无损保存避免 JPEG 在边缘产生 ringing 伪影——这些伪影会干扰 grounding 评测器的边缘检测，让 P 评分受 codec 噪声影响。
-- **为什么允许放大（enlarge=True）**：TIP-I2V 上游视频抽帧原始分辨率多为 224×126 等低码率规格，必须等比放大到 720P 长边才能与下游 evaluator（grounding / depth / optical_flow）的常用输入尺寸对齐。承担 5.7× 双线性插值的放大噪声，换取尺寸统一与下游一致性。
+- **为什么 long_edge=854 + PNG**：854 是 480P 标准长边（854×480 近似 16:9），与 CogVideoX-480 / Open-Sora 480P / SVD 等主流 I2V 模型的 480P 推理档位对齐；相较 720P 可显著降低 Phase 3 推理显存 / 时间开销；PNG 无损保存避免 JPEG 在边缘产生 ringing 伪影——这些伪影会干扰 grounding 评测器的边缘检测，让 P 评分受 codec 噪声影响。
+- **为什么允许放大（enlarge=True）**：TIP-I2V 上游视频抽帧原始分辨率多为 224×126 等低码率规格，必须等比放大到 480P 长边才能与下游 evaluator（grounding / depth / optical_flow）的常用输入尺寸对齐。承担 3.8× 双线性插值的放大噪声，换取尺寸统一与下游一致性。
 - **为什么双轨产物（`<name>.png` + `<name>_16x9.png`）**：I2V 生成模型多有硬编码的 16:9 输入约束（SVD 1024×576、CogVideoX 多分辨率、HunyuanVideo 1280×720 等），而 benchmark 原生首帧频繁出现正方形 / 竖屏 等非 16:9 比例。双轨设计把两个冲突需求解耦：evaluator 读原始等比图作 P 维度真值（零形变零裁剪零黑边）；生成器读 16:9 伴生件。这样生成模型拿到的是合法输入，评测期却不损失原始画面信息。选 letterbox 而非 crop 处理竖屏是因为：crop 会丢 56% 内容含主体，letterbox 仅带黑边且 SVD / CogVideoX 训练数据中本就存在大量 letterbox 样本，模型有处理黑边的先验。
 - **为什么 T2I 失败不抛异常**：流水线 8 步，任意一步在单题失败如果中断会让上游全部白跑。让 QC 统一裁决，整体吞吐更稳。
 - **为什么把 quality 元数据存进 manifest 而不是临时计算**：QC（§6.5）和 export（§6.7）都要消费这些字段，存一次比每步重算更稳定，也避免不同步骤算法略有差异导致同一字段两次算出不同结果。
@@ -802,7 +802,7 @@ sampling:
   require_clean_background: true
 
 construct_inputs:
-  long_edge: 1280
+  long_edge: 854
   format: png
   source_preference:
     - tip_derived_reference

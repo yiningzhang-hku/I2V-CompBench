@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The lion continues roaring with its mouth wide open, flames and embers flickering around it in the intense scene.",
+  "prompt": "The woman with vibrant red hair slowly raises her arm, maintaining her confident stance against the futuristic cityscape at sunset.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

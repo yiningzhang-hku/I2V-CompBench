@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The calico cat with green eyes slowly lifts its front paw and gently taps the wooden surface.",
+  "prompt": "The lion slowly raises its head, its fiery mane flickering as cosmic particles swirl around it.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

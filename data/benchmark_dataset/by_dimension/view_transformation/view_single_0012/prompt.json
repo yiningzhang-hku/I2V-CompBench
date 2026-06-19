@@ -3,9 +3,9 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The camera slowly pans right, maintaining the subject's spatial position and stable background.",
+  "prompt": "The camera slowly pans left, tracking the ant's movement across the wet surface while maintaining the reflection in the water.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

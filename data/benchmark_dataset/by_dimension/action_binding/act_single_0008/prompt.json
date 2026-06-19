@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The golden retriever slowly lifts its head and turns to look directly at the horizon as the sun dips below the sea.",
+  "prompt": "The subject slowly raises her hands to adjust the headpiece while maintaining focus.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

@@ -5,7 +5,7 @@ paths:
   prompt_dir: "prompts"               # prompts 模板保留在工程内
 
 sampling:
-  max_samples: 1000           # 中等规模验证，正式跑设为 null
+  max_samples: 6000           # 1000(已完成) + 5000(本次新增) = 6000 总量
   hf_split: "Eval"           # HuggingFace split: "Eval" (10K) / "Full" (1.7M)
 
 prior_package:

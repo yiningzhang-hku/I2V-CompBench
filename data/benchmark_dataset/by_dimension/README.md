@@ -1,15 +1,15 @@
 # Benchmark Dataset (by-dimension layout)
 
-Total questions: **48**
+Total questions: **409**
 
 | Dimension | Questions |
 | --- | --- |
-| attribute_binding | 9 |
-| action_binding | 12 |
-| motion_binding | 4 |
+| attribute_binding | 68 |
+| action_binding | 81 |
+| motion_binding | 59 |
 | spatial_composition | 0 |
-| background_dynamics | 10 |
-| view_transformation | 13 |
+| background_dynamics | 107 |
+| view_transformation | 94 |
 | interaction_reasoning | 0 |
 
 ## Per-question folder layout

@@ -3,9 +3,9 @@
   "dimension": "attribute_binding",
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The lion's mane subtly shifts as raindrops cling and slide down its fur, maintaining the same pose and scene.",
+  "prompt": "The subject's glowing red eyes flicker and intensify, revealing a deeper malevolence while remaining motionless in the same dark cloak.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

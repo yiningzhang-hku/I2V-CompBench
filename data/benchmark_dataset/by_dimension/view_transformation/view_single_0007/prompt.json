@@ -3,9 +3,9 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The camera slowly pans right, revealing more of the floating spherical structures in the futuristic cityscape under the cloudy sky.",
+  "prompt": "The camera slowly pans left, revealing more of the shadowy environment around the hunched figure.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

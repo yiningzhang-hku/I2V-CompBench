@@ -1,11 +1,11 @@
 """
-Generate 1280x720 strict 16:9 inference companions for every benchmark image.
+Generate 854x480 strict 16:9 inference companions for every benchmark image.
 
 Background
 ----------
 Phase 2 §6.4 dual-track output:
-  * <name>.png       — native-aspect 720P (long edge = 1280), evaluator P-axis truth
-  * <name>_16x9.png  — strict 1280x720 16:9, fed to I2V models that require 16:9 input
+  * <name>.png       — native-aspect 480P (long edge = 854), evaluator P-axis truth
+  * <name>_16x9.png  — strict 854x480 16:9, fed to I2V models that require 16:9 input
 
 This script scans data/benchmark_dataset/, finds every primary PNG (skipping any that
 already end with `_16x9`) and produces the companion file alongside it. Idempotent:
@@ -82,7 +82,7 @@ def process_one(primary: Path, apply: bool, force: bool) -> str:
         return "error"
 
     strategy = classify_16x9_strategy(img)
-    print(f"  [{strategy:<10}] {primary.name} ({img.size[0]}x{img.size[1]}) -> {companion.name} (1280x720)")
+    print(f"  [{strategy:<10}] {primary.name} ({img.size[0]}x{img.size[1]}) -> {companion.name} (854x480)")
 
     if apply:
         out = to_16x9_720p(img)
@@ -91,7 +91,7 @@ def process_one(primary: Path, apply: bool, force: bool) -> str:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Build 1280x720 16:9 companions for benchmark images.")
+    parser = argparse.ArgumentParser(description="Build 854x480 16:9 companions for benchmark images.")
     parser.add_argument(
         "--root",
         default=str(_REPO_ROOT / "data" / "benchmark_dataset"),

@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The cyberpunk woman adjusts her high-tech headset, her glowing red jacket accents pulsing subtly as she activates her neural interface.",
+  "prompt": "The pirates continue marching forward in unison, their footsteps echoing on the cobblestone street under the flickering lantern light.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

@@ -3,9 +3,9 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The glowing green light moves steadily to the right through the dark forest.",
+  "difficulty": "easy",
+  "rarity": "common",
+  "prompt": "The blonde woman in the black and gold futuristic suit moves to the right while maintaining her position in the high-tech industrial setting.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

@@ -4,8 +4,8 @@
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
-  "prompt": "The subject moves steadily to the right while the scene remains unchanged.",
+  "rarity": "common",
+  "prompt": "The vibrant yellow sea slug with purple-tipped appendages moves steadily to the right within the dark underwater scene.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

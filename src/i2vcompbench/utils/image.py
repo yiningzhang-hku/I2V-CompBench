@@ -15,7 +15,7 @@ from loguru import logger
 from PIL import Image
 
 
-DEFAULT_LONG_EDGE = 1280  # 720P long edge (1280x720); see Phase 2 §6.4
+DEFAULT_LONG_EDGE = 854  # 480P long edge (854x480, 16:9); see Phase 2 §6.4
 
 
 def open_image(path: str | Path) -> Image.Image:
@@ -44,8 +44,8 @@ def resize_long_edge(
     enlarge=False (default): only shrink oversized images, leave small ones intact.
         Used by Phase 1 API upload path where we just want an upper bound.
     enlarge=True: force-resize regardless of original size, including upscaling small
-        images (e.g. TIP-I2V 224x126 -> 1280x720). Used by Phase 2 input construction
-        where benchmark assets must be uniformly 720P-class (long edge = 1280).
+        images (e.g. TIP-I2V 224x126 -> 854x480). Used by Phase 2 input construction
+        where benchmark assets must be uniformly 480P-class (long edge = 854).
     """
     w, h = img.size
     le = max(w, h)
@@ -101,8 +101,8 @@ def image_resolution_ok(img: Image.Image, min_long_edge: int = 384) -> bool:
 # 16:9 inference-side adapter (Phase 2 §6.4 dual-track output)
 # ----------------------------------------------------------------------------
 
-DEFAULT_INFERENCE_W = 1280
-DEFAULT_INFERENCE_H = 720
+DEFAULT_INFERENCE_W = 854
+DEFAULT_INFERENCE_H = 480
 _NEAR_169_TOLERANCE = 0.04  # ±4% 认为已足够接近 16:9，直接 resize不可见形变
 
 
@@ -112,7 +112,7 @@ def to_16x9_720p(
     target_h: int = DEFAULT_INFERENCE_H,
     pad_color: tuple = (0, 0, 0),
 ) -> Image.Image:
-    """Adapt arbitrary-aspect image to a strict ``target_w x target_h`` (default 1280x720) canvas.
+    """Adapt arbitrary-aspect image to a strict ``target_w x target_h`` (default 854x480) canvas.
 
     Strategy (selected automatically, no bbox required):
       1. ±4% near 16:9   -> direct resize, distortion <= 4% (imperceptible)
@@ -120,7 +120,7 @@ def to_16x9_720p(
       3. else            -> letterbox: equal-ratio scale to fit, center on black canvas
 
     Used by Phase 2 to produce ``*_16x9.png`` companion files for I2V model inference,
-    while keeping the original ``*.png`` (long-edge=1280, native ratio) intact for
+    while keeping the original ``*.png`` (long-edge=854, native ratio) intact for
     evaluator P-axis ground truth.
     """
     w, h = img.size

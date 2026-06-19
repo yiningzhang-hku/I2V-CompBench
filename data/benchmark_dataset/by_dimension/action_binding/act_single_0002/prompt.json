@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The dragon slowly folds its wings and rises into the air, maintaining its position above the ruins.",
+  "prompt": "The woman in the white hijab and long coat begins to walk forward confidently down the dimly lit arched corridor.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

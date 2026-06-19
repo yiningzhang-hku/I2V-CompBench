@@ -3,9 +3,9 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The camera slowly pans left, maintaining the subject's spatial position and stable background in the high-tech industrial setting.",
+  "prompt": "The camera slowly pans left, revealing more of the glowing figures and smoke behind the robot.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

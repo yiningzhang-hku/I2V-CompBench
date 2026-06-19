@@ -3,9 +3,9 @@
   "dimension": "attribute_binding",
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The vibrant red rose at the center gradually transforms into a deep blue rose while the swirling black ink remains static against the white background.",
+  "difficulty": "easy",
+  "rarity": "common",
+  "prompt": "The subject's vibrant green and purple patterns shift and pulse with a glowing, rhythmic intensity, enhancing the surreal aura.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

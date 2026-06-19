@@ -3,9 +3,9 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The camera smoothly tracks the couple along the winding pink path, maintaining focus on the castle in the distance.",
+  "difficulty": "easy",
+  "rarity": "common",
+  "prompt": "The camera slowly zooms in on Batman's face while maintaining the original framing and background stability.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

@@ -203,7 +203,7 @@ def _patch_text_row(text_row: dict) -> bool:
         return False
     changed = False
 
-    if "primary_dimension" not in text_row:
+    if not text_row.get("primary_dimension"):
         primary, cands, forb = _infer_dimension_routing(text_row)
         text_row["primary_dimension"] = primary
         text_row["candidate_dimensions"] = cands

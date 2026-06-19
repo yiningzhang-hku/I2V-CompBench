@@ -70,9 +70,12 @@ def build_quota(config: Dict[str, Any]) -> QuotaPlan:
     contrastive_dims = set(
         (quota_cfg.get("contrastive_pair") or {}).get("enabled_dimensions") or []
     )
+    skip_dims = set(quota_cfg.get("skip_dimensions") or [])
 
     buckets: List[QuotaBucket] = []
     for dim in DIMENSIONS_V2:
+        if dim in skip_dims:
+            continue
         modes = input_mode_ratio.get(dim) or {"single_image": 1.0}
         # validate ratios sum near 1.0
         s = sum(modes.values())

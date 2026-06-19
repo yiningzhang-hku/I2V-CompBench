@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The subject's pink feathered costume shifts dynamically as they slowly raise their arms, creating a flowing motion.",
+  "prompt": "The subject's expression subtly shifts from calm to serene, with her closed eyes gently relaxing further.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

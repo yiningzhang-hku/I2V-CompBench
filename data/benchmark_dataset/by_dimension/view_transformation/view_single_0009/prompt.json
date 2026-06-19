@@ -3,9 +3,9 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The camera slowly pans right, revealing more of the village and mountains while maintaining the reflective pond's stable position.",
+  "prompt": "The camera slowly pans right, revealing more of the glowing blue-lit corridor while maintaining the man's position and the stable background.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

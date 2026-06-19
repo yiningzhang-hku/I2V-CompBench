@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The camera slowly pans right, revealing more of the building and the palm tree to the side.",
+  "prompt": "The camera slowly pans left, revealing more of the glowing forest and the lanterns surrounding the woman.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

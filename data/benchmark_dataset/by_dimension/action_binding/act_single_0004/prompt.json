@@ -4,8 +4,8 @@
   "subtype": "single_subject_action",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
-  "prompt": "The horned creature slowly extends its wings, causing the surrounding feathers to swirl dynamically around it.",
+  "rarity": "common",
+  "prompt": "The ghostly figure slowly raises its arms, the long white hair drifting as if moved by an unseen force.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The anime-style woman with long silver hair slowly raises her arms, her white robe fluttering gently in the evening breeze.",
+  "prompt": "The woman in the white lace bikini lifts her arms gracefully as the waves gently roll in behind her.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

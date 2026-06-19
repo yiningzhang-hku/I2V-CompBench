@@ -3,9 +3,9 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The camera smoothly pans left, maintaining the subject's spatial position and the stable background.",
+  "prompt": "The camera slowly pans right, revealing the full expanse of the snow-covered mountain range behind the figure.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

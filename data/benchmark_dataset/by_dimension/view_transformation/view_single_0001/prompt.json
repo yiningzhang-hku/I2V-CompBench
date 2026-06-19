@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The camera slowly pans right, revealing more of the chaotic golden explosions and silhouetted figures in the background.",
+  "prompt": "The camera slowly zooms in on the werewolf's glowing red eyes, maintaining stable background and spatial position.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

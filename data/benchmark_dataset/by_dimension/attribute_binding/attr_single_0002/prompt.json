@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The bearded man's expression gradually shifts from neutral to a subtle smile, maintaining all other attributes.",
+  "prompt": "The man in the striped shirt and cap slowly removes his cap, revealing a bald head.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

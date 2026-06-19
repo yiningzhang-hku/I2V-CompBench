@@ -3,9 +3,9 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The camera slowly pans left, maintaining the woman's position and the stable background.",
+  "prompt": "The camera slowly pans to the right, maintaining the teddy bear's position and the white background.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

@@ -1,0 +1,11 @@
+{"question_id": "attr_single_0004", "risk_flags": ["low_confidence::attribute_baseline_clear", "low_confidence::resolution_ok"]}
+{"question_id": "attr_single_0015", "risk_flags": ["soft_fail::background_stable_baseline", "low_confidence::resolution_ok"]}
+{"question_id": "attr_single_0061", "risk_flags": ["soft_fail::background_stable_baseline", "low_confidence::resolution_ok"]}
+{"question_id": "act_single_0018", "risk_flags": ["low_confidence::has_target_subject_visible", "low_confidence::neutral_pre_action_pose", "low_confidence::body_parts_unoccluded", "low_confidence::single_target_subject", "low_confidence::background_stable_baseline", "low_confidence::resolution_ok"]}
+{"question_id": "act_single_0037", "risk_flags": ["soft_fail::body_parts_unoccluded", "low_confidence::background_stable_baseline"]}
+{"question_id": "act_single_0043", "risk_flags": ["low_confidence::has_target_subject_visible", "low_confidence::neutral_pre_action_pose", "low_confidence::body_parts_unoccluded", "low_confidence::single_target_subject", "low_confidence::background_stable_baseline", "low_confidence::resolution_ok"]}
+{"question_id": "act_single_0067", "risk_flags": ["soft_fail::background_stable_baseline", "low_confidence::resolution_ok"]}
+{"question_id": "act_single_0077", "risk_flags": ["soft_fail::neutral_pre_action_pose", "soft_fail::background_stable_baseline", "low_confidence::resolution_ok"]}
+{"question_id": "motion_single_0036", "risk_flags": ["low_confidence::resolution_ok"]}
+{"question_id": "bg_single_0031", "risk_flags": ["low_confidence::has_target_subject_visible", "low_confidence::subject_pose_neutral", "low_confidence::resolution_ok"]}
+{"question_id": "bg_single_0126", "risk_flags": ["low_confidence::has_target_subject_visible", "low_confidence::scene_relevant_to_dynamic", "low_confidence::subject_pose_neutral"]}

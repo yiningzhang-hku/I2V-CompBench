@@ -3,9 +3,9 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
-  "rarity": "rare",
-  "prompt": "The camera slowly pans left, revealing more of the building's symmetrical facade under the overcast sky.",
+  "difficulty": "easy",
+  "rarity": "common",
+  "prompt": "The camera slowly pans right, revealing more of the ruined cityscape around the minifigure.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

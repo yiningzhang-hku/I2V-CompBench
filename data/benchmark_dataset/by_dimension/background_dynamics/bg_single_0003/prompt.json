@@ -4,8 +4,8 @@
   "subtype": "background_change_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
-  "prompt": "The background gradually shifts to a dynamic solar panel field while the subject remains still.",
+  "rarity": "common",
+  "prompt": "The dark, smoky background shifts dynamically with swirling motion, while the subject remains still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

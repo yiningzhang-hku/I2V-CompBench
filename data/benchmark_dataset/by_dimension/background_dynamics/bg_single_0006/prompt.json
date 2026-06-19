@@ -3,9 +3,9 @@
   "dimension": "background_dynamics",
   "subtype": "background_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The clouds shift and swirl in the sky, casting dynamic shadows that move across the hilltop while the subject remains still.",
+  "prompt": "The glowing clouds in the sky shift and swirl slowly, while the subject remains still in silhouette.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

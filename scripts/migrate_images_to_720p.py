@@ -1,10 +1,10 @@
 """
-Migrate existing benchmark dataset images to 720P-class (long edge = 1280).
+Migrate existing benchmark dataset images to 480P-class (long edge = 854).
 
 Background
 ----------
 Phase 2 §6.4 (revised) requires every input image (first_frames/, ref_images/) to be
-resized to long_edge=1280 with aspect ratio preserved (path A1: equal-ratio upscale,
+resized to long_edge=854 with aspect ratio preserved (path A1: equal-ratio upscale,
 no letterbox, no crop). Images already produced before this rule are typically
 224x126 / 224x224 / 126x224 (TIP-I2V native low-res frames) and must be migrated.
 
@@ -21,7 +21,7 @@ Usage
 
 Idempotency
 -----------
-Already-1280-long-edge images are skipped. Safe to rerun.
+Already-854-long-edge images are skipped. Safe to rerun.
 """
 
 from __future__ import annotations
@@ -48,7 +48,7 @@ from i2vcompbench.utils.image import (  # noqa: E402
 
 
 def iter_target_pngs(root: Path):
-    """Yield every PNG under root that should follow the 720P rule.
+    """Yield every PNG under root that should follow the 480P rule.
 
     by_dimension/<dim>/<question_id>/first_frame.png
     by_dimension/<dim>/<question_id>/ref_images/*.png
@@ -85,7 +85,7 @@ def migrate_one(path: Path, long_edge: int, apply: bool) -> str:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Migrate benchmark images to 720P long edge.")
+    parser = argparse.ArgumentParser(description="Migrate benchmark images to 480P long edge.")
     parser.add_argument(
         "--root",
         default=str(_REPO_ROOT / "data" / "benchmark_dataset"),

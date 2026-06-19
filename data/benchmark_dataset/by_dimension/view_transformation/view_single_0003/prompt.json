@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The camera slowly pans left, revealing the vast snowy landscape surrounding the figure on the mountain peak.",
+  "prompt": "The camera slowly pans left, revealing more of the gothic hall's towering columns and dimly lit arches.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

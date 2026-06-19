@@ -3,9 +3,9 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The camera slowly pans right, revealing more of the cobblestone village and surrounding green hills.",
+  "difficulty": "easy",
+  "rarity": "common",
+  "prompt": "The camera smoothly orbits the International Space Station, maintaining the sun's glow on the horizon.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

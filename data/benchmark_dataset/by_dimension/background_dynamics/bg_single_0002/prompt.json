@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The sky gradually shifts from sunset hues to twilight, with the rainbow fading slowly while the castle remains still.",
+  "prompt": "The snowfall intensifies and the golden aura around the figure pulses rhythmically, while the subject remains still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

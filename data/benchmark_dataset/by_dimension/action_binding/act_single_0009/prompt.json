@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The subject gently turns her head toward the window, her golden headband catching the sunset light.",
+  "difficulty": "easy",
+  "rarity": "common",
+  "prompt": "The pink bear slowly raises its front paws upward while remaining seated on the gray surface.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

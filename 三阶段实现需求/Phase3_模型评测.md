@@ -283,7 +283,7 @@ class ModelAdapter:
     "seed": 42,
     "num_frames": 81,
     "fps": 16,
-    "resolution": "720p"
+    "resolution": "480p"
   },
   "errors": []
 }
@@ -292,7 +292,7 @@ class ModelAdapter:
 **生成参数依据**：
 
 - `num_frames=81 / fps=16` 对齐当前主流 I2V 模型默认 5s@16fps 输出。模型原生输出不同时，以原生为准，由 §4.2 统一重采样。
-- `resolution=720p` 仅为默认；evaluator 底层几何（§4.5.4）**不允许硬编码分辨率**，必须读 video metadata。
+- `resolution=480p` 仅为默认；evaluator 底层几何（§4.5.4）**不允许硬编码分辨率**，必须读 video metadata。
 
 **多种子策略**（应对 I2V 随机性）：
 
@@ -329,7 +329,7 @@ class ModelAdapter:
   "ref_images_normalized_paths": ["normalized_videos/ref/attr_0001_ref0.jpg"],
   "num_frames": 81,
   "fps": 16,
-  "resolution": [1280, 720]
+  "resolution": [854, 480]
 }
 ```
 

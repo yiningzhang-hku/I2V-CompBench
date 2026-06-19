@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The turtle continues swimming forward with smooth, rhythmic movements through the sunlit water.",
+  "prompt": "The woman's face slowly moves forward through the swirling purple and blue smoke, maintaining the surreal, dreamlike atmosphere.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",
