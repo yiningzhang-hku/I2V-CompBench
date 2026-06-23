@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The camera slowly pans left, maintaining the fire truck's position and the stable background.",
+  "prompt": "The camera slowly pans left, revealing the full side of the yellow fire truck and its emergency equipment.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

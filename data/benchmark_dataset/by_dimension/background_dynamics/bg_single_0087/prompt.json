@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "common",
-  "prompt": "The clouds shift and swirl in the sky above the hilltop, while the subject remains still.",
+  "prompt": "The glowing path beneath the phoenix shifts and pulses with energy, while the lotus flowers sway gently in the swirling clouds.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

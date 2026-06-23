@@ -3,9 +3,9 @@
   "dimension": "attribute_binding",
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The giraffe's head and neck slowly turn slightly, maintaining the same pose and background.",
+  "difficulty": "easy",
+  "rarity": "common",
+  "prompt": "The the subject  .",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

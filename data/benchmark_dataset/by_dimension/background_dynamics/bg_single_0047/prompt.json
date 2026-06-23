@@ -4,8 +4,8 @@
   "subtype": "background_change_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
-  "prompt": "The mist thickens and shifts slowly around the still football player, creating a dynamic, evolving atmosphere.",
+  "rarity": "common",
+  "prompt": "The candle flames flicker and cast shifting shadows across the room, while the subject remains still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

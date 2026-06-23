@@ -4,8 +4,8 @@
   "subtype": "single_subject_action",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
-  "prompt": "The subject raises its arms, releasing a burst of lightning that arcs toward the glowing blue sphere.",
+  "rarity": "common",
+  "prompt": "The subject slowly raises their arms, fingers stretching upward in the dim, yellowish light.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

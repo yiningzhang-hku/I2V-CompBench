@@ -3,9 +3,9 @@
   "dimension": "attribute_binding",
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The boy slowly closes his eyes, maintaining his position and expression in the sunlit forest.",
+  "prompt": "The man's expression shifts from shock to surprise, his mouth still wide open, in the same static frame.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

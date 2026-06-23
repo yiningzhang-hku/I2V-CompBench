@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The garden gnome wiggles its body and raises its arms slowly while standing on the black background surrounded by autumn leaves.",
+  "prompt": "The garden gnome gently raises his hand and waves hello, keeping the scene and background unchanged.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

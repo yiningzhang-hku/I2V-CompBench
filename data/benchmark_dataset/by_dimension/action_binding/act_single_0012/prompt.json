@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The robotic figure raises its golden-jacketed arm slowly while maintaining its position on the red and white striped background.",
+  "prompt": "The the subject .",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

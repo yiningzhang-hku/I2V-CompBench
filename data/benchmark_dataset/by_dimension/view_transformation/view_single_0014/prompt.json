@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The camera slowly pans right, revealing more of the sunlit forest while maintaining the fairies' central position.",
+  "prompt": "The camera slowly pans right, revealing more of the sunlit forest glade while keeping the fairies and butterfly centered.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

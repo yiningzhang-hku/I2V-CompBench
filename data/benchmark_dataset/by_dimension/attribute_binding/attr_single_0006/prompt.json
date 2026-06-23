@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The subject's glowing red eyes flicker and intensify, revealing a deeper malevolence while remaining motionless in the same dark cloak.",
+  "prompt": "The subject's glowing red eyes flicker and intensify, revealing a deeper malevolence.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

@@ -4,8 +4,8 @@
   "subtype": "single_subject_action",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
-  "prompt": "The subject gently turns her head to the side, her wet hair catching the sunlight as she smiles softly.",
+  "rarity": "common",
+  "prompt": "The woman slowly lowers her hands from her face, her eyes still wide with fear in the dimly lit room with candles and a chandelier.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The orange tabby cat shifts smoothly to the right while maintaining its upright posture and stable background.",
+  "prompt": "The orange tabby cat shifts to the right while maintaining its upright position and stable background.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

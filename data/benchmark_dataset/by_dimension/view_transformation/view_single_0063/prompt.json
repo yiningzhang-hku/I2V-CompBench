@@ -4,8 +4,8 @@
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
   "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The camera slowly pans right, revealing more of the steampunk airship and the cityscape below.",
+  "rarity": "common",
+  "prompt": "The camera slowly pans right, maintaining the subject's spatial position and stable background in the high-tech industrial setting.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The subject moves to the right while remaining in the same position relative to the stable background and camera framing.",
+  "prompt": "The subject moves to the right while remaining in the same position relative to the stable scene and camera framing.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

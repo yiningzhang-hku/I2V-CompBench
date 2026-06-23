@@ -3,9 +3,9 @@
   "dimension": "attribute_binding",
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The soft purple blossoms gently sway, with petals subtly shifting position while maintaining the original composition.",
+  "prompt": "The subject's glowing green eyes flicker and intensify in response to the surrounding neon environment.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

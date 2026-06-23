@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "common",
-  "prompt": "The camera smoothly pans left, tracking the man as he moves through the fiery urban scene with the red car and explosions in the background.",
+  "prompt": "The camera smoothly pans left, revealing the full width of the arched doorway and the man's full silhouette.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

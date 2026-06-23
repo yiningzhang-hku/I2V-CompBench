@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The pirates continue marching forward in unison, their footsteps echoing on the cobblestone street under the flickering lantern light.",
+  "prompt": "The the subject .",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

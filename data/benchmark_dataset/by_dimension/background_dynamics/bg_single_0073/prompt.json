@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "common",
-  "prompt": "The background scenery shifts as trees and buildings pass by slowly, while the subject remains still in the frame.",
+  "prompt": "The sunlight shifts through the tree canopy, casting moving shadows across the forest floor while the subject remains still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

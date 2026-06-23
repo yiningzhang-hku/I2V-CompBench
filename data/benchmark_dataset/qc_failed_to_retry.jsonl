@@ -1,36 +1,51 @@
-{"question_id": "act_single_0010", "risk_flags": ["soft_fail::neutral_pre_action_pose", "hard_fail::single_target_subject", "low_confidence::background_stable_baseline"]}
+{"question_id": "act_single_0010", "risk_flags": ["hard_fail::single_target_subject", "low_confidence::background_stable_baseline"]}
 {"question_id": "act_single_0034", "risk_flags": ["soft_fail::neutral_pre_action_pose", "hard_fail::single_target_subject", "soft_fail::background_stable_baseline"]}
-{"question_id": "motion_single_0048", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::starting_position_valid", "soft_fail::unique_target_subject"]}
+{"question_id": "act_single_0044", "risk_flags": ["hard_fail::single_target_subject"]}
+{"question_id": "motion_single_0133", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::starting_position_valid", "soft_fail::unique_target_subject"]}
 {"question_id": "bg_single_0004", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::subject_pose_neutral"]}
 {"question_id": "bg_single_0018", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
 {"question_id": "bg_single_0034", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
-{"question_id": "bg_single_0060", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
-{"question_id": "bg_single_0068", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
-{"question_id": "bg_single_0081", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
-{"question_id": "bg_single_0082", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::no_dynamic_already_active", "soft_fail::subject_pose_neutral"]}
-{"question_id": "bg_single_0088", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
-{"question_id": "bg_single_0089", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::subject_pose_neutral"]}
-{"question_id": "bg_single_0101", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::subject_pose_neutral"]}
-{"question_id": "bg_single_0102", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::subject_pose_neutral"]}
-{"question_id": "bg_single_0103", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
-{"question_id": "bg_single_0110", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
-{"question_id": "bg_single_0111", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
-{"question_id": "bg_single_0114", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::subject_pose_neutral"]}
-{"question_id": "bg_single_0115", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
-{"question_id": "bg_single_0117", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
-{"question_id": "bg_single_0118", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
-{"question_id": "bg_single_0119", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
-{"question_id": "bg_single_0120", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
-{"question_id": "bg_single_0121", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
-{"question_id": "bg_single_0122", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
-{"question_id": "bg_single_0123", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0052", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::no_dynamic_already_active", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0055", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0070", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0084", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0092", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0105", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0106", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::no_dynamic_already_active", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0112", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0113", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0123", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::no_dynamic_already_active", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0125", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0126", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::subject_pose_neutral"]}
 {"question_id": "bg_single_0127", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
-{"question_id": "bg_single_0128", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
-{"question_id": "bg_single_0129", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::subject_pose_neutral"]}
-{"question_id": "bg_single_0130", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
-{"question_id": "bg_single_0133", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::no_dynamic_already_active", "soft_fail::subject_pose_neutral"]}
-{"question_id": "bg_single_0135", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
-{"question_id": "bg_single_0136", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
-{"question_id": "bg_single_0138", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::no_dynamic_already_active", "soft_fail::subject_pose_neutral"]}
-{"question_id": "bg_single_0140", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0134", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0137", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0138", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0140", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::no_dynamic_already_active", "soft_fail::subject_pose_neutral"]}
 {"question_id": "bg_single_0141", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0143", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0146", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0147", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0150", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0151", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0152", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0153", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0154", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::no_dynamic_already_active", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0155", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0156", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0158", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0159", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::no_dynamic_already_active", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0160", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0161", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0162", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0164", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0165", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::no_dynamic_already_active", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0167", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0168", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0171", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0174", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::no_dynamic_already_active", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0176", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0177", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0179", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::scene_relevant_to_dynamic", "soft_fail::no_dynamic_already_active", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0180", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::subject_pose_neutral"]}
+{"question_id": "bg_single_0181", "risk_flags": ["hard_fail::has_target_subject_visible", "soft_fail::subject_pose_neutral"]}

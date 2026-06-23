@@ -3,9 +3,9 @@
   "dimension": "attribute_binding",
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The red textured object subtly shifts its surface texture while remaining in the same position against the green and yellow background.",
+  "difficulty": "easy",
+  "rarity": "common",
+  "prompt": "The baby's expression subtly shifts from neutral to a gentle smile, with lips slightly parting further.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

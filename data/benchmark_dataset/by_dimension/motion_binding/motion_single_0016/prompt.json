@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The teddy bear in the blue jacket shifts to the right while remaining on the mossy rock.",
+  "prompt": "The teddy bear in the sweater shifts to the right while remaining on the mossy rock.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

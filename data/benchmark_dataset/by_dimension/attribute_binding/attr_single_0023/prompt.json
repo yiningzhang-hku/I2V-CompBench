@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The boy's face on the album cover gradually shifts expression from neutral to a subtle smile.",
+  "prompt": "The young boy's face on the album cover gradually shifts expression from neutral to a subtle smile.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

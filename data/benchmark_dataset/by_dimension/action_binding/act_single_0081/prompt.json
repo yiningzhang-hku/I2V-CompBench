@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
-  "rarity": "common",
-  "prompt": "The shadowy figure steps out from behind the tree, slowly turning to face the viewer.",
+  "difficulty": "easy",
+  "rarity": "rare",
+  "prompt": "The elf slowly blinks and turns their head slightly to the right, maintaining a still camera and stable background.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

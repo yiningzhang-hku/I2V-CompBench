@@ -4,8 +4,8 @@
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
-  "prompt": "The elderly man's white beard gradually glows with a soft golden light, enhancing his radiant aura.",
+  "rarity": "common",
+  "prompt": "The joyful brown and white puppy continues running through the golden grass, its tongue still out and ears flapping with each step.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

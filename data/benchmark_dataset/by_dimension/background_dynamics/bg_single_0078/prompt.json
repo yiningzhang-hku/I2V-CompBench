@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "common",
-  "prompt": "The crowd's energy intensifies as spotlights shift dynamically across the arena, while the subject remains still.",
+  "prompt": "The mist in the sky gradually thickens and shifts, flowing slowly over the landscape while the subject remains still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

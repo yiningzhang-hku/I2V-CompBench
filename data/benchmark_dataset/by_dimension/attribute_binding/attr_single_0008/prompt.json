@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The eye's redness and irritation in the sclera gradually diminish, returning to a clear, healthy appearance.",
+  "prompt": "The eye's red bloodshot veins gradually fade, leaving the sclera clear and healthy.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

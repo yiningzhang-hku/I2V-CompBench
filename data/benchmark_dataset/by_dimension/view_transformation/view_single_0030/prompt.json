@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "rare",
-  "prompt": "The camera slowly pans right, maintaining the subject's position and the stable background.",
+  "prompt": "The camera slowly pans right, revealing more of the city skyline while keeping the subject and background stable.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

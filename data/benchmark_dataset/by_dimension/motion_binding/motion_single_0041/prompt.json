@@ -3,9 +3,9 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The majestic gorilla moves steadily to the right within the misty jungle, maintaining its powerful form and the stable lush background.",
+  "difficulty": "easy",
+  "rarity": "common",
+  "prompt": "The group of futuristic figures in glowing suits moves to the right within the high-tech chamber.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

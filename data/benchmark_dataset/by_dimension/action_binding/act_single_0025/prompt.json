@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The subject slowly raises their arms upward while maintaining a meditative posture in the vibrant purple field.",
+  "prompt": "The subject slowly raises their arms upward while maintaining a seated meditation posture in the vibrant purple field.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

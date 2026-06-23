@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The moonlit desert sky shifts with subtle cloud movement, while the raven remains still in the frame.",
+  "prompt": "The moonlit desert sky gradually shifts, with the horizon glowing brighter and distant mountains subtly darkening, while the subject remains still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "common",
-  "prompt": "The camera slowly pans right, revealing more of the snowy mountain landscape while keeping the boy and dogs centered.",
+  "prompt": "The camera  of the scene.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

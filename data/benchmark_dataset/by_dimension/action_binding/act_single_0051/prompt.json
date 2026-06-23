@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The subject slowly raises its skeletal head and extends its shadowy limbs in a deliberate motion.",
+  "prompt": "The subject sprints forward down the corridor, dodging flames and moving toward the bright light at the end.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

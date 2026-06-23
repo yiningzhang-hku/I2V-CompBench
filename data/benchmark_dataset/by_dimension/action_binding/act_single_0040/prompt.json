@@ -4,8 +4,8 @@
   "subtype": "single_subject_action",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
-  "prompt": "The dragon's mouth opens wider as the green lightning bolt intensifies, its golden scales glowing brighter with each pulse.",
+  "rarity": "common",
+  "prompt": "The orange tiger figurine waves its paw in a friendly gesture, maintaining its position and appearance.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

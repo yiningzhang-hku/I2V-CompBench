@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "common",
-  "prompt": "The camera slowly pans right, revealing more of the twilight sky and the distant stars beyond the window.",
+  "prompt": "The camera slowly pans right, revealing more of the winding stream and distant mountains.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

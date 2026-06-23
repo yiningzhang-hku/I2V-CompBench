@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The camera slowly pans upward, following the phoenix as it ascends from the pyre.",
+  "prompt": "The camera slowly pans upward, tracking the phoenix as it ascends from the pyre.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

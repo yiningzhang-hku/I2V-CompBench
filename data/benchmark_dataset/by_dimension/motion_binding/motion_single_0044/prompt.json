@@ -3,9 +3,9 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The woman in the red jumpsuit moves to the right while remaining in the same position relative to the stable background and camera framing.",
+  "prompt": "The subject moves smoothly to the right while remaining in the same position relative to the stable forest background.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

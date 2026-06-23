@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The weathered skull slowly blinks its glowing green eyes, maintaining a still camera and stable background.",
+  "prompt": "The skull's glowing green eyes flicker and pulse rhythmically, maintaining the same static framing and dark background.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

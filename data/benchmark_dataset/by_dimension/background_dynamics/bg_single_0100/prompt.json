@@ -4,8 +4,8 @@
   "subtype": "background_change_single",
   "input_mode": "single_image",
   "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The pink and purple bokeh background gently shifts and swirls, while the subject remains still.",
+  "rarity": "common",
+  "prompt": "The glowing lotus flowers gently pulse with light, and the celestial sphere shifts subtly in the cosmic sky.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

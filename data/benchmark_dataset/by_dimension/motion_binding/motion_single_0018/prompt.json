@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The blue-skinned deity shifts smoothly to the right while maintaining the same pose and background.",
+  "prompt": "The blue-skinned deity slowly shifts to the right while maintaining the same pose and background.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

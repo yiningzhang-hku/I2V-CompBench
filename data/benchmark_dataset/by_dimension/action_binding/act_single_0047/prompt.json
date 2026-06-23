@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The cyberpunk woman in the sleek black suit with glowing red accents slowly raises her hand, activating her futuristic headset.",
+  "prompt": "The turtle continues swimming forward through the underwater forest, its iridescent shell shimmering with each graceful movement.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

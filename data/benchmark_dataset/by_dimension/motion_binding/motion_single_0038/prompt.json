@@ -3,9 +3,9 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The sleek blue sports car moves steadily to the right along the winding mountain road under the full moon.",
+  "difficulty": "easy",
+  "rarity": "common",
+  "prompt": "The butterfly moves steadily to the right across the stream, remaining in the same plane and depth.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

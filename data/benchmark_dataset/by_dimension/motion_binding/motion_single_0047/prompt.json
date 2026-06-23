@@ -3,9 +3,9 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The subject walks steadily to the right across the red-lit landscape beside the industrial structure.",
+  "prompt": "The subject walks to the right along the forest road, arms still outstretched, maintaining position relative to the stable background.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

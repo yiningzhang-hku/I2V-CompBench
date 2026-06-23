@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "common",
-  "prompt": "The glowing jack-o'-lanterns flicker and pulse with a rhythmic light, while the witch remains still in the center.",
+  "prompt": "The fighter jets in the sky gradually shift position while the subject remains still, maintaining stable background framing.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

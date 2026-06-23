@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The bearded man with long blonde hair slowly raises his head higher, maintaining his gaze upward in the dim industrial setting.",
+  "prompt": "The cartoon bee flaps its wings and moves forward steadily across the pink background.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

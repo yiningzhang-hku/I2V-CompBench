@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The subject slowly steps forward from the doorway into the dark hallway, casting a shifting shadow.",
+  "prompt": "The subject steps forward from the doorway into the dark hallway, casting a shifting shadow.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

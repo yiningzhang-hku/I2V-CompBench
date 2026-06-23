@@ -3,9 +3,9 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The figure in the flowing blue robe moves steadily to the right across the desert dunes.",
+  "prompt": "The ballerina in the white tutu moves smoothly to the right while maintaining her pose and the stable background.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

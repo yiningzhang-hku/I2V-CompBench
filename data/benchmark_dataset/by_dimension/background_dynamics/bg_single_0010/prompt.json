@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The turbulent, foamy waves shift and churn around the still subject under the dramatic, cloudy sky.",
+  "prompt": "The turbulent green and white waves shift and churn around the still woman, while the cloudy sky remains stable.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

@@ -3,9 +3,9 @@
   "dimension": "background_dynamics",
   "subtype": "background_change_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
-  "rarity": "common",
-  "prompt": "The beam of divine light above the temple slowly shifts, casting moving shadows across the stone walls while the subject remains still.",
+  "difficulty": "medium",
+  "rarity": "rare",
+  "prompt": "The sunlight shifts across the grass and porch, casting moving shadows as the trees gently sway in the breeze.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

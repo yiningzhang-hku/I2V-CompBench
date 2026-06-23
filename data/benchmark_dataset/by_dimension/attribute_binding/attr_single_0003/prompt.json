@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The subject's expression subtly shifts from calm to serene, with her closed eyes gently relaxing further.",
+  "prompt": "The subject's closed eyes gradually open, revealing expressive gaze while maintaining the original composition and stable background.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

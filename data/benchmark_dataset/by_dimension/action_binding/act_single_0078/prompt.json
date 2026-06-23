@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
-  "rarity": "common",
-  "prompt": "The teacher at the front of the classroom begins writing on the green chalkboard with chalk.",
+  "difficulty": "easy",
+  "rarity": "rare",
+  "prompt": "The dragon's jaws open wide as it lets out a thunderous roar, its claws digging into the stone ground.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

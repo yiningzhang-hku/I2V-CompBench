@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The woman's glowing blue eyes gradually dim to a normal hue while she remains seated at the bar.",
+  "prompt": "The woman's glowing blue eyes flicker and intensify, maintaining her seated position and the bar's neon-lit atmosphere.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

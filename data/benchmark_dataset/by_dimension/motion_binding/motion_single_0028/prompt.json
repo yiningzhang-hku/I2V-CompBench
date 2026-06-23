@@ -4,8 +4,8 @@
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
-  "prompt": "The vintage train moves to the right, emerging further from the tunnel with smoke trailing behind.",
+  "rarity": "common",
+  "prompt": "The blonde princess in the blue gown steps to the right, maintaining her position relative to the glowing tree and magical forest.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

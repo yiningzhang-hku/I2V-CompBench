@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The woman's curly hair gently shifts as golden light and sparkles swirl around her, maintaining a serene, magical atmosphere.",
+  "prompt": "The woman's curly hair gently shifts as golden light and sparkles swirl around her hands, maintaining a serene, magical atmosphere.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

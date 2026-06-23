@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The deity moves to the right while maintaining the same pose and background.",
+  "prompt": "The deity shifts steadily to the right while maintaining the same pose and surroundings.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

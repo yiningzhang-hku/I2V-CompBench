@@ -4,8 +4,8 @@
   "subtype": "background_change_single",
   "input_mode": "single_image",
   "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The graffiti on the walls subtly shifts and pulses with a faint glow, while the subject remains still.",
+  "rarity": "common",
+  "prompt": "The sunlight shifts across the valley, casting changing shadows on the red-roofed houses while the subject remains still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

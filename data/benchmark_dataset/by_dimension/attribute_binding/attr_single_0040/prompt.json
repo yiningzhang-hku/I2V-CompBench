@@ -3,9 +3,9 @@
   "dimension": "attribute_binding",
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The glowing jellyfish-like creature pulses with intensified blue-white light, its tendrils shimmering subtly in place.",
+  "prompt": "The woman slowly adjusts her pink dupatta, letting it flutter gently in the breeze.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

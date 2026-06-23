@@ -3,9 +3,9 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "medium",
   "rarity": "rare",
-  "prompt": "The camera slowly pans forward down the hallway, maintaining the scene's depth and stable background.",
+  "prompt": "The camera smoothly pans left along the mountain trail, following the cyclist's motion while keeping the scene context and background stable.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

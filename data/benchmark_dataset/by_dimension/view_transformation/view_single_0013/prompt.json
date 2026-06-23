@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The camera slowly pans right, revealing more of the ruined cityscape around the minifigure.",
+  "prompt": "The camera slowly pans right, revealing more of the ruined cityscape around the LEGO minifigure.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The queen's hands and face gradually transform as the dark spots spread and intensify, revealing the full extent of the curse.",
+  "prompt": "The woman's hands gradually lose the dark spots, revealing clear skin, while she remains still in the same pose.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

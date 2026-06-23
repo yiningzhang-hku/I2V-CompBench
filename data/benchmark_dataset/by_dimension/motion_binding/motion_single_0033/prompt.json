@@ -3,9 +3,9 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The subject moves steadily to the right within the stable forest scene.",
+  "prompt": "The dark horse moves to the right across the wet beach, splashing through shallow water as waves roll in.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

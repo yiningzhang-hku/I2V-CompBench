@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The girl's smile gradually widens, showing more teeth while maintaining her position and expression.",
+  "prompt": "The girl's braided hair gently sways as she laughs, maintaining her position and surroundings.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

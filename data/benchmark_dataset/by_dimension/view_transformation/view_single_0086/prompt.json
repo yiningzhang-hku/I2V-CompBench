@@ -3,9 +3,9 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
-  "rarity": "common",
-  "prompt": "The camera slowly pans right along the boardwalk, following the monks as they move through the scene.",
+  "difficulty": "medium",
+  "rarity": "rare",
+  "prompt": "The camera slowly pans left, revealing the full length of the cylindrical spacecraft component within the dimly lit facility.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

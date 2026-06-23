@@ -3,9 +3,9 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
-  "rarity": "rare",
-  "prompt": "The blue helicopter moves steadily to the right through the dense forest with autumn foliage under a hazy sky.",
+  "difficulty": "easy",
+  "rarity": "common",
+  "prompt": "The the subject moves to the right.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

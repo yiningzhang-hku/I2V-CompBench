@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The camera slowly pans right, revealing the full expanse of the snow-covered mountain range behind the figure.",
+  "prompt": "The camera slowly pans right, revealing the vast snowy landscape beyond the figure on the ridge.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

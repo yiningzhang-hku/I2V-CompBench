@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The subject's spiky hair gradually transforms into smooth, flowing hair while maintaining the same pose and background.",
+  "prompt": "The creature's spiky hair gradually transforms into smooth, flowing hair while maintaining its blue hoodie and large eyes.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

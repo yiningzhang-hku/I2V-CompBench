@@ -4,8 +4,8 @@
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
-  "prompt": "The raccoon slowly moves to the right, remaining in the same frame and position relative to the tree and foliage.",
+  "rarity": "common",
+  "prompt": "The vibrant orange ant with black stripes crawls steadily to the right across the soil amid the green foliage.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

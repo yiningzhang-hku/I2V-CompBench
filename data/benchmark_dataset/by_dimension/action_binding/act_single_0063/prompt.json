@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The black snake with an open mouth continuously drips white liquid onto the bold red background.",
+  "prompt": "The fox slowly extends its paw forward, curiously reaching toward a floating leaf in the sunlight.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

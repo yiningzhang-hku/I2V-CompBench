@@ -4,8 +4,8 @@
   "subtype": "background_change_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
-  "prompt": "The green glow above intensifies, casting shifting light patterns on the stone path, while the subject remains still.",
+  "rarity": "common",
+  "prompt": "The background subtly shifts with gentle ripples, while the subject remains still in the same frame.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

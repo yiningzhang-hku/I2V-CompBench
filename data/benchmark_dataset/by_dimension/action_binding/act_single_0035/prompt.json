@@ -4,8 +4,8 @@
   "subtype": "single_subject_action",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
-  "prompt": "The cloaked figure in red raises the sword slowly, causing the ghostly woman to flicker and drift backward in the dim light.",
+  "rarity": "common",
+  "prompt": "The woman in the shiny pink cat-themed jumpsuit continues dancing energetically against the vibrant purple and blue swirling background.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

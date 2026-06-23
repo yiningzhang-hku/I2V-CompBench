@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The camera slowly zooms in on Batman's face while maintaining the original framing and background stability.",
+  "prompt": "The camera slowly zooms in on Batman's face while maintaining the original scene and background stability.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

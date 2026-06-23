@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "common",
-  "prompt": "The cosmic sky shifts subtly, with the glowing moon pulsing and floating orbs drifting slowly across the scene.",
+  "prompt": "The snow gently falls around the family, and the Christmas trees sway slightly in the breeze, while the subject remains still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

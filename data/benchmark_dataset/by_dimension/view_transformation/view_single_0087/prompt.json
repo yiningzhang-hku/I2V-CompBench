@@ -3,9 +3,9 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "medium",
   "rarity": "rare",
-  "prompt": "The camera slowly pans right, revealing more of the glowing clouds and distant stars.",
+  "prompt": "The camera slowly pans right, revealing more of the rocky island and surrounding ocean.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

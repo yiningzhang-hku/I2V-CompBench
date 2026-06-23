@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The glowing yellow flowers gently sway in the breeze, and the luminous lights flicker and pulse rhythmically, while the subject remains still.",
+  "prompt": "The glowing yellow flowers gently sway in the night breeze, and the luminous lights flicker and pulse rhythmically.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

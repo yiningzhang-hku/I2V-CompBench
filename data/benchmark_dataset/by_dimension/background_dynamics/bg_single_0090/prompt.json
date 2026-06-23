@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "common",
-  "prompt": "The dark background gradually shifts to a soft gradient, while the subject remains still.",
+  "prompt": "The shallow water at the beach gradually rises around the doll, while the subject remains still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

@@ -4,8 +4,8 @@
   "subtype": "background_change_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
-  "prompt": "The sunlight through the windows gradually shifts, casting new patterns on the floor while the subject remains still.",
+  "rarity": "common",
+  "prompt": "The sky gradually darkens as clouds roll in, shifting from scattered white to dense gray, while the subject remains still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

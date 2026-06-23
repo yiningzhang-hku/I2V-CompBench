@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "common",
-  "prompt": "The sunlight shifts across the forest outside the window, casting moving shadows on the wall while the subject remains still.",
+  "prompt": "The thatched hut sways slightly in the breeze, while the man with dreadlocks remains still, playing the djembe drum.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

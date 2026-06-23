@@ -3,9 +3,9 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The floating island with the castle and waterfalls moves to the right while remaining stable in position and orientation.",
+  "prompt": "The tabby cat in the white astronaut suit moves steadily to the right while floating in space.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

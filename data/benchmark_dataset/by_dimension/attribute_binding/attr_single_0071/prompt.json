@@ -3,9 +3,9 @@
   "dimension": "attribute_binding",
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "rare",
-  "prompt": "The man in the black uniform slowly removes his futuristic glasses, revealing his eyes clearly.",
+  "prompt": "The black t-shirt's white gothic-style logo subtly shifts, revealing a faint glow around the central cross-like symbol.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

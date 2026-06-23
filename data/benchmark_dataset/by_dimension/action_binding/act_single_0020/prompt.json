@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The cartoon fox playfully licks its lips and wiggles its ears while sitting on the rock.",
+  "prompt": "The cartoon fox playfully wiggles its tongue while sitting on the rock, maintaining the same position and background.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

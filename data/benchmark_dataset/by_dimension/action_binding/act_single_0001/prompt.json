@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The woman's face slowly moves forward through the swirling purple and blue smoke, maintaining the surreal, dreamlike atmosphere.",
+  "prompt": "The woman's face slowly moves forward from the swirling purple and blue smoke, maintaining the surreal, dreamlike atmosphere.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

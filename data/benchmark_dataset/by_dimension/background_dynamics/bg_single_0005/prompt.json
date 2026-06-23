@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The star-filled sky shifts subtly, with stars drifting slowly across the horizon while the spacecraft remains still.",
+  "prompt": "The star-filled sky above the alien landscape shifts subtly, with stars twinkling and drifting slowly across the frame.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

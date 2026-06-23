@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "common",
-  "prompt": "The camera slowly pans left, tracking the woman's movement while keeping the background stable.",
+  "prompt": "The camera slowly pans left, revealing the vast emptiness of the desolate landscape behind the cloaked figure.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

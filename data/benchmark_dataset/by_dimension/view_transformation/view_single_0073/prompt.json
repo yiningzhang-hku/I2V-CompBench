@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "rare",
-  "prompt": "The camera slowly pans left, revealing the full facade of the house under the night sky.",
+  "prompt": "The camera slowly pans left, revealing the full height of the ghostly figure above the man on the floor.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

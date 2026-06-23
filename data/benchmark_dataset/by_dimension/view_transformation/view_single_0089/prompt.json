@@ -3,9 +3,9 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "medium",
   "rarity": "rare",
-  "prompt": "The camera slowly pans right, revealing more of the glowing pyramids and palm trees under the luminous blue moon.",
+  "prompt": "The camera slowly pans right, revealing more of the table's decorative arrangement.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

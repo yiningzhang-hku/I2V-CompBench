@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "rare",
-  "prompt": "The camera slowly pans right, revealing more of the control room's monitor array while maintaining the men's spatial position.",
+  "prompt": "The camera slowly pans right, revealing more of the snowy village and the glowing Christmas tree.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

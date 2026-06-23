@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "common",
-  "prompt": "The background subtly shifts in lighting and texture while the subject remains still.",
+  "prompt": "The glowing moon shifts subtly, and floating particles drift in slow, gentle currents around the still silhouetted couple.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

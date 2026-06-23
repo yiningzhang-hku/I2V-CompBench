@@ -3,9 +3,9 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "medium",
   "rarity": "rare",
-  "prompt": "The camera slowly pans right, revealing more of the desert landscape surrounding the Step Pyramid of Djoser at Saqqara.",
+  "prompt": "The camera slowly pans left, revealing more of the bedroom's decorated walls and the piano.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

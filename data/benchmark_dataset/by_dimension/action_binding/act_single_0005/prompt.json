@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The woman with vibrant red hair slowly raises her arm, maintaining her confident stance against the futuristic cityscape at sunset.",
+  "prompt": "The woman with vibrant red hair confidently raises her arm, her black dress fluttering slightly in the evening breeze.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

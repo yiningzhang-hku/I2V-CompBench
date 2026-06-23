@@ -3,9 +3,9 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "common",
-  "prompt": "The camera smoothly pans left along the street, following the woman's movement while maintaining the scene context and background stability.",
+  "difficulty": "easy",
+  "rarity": "rare",
+  "prompt": "The camera slowly pans left, revealing more of the industrial structure on the alien planet's horizon.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

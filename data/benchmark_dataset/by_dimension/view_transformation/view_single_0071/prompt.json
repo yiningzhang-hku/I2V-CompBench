@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "rare",
-  "prompt": "The camera slowly pans left, revealing more of the lake and the distant figure standing under the tree as the sun sets.",
+  "prompt": "The camera slowly pans left, revealing more of the ruined landscape while maintaining the boy's position in the frame.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

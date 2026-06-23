@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "common",
-  "prompt": "The dim, hazy environment gradually shifts as the group of people in dark clothing subtly repositions around the still subject.",
+  "prompt": "Smoke thickens and swirls in the air, while the crumbling buildings remain stable and the subject stays still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

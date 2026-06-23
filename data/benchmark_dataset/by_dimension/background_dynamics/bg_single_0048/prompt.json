@@ -4,8 +4,8 @@
   "subtype": "background_change_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
-  "prompt": "The jungle background shifts subtly with swaying leaves and distant mountain mist, while the subject remains still.",
+  "rarity": "common",
+  "prompt": "The dim prison lighting flickers intermittently, casting shifting shadows on the walls while the subject remains still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

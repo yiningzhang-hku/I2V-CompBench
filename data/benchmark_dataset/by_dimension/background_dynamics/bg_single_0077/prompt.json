@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "common",
-  "prompt": "The clouds shift and swirl in the sky above the ancient ruins, while the subject remains still on the cliff.",
+  "prompt": "The surreal sky shifts with swirling clouds of orange, green, and blue while the subject remains still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

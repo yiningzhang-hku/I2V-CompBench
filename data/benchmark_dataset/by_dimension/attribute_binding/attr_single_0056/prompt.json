@@ -3,9 +3,9 @@
   "dimension": "attribute_binding",
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The woman slowly raises her hand, revealing a small pendant around her neck, while remaining on the same spot in the misty jungle path.",
+  "prompt": "The subject's long hair slowly lifts and flows as their pale face subtly shifts in the dim light.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

@@ -3,9 +3,9 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The woman in the pink floral kimono shifts smoothly to the right while remaining in the same pose and facing forward.",
+  "difficulty": "easy",
+  "rarity": "common",
+  "prompt": "The military helicopter moves steadily to the right while hovering over the snowy, foggy landscape.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

@@ -4,8 +4,8 @@
   "subtype": "background_change_single",
   "input_mode": "single_image",
   "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The snowfall intensifies and the mist thickens around the still figure, creating a more obscured and dynamic backdrop.",
+  "rarity": "common",
+  "prompt": "The candlelight flickers and dances across the table, casting shifting shadows while the subject remains still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

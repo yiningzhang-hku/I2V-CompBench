@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "rare",
-  "prompt": "The camera slowly pans right, maintaining the subject's spatial position and stable background.",
+  "prompt": "The camera slowly pans right, revealing more of the cityscape beneath the steampunk airship.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

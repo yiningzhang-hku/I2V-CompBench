@@ -3,9 +3,9 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The stylized polar bear sculpture moves to the right while maintaining its position relative to the background.",
+  "prompt": "The subject moves steadily to the right while remaining in the same position relative to the stable background and sky.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

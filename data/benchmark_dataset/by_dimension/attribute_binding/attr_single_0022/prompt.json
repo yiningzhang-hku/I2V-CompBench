@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The wolf's eyes gradually open wider, revealing more of the iris while remaining in the same position.",
+  "prompt": "The wolf's head remains in the same position, with its eyes and snout subtly shifting in illumination.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

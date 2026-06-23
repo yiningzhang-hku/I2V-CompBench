@@ -3,9 +3,9 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
-  "rarity": "common",
-  "prompt": "The camera slowly pans left, maintaining the subject's spatial position and stable background in the futuristic cockpit.",
+  "difficulty": "medium",
+  "rarity": "rare",
+  "prompt": "The camera slowly pans left, revealing more of the snow-covered village street under the starry night sky.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

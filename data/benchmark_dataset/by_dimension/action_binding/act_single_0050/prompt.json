@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The golden retriever slowly lifts its head and wags its tail, eyes still fixed on the distant horizon.",
+  "prompt": "The chibi-style character with fiery orange hair and glowing eyes twirls gracefully, sending sparkles dancing around her.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

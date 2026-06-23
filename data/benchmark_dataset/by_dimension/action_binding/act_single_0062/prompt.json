@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The bearded man in dark futuristic armor raises his arm slowly, snow falling gently around him.",
+  "prompt": "The cybernetic alien slowly raises its mechanical arm, glowing eyes scanning the neon-lit cityscape.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

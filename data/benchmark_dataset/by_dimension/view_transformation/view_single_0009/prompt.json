@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The camera slowly pans right, revealing more of the glowing blue-lit corridor while maintaining the man's position and the stable background.",
+  "prompt": "The camera slowly pans left, revealing the full length of the glowing corridor.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

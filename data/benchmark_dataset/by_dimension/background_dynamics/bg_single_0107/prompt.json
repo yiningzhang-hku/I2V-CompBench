@@ -4,8 +4,8 @@
   "subtype": "background_change_single",
   "input_mode": "single_image",
   "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The sunlight shifts across the tree canopy, casting moving shadows on the porch steps while the subject remains still.",
+  "rarity": "common",
+  "prompt": "The glowing jack-o'-lanterns flicker and pulse with a rhythmic, eerie light, while the witch remains still in the center.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

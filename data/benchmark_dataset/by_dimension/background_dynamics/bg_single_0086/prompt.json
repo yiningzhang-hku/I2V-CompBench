@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "common",
-  "prompt": "The neon lights on the poster pulse rhythmically, shifting from purple to pink, while the subject remains still.",
+  "prompt": "The background subtly shifts as the red car's badge glows faintly, while the subject remains still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

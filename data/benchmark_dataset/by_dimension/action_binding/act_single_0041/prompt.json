@@ -4,8 +4,8 @@
   "subtype": "single_subject_action",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
-  "prompt": "The dark horse statue slowly raises its head, maintaining its polished reflection on the glossy floor.",
+  "rarity": "common",
+  "prompt": "The cartoonish orange fish with large eyes swims in place with a worried expression against the black background.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

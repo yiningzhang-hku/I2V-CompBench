@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The dreamlike blossoms and mist gently shift and swirl around the still subject, creating a subtle, continuous motion in the background.",
+  "prompt": "The blossoms in the background gently shift and swirl, creating a dreamy, painterly motion while the subject remains still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

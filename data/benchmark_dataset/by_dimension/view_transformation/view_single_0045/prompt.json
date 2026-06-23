@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "common",
-  "prompt": "The camera slowly pans left, revealing more of the rustic cabin's interior while maintaining the man and children in the frame.",
+  "prompt": "The camera slowly pans right, following the couple as they move along the winding path toward the pink castle.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

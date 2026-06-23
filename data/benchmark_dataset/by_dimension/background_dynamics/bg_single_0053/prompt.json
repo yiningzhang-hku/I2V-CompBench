@@ -3,9 +3,9 @@
   "dimension": "background_dynamics",
   "subtype": "background_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The swirling sky shifts dynamically in orange, teal, and yellow while the subject remains still in profile.",
+  "prompt": "The cherry blossoms gently fall around the bears, their reflections rippling in the water as the breeze shifts.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

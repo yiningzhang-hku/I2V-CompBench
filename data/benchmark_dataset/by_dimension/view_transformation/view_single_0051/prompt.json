@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "common",
-  "prompt": "The camera  of the scene.",
+  "prompt": "The camera slowly pans left, revealing more of the rustic cabin's interior while maintaining the man and children in the frame.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

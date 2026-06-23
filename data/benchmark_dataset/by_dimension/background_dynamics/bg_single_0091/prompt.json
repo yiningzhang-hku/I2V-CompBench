@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "common",
-  "prompt": "The sunset sky shifts from pink to deep violet, while the subject remains still on the rocky shore.",
+  "prompt": "The warm light in the grand arched hallway gradually shifts, casting new patterns on the ornate walls while the subject remains still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The warrior raises their sword, causing the red cape to billow dramatically in the wind.",
+  "difficulty": "easy",
+  "rarity": "common",
+  "prompt": "The bald man with a goatee slowly raises his hand, keeping his gaze steady against the glowing background.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

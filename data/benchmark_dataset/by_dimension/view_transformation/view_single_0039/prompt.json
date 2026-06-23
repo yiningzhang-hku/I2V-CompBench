@@ -3,9 +3,9 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "common",
-  "prompt": "The camera slowly pans right along the winding path, maintaining focus on the couple as they move toward the castle.",
+  "difficulty": "easy",
+  "rarity": "rare",
+  "prompt": "The camera slowly pans left, revealing the full scope of the glowing mountains and swirling autumn foliage.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

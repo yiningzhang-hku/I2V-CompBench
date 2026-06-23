@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "common",
-  "prompt": "The camera slowly pans right, revealing more of the bustling street market while keeping the man and background stable.",
+  "prompt": "The camera slowly pans right, revealing more of the forest background while keeping the girl and robot in frame.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

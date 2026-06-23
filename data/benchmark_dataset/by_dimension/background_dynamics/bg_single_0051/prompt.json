@@ -3,9 +3,9 @@
   "dimension": "background_dynamics",
   "subtype": "background_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "Smoke thickens and swirls in the air, while the crumbling buildings remain stable and the subject stays still.",
+  "prompt": "The sunflowers gently sway in the breeze as the sunset deepens into twilight, while the subject remains still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

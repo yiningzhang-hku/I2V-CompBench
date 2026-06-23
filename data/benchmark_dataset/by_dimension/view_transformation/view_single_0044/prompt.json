@@ -3,9 +3,9 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "common",
-  "prompt": "The camera slowly pans left, revealing more of the city street while keeping the subject and background stable.",
+  "difficulty": "easy",
+  "rarity": "rare",
+  "prompt": "The camera slowly pans right, revealing more of the riverbank and the pagoda's lower tiers.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

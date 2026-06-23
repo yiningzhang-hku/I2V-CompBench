@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "rare",
-  "prompt": "The camera slowly pans right, following the cowboys as they ride through the misty mountain pass.",
+  "prompt": "The camera slowly pans left, revealing the full silhouette of the house and the surrounding trees under the cloudy sky.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

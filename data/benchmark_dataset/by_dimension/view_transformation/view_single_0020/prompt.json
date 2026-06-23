@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The camera slowly pans left, revealing more of the city skyline through the windshield.",
+  "prompt": "The camera slowly pans left, revealing the dimly lit street beyond the car window.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

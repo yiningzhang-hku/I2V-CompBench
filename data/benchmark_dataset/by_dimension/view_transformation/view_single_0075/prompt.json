@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "rare",
-  "prompt": "The camera slowly pans right, following the boy and robot as they continue playing soccer on the grassy field under the setting sun.",
+  "prompt": "The camera slowly pans left, maintaining the subject's spatial position and stable background.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

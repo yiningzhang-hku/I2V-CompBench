@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "rare",
-  "prompt": "The camera slowly pans left, revealing more of the cylindrical machine and the bright tunnel in the background.",
+  "prompt": "The camera smoothly pans left, maintaining the subject's spatial position and stable background in the cyberpunk setting.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

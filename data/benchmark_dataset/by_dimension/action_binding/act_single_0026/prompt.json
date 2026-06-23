@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The black horse lifts its front hoof and steps forward, moving steadily through the golden field.",
+  "prompt": "The black horse lifts its front hoof and steps forward in the golden field, maintaining the stable background and camera framing.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

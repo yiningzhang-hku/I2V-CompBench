@@ -3,9 +3,9 @@
   "dimension": "attribute_binding",
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The subject's expression shifts from focused to relaxed, with subtle changes in facial muscles while remaining seated.",
+  "prompt": "The bearded man in dark armor slowly removes his helmet, revealing his face clearly in the smoky, war-torn landscape.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

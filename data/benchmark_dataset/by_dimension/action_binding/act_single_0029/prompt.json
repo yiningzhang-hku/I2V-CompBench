@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The baby giggles and raises the wooden letter 'H' above their head, then gently swings the brown strap back and forth.",
+  "prompt": "The baby giggles and raises the wooden letter 'H' above their head, then gently taps it against the brown strap.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

@@ -4,8 +4,8 @@
   "subtype": "background_change_single",
   "input_mode": "single_image",
   "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "Raindrops cascade down the wet pavement, reflecting shifting light patterns from the streetlamps and skyscrapers as the city night scene subtly evolves.",
+  "rarity": "common",
+  "prompt": "The background subtly shifts, with the lighting and textures in the collage changing while the subject remains still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

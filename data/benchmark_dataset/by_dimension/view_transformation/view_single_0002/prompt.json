@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The camera slowly pans left, revealing more of the glowing forest and the lanterns surrounding the woman.",
+  "prompt": "The camera slowly pans right, revealing more of the glowing forest and lanterns while maintaining the subject's position and background stability.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

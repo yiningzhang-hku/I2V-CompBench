@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "common",
-  "prompt": "The sunlight shifts across the desk, casting new shadows on the books and plants while the subject remains still.",
+  "prompt": "Raindrops streak down the wet pavement, and distant streetlights flicker as the city's ambient glow shifts subtly.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

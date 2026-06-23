@@ -3,9 +3,9 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The yellow military transport aircraft moves steadily to the right across the vibrant sunset sky.",
+  "difficulty": "easy",
+  "rarity": "common",
+  "prompt": "The subject walks steadily to the right across the desert dunes, leaving a continuous trail of footprints in the golden sand.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

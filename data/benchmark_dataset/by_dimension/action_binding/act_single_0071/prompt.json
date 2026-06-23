@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
-  "rarity": "common",
-  "prompt": "The subject continues ascending the spiraling futuristic staircase, moving steadily upward in the warm golden light.",
+  "difficulty": "easy",
+  "rarity": "rare",
+  "prompt": "The glowing blue sphere slowly rotates in place within the circular structure, maintaining its position and luminosity.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

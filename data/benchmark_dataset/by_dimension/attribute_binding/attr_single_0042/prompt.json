@@ -3,9 +3,9 @@
   "dimension": "attribute_binding",
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The cybernetic woman's golden circuitry pulses with energy, and her mechanical facial components shift subtly, revealing dynamic internal mechanisms.",
+  "prompt": "The subject's glowing red eyes intensify, and the ethereal blue and red energy swirls around it become more dynamic and vibrant.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

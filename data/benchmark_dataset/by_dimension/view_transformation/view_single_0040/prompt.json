@@ -3,9 +3,9 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "common",
-  "prompt": "The camera smoothly pans left, revealing the vast desolate landscape behind the cloaked figure riding the horse.",
+  "difficulty": "easy",
+  "rarity": "rare",
+  "prompt": "The camera smoothly zooms in on the floating bunny-like creature while maintaining the stable black background and spatial position.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

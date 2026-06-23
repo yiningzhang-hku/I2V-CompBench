@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "common",
-  "prompt": "The camera slowly pans right, revealing more of the forest and the robot's full height.",
+  "prompt": "The camera smoothly pans left along the street, following the woman's movement.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

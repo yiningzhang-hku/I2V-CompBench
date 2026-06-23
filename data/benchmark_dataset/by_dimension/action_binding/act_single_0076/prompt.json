@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
-  "rarity": "common",
-  "prompt": "The golden sedan continues driving forward along the winding autumn road, weaving through vibrant fall foliage and past distant mountains under a partly cloudy sky.",
+  "difficulty": "easy",
+  "rarity": "rare",
+  "prompt": "The subject raises its paw and touches the glowing blue sphere, causing the lightning bolts to surge outward.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

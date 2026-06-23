@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The muscular warrior with long hair charges forward, swinging the massive curved blade in a dynamic black-and-white manga-style illustration.",
+  "difficulty": "easy",
+  "rarity": "common",
+  "prompt": "The luminous white dragon-like creature slowly uncoils and shifts its form, maintaining a stable background and consistent framing.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

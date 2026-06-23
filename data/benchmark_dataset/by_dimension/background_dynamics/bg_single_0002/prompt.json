@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The snowfall intensifies and the golden aura around the figure pulses rhythmically, while the subject remains still.",
+  "prompt": "The snowfall intensifies around the still figure, with glowing particles swirling in the warm aura.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

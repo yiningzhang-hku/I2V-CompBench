@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The the subject moves to the right.",
+  "prompt": "The small gray alien slowly shifts to the right while remaining on the forest floor log.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

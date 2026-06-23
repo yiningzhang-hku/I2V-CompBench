@@ -4,8 +4,8 @@
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
   "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The camera slowly pans left, revealing the dark corridor beyond the doorway.",
+  "rarity": "common",
+  "prompt": "The camera slowly pans left, revealing more of the twilight sky beyond the window.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

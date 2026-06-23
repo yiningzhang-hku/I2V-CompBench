@@ -3,9 +3,9 @@
   "dimension": "attribute_binding",
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "rare",
-  "prompt": "The woman in the hanfu slowly lifts her hand, the floral embroidery shimmering in the light.",
+  "prompt": "The elderly man's white beard gradually glows with a soft golden light, maintaining his seated meditation pose.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

@@ -3,9 +3,9 @@
   "dimension": "attribute_binding",
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The lion's mane ripples dynamically in the wind as rain continues to fall.",
+  "prompt": "The person slowly removes the pink mask, revealing their face while still holding the dark object near the stove and refrigerator.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

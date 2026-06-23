@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The boy in the red shirt slowly raises his hand toward the pixelated Earth in the sky.",
+  "prompt": "The boy in the red shirt slowly raises his hand toward the floating Earth, his gaze remaining fixed on it.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The woman's star-adorned headdress glows with a soft, pulsating light, enhancing her mystical aura.",
+  "prompt": "The woman's golden star crown glows brighter, its celestial patterns pulsing with light.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

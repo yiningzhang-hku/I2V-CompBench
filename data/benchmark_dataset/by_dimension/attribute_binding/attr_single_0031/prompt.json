@@ -4,8 +4,8 @@
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
-  "prompt": "The light green cup gradually changes its purple logo to a yellow one while remaining in the same position.",
+  "rarity": "common",
+  "prompt": "The golden skull gradually shifts its expression from neutral to a subtle grin, maintaining all other visual elements unchanged.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

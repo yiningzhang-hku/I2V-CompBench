@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The camera smoothly orbits the International Space Station, maintaining the sun's glow on the horizon.",
+  "prompt": "The camera slowly pans right, maintaining the ISS's position and the stable Earth horizon.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

@@ -3,9 +3,9 @@
   "dimension": "background_dynamics",
   "subtype": "background_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The vibrant forest background subtly shifts with drifting sunlight and gently swaying flowers, while the subject remains still.",
+  "prompt": "The dim garage lights flicker once, then stabilize, while the subject remains still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

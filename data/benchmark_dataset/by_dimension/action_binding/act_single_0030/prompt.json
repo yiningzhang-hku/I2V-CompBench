@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The young lion slowly raises its head and roars, its body remaining still in the sunlit jungle clearing.",
+  "prompt": "The young lion cub takes a cautious step forward, ears flicking as it surveys the sunlit jungle clearing.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

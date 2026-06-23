@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "Smoke swirls and thickens in the alleyway, shifting slowly around the still figure of the man.",
+  "prompt": "The smoke in the alleyway swirls and thickens around the man, while he remains still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

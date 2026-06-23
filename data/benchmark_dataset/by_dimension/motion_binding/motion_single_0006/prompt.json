@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The towering burger shifts steadily to the right while sauce and condiments continue to fly outward.",
+  "prompt": "The towering burger moves steadily to the right while maintaining its identity and scene context.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

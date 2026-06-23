@@ -3,9 +3,9 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
-  "rarity": "common",
-  "prompt": "The camera slowly pans left, revealing more of the high-tech environment around the woman with cybernetic implants.",
+  "difficulty": "medium",
+  "rarity": "rare",
+  "prompt": "The camera slowly pans left, revealing more of the dimly lit hall and the silhouetted figures in quiet tension.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

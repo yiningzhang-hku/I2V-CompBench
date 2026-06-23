@@ -3,9 +3,9 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The green-skinned witch moves to the right, maintaining her position relative to the moonlit house and cobblestone path.",
+  "prompt": "The futuristic race car moves steadily to the right through the neon-lit tunnel, maintaining its identity and the stable background.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

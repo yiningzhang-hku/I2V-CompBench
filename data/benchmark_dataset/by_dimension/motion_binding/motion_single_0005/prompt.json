@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The young girl in the yellow pajama shifts slightly to the right while remaining on the bed.",
+  "prompt": "The young girl in the yellow shirt shifts slightly to the right while remaining on the bed.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

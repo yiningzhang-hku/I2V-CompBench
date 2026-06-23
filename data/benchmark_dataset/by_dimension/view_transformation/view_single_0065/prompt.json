@@ -4,8 +4,8 @@
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
   "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The camera slowly pans left, revealing more of the ruined landscape while maintaining the boy's position in the frame.",
+  "rarity": "common",
+  "prompt": "The camera slowly pans right, revealing more of the snowy mountain landscape while keeping the boy and dogs centered.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The camera slowly pans left, tracking the ant's movement across the wet surface while maintaining the reflection in the water.",
+  "prompt": "The camera slowly pans left, maintaining focus on the ant and its reflection on the wet surface.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

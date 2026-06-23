@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The dolphin continues its arc through the air, gliding smoothly before splashing back into the ocean waves.",
+  "difficulty": "easy",
+  "rarity": "common",
+  "prompt": "The peacock slowly fans out its iridescent feathers in a graceful, swirling motion against the dark background.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

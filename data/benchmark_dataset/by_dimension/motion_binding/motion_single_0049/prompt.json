@@ -3,9 +3,9 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The majestic black bear moves steadily to the right through the misty forest, maintaining its identity and the stable scene context.",
+  "prompt": "The subject shifts smoothly to the right while maintaining identity, scene context, and stable background.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "rare",
-  "prompt": "The camera slowly pans right, revealing more of the surrounding trees and grass while maintaining the cabin's position in the frame.",
+  "prompt": "The camera slowly pans right, maintaining focus on the children in the foreground.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

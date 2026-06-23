@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The raven slowly spreads its wings, feathers glinting subtly under distant starlight.",
+  "prompt": "The brown horse with a white blaze lifts its front leg in a steady, deliberate motion.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

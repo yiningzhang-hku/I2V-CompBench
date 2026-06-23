@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The woman's expression shifts from intense gaze to a subtle smile, maintaining her pose and surroundings.",
+  "prompt": "The woman slowly blinks, her expression shifting from intense focus to subtle contemplation.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

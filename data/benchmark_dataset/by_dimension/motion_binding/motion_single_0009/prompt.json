@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The elephant moves steadily to the right while remaining in the spotlight, casting a shifting shadow on the sandy floor.",
+  "prompt": "The elephant moves steadily to the right while maintaining its regal posture and position in the arena.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

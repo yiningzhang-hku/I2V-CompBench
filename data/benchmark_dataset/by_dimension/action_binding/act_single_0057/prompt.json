@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The subject slowly raises their arm, reaching toward the glowing horizon as the sunset light casts long shadows on the sand.",
+  "difficulty": "easy",
+  "rarity": "common",
+  "prompt": "The weathered wooden building gently sways as the string lights flicker on and off.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

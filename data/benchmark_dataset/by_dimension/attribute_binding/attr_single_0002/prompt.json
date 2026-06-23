@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The man in the striped shirt and cap slowly removes his cap, revealing a bald head.",
+  "prompt": "The man slowly removes his cap, revealing short hair, while maintaining his position and smile.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

@@ -3,9 +3,9 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "medium",
   "rarity": "rare",
-  "prompt": "The camera slowly pans right, revealing more of the village and surrounding hills while maintaining stable background and subject position.",
+  "prompt": "The camera slowly pans to the right, maintaining the subject's position and the stable background.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

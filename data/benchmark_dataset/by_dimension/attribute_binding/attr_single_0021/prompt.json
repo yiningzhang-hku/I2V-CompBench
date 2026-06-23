@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The woman's wedding gown gently shifts from ombre lavender-to-white as a soft breeze flows through the forest.",
+  "prompt": "The woman's ombre lavender-to-white gown gently shifts, revealing a subtle change in fabric sheen as sunlight passes through the blossoms.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

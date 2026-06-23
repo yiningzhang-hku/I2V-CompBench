@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "common",
-  "prompt": "The camera slowly pans left, revealing the full width of the stained-glass window behind the floating glass slipper.",
+  "prompt": "The camera slowly pans right, revealing more of the cobblestone village and surrounding green hills.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

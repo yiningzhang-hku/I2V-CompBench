@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The small bird flaps its wings and leaps off the rock into the air, flying through the sunlit forest.",
+  "prompt": "The subject walks forward steadily through the snow-covered landscape under the starry night sky with the Milky Way above.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

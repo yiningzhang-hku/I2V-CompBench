@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The subject slowly raises their arms upward, palms facing the flames, in a gesture of defiance against the fiery urban backdrop.",
+  "prompt": "The subject slowly raises their arms upward, arms extending into the air as flames flicker around them.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

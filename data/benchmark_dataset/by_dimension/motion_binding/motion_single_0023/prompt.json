@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The chibi-style girl moves smoothly to the right while maintaining her position relative to the scene and background.",
+  "prompt": "The chibi-style girl moves smoothly to the right while maintaining her pose and surroundings.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

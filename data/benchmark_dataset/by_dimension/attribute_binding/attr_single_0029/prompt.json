@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The girl's long black hair flows gently in the wind as the swirling patterns around her remain unchanged.",
+  "prompt": "The young girl's long black hair gradually shifts to a vibrant red, while she remains still in the same pose.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

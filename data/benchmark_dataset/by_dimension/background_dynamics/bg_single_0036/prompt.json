@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The hazy sky gradually clears, revealing brighter sunlight over the distant mountains, while the subject remains still.",
+  "prompt": "The hazy sky gradually clears, revealing brighter sunlight over the mountains, while the subject remains still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

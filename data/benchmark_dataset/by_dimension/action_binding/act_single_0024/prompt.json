@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The subject sprints forward through the neon-lit streets, their motion creating a blur of light against the holographic skyline.",
+  "prompt": "The subject sprints forward through the neon-lit streets, their motion creating a blur of light against the holographic buildings.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The camera slowly pans right, revealing more of the desert landscape surrounding the pyramids.",
+  "prompt": "The camera slowly pans right, revealing more of the desert landscape and the full scale of the pyramids.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

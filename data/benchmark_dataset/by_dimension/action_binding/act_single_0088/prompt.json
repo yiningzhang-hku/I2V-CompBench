@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
-  "rarity": "rare",
-  "prompt": "The black crow on the branch shifts its weight and spreads its wings, preparing to take flight into the night.",
+  "difficulty": "medium",
+  "rarity": "common",
+  "prompt": "The bearded man with long blonde hair slowly raises his head further upward, maintaining his serious expression in the dimly lit setting.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

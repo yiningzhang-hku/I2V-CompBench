@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "rare",
-  "prompt": "The camera slowly pans right, maintaining focus on the boys in the foreground while the classroom background remains stable.",
+  "prompt": "The camera slowly pans left, revealing the dark corridor beyond the doorway while maintaining the spatial position of the bed and control panels.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

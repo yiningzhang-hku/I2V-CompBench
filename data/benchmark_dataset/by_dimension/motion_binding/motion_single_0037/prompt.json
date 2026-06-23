@@ -3,9 +3,9 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The comet moves steadily to the right across the frame, maintaining its glowing tail and position relative to the background.",
+  "difficulty": "easy",
+  "rarity": "common",
+  "prompt": "The subject moves steadily to the right within the crowded scene, maintaining the original background and framing.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

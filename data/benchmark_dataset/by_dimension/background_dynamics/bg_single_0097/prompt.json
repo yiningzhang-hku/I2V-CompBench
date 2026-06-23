@@ -4,8 +4,8 @@
   "subtype": "background_change_single",
   "input_mode": "single_image",
   "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The rain intensifies on the windows, streaks flowing downward as the forest outside darkens further.",
+  "rarity": "common",
+  "prompt": "The scenery outside the car window shifts smoothly as trees and buildings pass by, while the subject remains still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

@@ -3,9 +3,9 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The farmer in the straw hat and overalls moves to the right while remaining in the same position relative to the fence and field.",
+  "prompt": "The heavily armored robotic warrior shifts steadily to the right while remaining in the same frame.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

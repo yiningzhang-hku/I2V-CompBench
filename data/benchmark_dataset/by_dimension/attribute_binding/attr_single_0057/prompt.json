@@ -3,9 +3,9 @@
   "dimension": "attribute_binding",
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The bearded man slowly removes his dark coat, revealing a lighter layer beneath, while remaining kneeling on the misty beach.",
+  "prompt": "The subject slowly raises their arms, palms facing upward, as a soft glow emanates from their hands.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The subject slowly raises her hands to adjust the headpiece while maintaining focus.",
+  "prompt": "The subject continues focusing intently, slowly moving her hands to complete the task.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

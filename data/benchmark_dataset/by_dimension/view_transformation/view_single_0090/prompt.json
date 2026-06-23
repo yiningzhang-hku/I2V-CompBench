@@ -3,9 +3,9 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "medium",
   "rarity": "rare",
-  "prompt": "The camera slowly pans left along the glowing forest path, maintaining stable background and subject position.",
+  "prompt": "The camera slowly pans left, maintaining the wolf's position and the stable city background.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

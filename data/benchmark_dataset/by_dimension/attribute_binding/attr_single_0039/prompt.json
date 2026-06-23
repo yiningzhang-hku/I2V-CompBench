@@ -3,9 +3,9 @@
   "dimension": "attribute_binding",
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The woman's red hair gradually shifts from flowing to still, as if suspended in the cosmic stillness.",
+  "prompt": "The subject's white hair gradually turns black while maintaining the gas mask and yellow-collared jacket.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

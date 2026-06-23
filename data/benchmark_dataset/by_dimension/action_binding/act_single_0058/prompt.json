@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The anime-style girl gently moves her hand up and down while maintaining her smile, still standing by the window under the glowing sunset.",
+  "difficulty": "easy",
+  "rarity": "common",
+  "prompt": "The peacock slowly lowers its tail feathers while standing still in the misty jungle.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

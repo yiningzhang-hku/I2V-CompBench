@@ -3,9 +3,9 @@
   "dimension": "attribute_binding",
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The woman in the red dress slowly turns her head to look directly at the crowd below.",
+  "prompt": "The robotic cat's glowing green eyes flicker and pulse rhythmically, maintaining its static position in the dark setting.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

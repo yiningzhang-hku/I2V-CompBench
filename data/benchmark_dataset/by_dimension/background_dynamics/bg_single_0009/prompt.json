@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The futuristic vehicle's interior lighting shifts from warm orange to cool blue, creating a dynamic sci-fi atmosphere while the subject remains still.",
+  "prompt": "The glowing orange and blue lights in the cockpit shift and pulse rhythmically, creating dynamic ambient changes while the subject remains still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

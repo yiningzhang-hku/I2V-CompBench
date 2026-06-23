@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The camera slowly pans left, revealing more of the glowing figures and smoke behind the robot.",
+  "prompt": "The camera slowly pans right, revealing more of the golden glowing figures and smoke in the background while keeping the robot and scene context stable.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

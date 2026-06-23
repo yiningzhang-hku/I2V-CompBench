@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The tank's main cannon fires, launching a missile from its turret into the dark sky, with smoke and fire continuing to rise.",
+  "difficulty": "easy",
+  "rarity": "common",
+  "prompt": "The blue-haired anime woman raises her hand slowly, her motion smooth and deliberate against the vibrant geometric backdrop.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

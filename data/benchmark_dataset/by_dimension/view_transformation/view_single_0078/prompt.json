@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "rare",
-  "prompt": "The camera slowly pans right, revealing more of the glowing village street under the starry sky.",
+  "prompt": "The camera slowly pans right, maintaining the spatial position of the two men and the stable background.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

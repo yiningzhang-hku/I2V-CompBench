@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The neon lights shift from purple to blue, creating a pulsing glow across the virtual concert scene while the subject remains still.",
+  "prompt": "The vibrant purple lighting in the virtual concert shifts dynamically, with digital avatars in the background pulsing and swirling in rhythm.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

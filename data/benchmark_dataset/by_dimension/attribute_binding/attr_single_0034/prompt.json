@@ -4,8 +4,8 @@
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
-  "prompt": "The man slowly removes his glasses, revealing his eyes clearly.",
+  "rarity": "common",
+  "prompt": "The phoenix's wings glow brighter, intensifying the radiant orange and yellow light emanating from its body.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

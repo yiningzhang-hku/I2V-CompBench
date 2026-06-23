@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The dark, smoky background shifts dynamically with swirling motion, while the subject remains still.",
+  "prompt": "The dark, smoky background gradually shifts and swirls, while the subject remains still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

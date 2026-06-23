@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The glowing clouds in the sky shift and swirl slowly, while the subject remains still in silhouette.",
+  "prompt": "The glowing clouds in the sky shift and swirl slowly, while the subject remains still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

@@ -3,9 +3,9 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "medium",
   "rarity": "rare",
-  "prompt": "The camera slowly pans right, revealing more of the village and the distant castle.",
+  "prompt": "The camera smoothly pans left to reveal the full extent of the battlefield and the distant castle.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

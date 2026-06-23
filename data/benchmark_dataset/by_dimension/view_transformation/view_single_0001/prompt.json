@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The camera slowly zooms in on the werewolf's glowing red eyes, maintaining stable background and spatial position.",
+  "prompt": "The camera slowly pans left across the poster, revealing more of the werewolf's snarling face and the stylized eye symbol.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

@@ -3,9 +3,9 @@
   "dimension": "attribute_binding",
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The baby dragon's diaper changes from green to red while holding the teddy bear.",
+  "prompt": "The subject's glowing blue tattoos pulse with energy, intensifying in brightness while maintaining static pose and background.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

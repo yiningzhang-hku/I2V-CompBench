@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The cracked side of the woman's face gradually transforms into a vibrant, intact state, maintaining the same identity and scene context.",
+  "prompt": "The cracked side of the woman's face gradually transforms into a vibrant, intact surface, maintaining the same identity and scene context.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

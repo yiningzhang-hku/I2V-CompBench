@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The neon purple, blue, and orange energy orb around the headphones pulses rhythmically, while the headphones remain still.",
+  "prompt": "The neon purple, blue, and orange energy orb around the headphones slowly pulses and shifts in intensity, while the subject remains still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

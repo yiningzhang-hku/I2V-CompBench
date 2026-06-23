@@ -3,9 +3,9 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "common",
-  "prompt": "The camera smoothly pans left to follow the dynamic grappling motion between the two women in white judo gis.",
+  "difficulty": "easy",
+  "rarity": "rare",
+  "prompt": "The camera slowly pans left, maintaining the rose's position and the stable background with the glowing heart-shaped bokeh.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

@@ -4,8 +4,8 @@
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
-  "prompt": "The majestic brown horse moves steadily to the right across the vibrant field of orange flowers under the dramatic sunset sky.",
+  "rarity": "common",
+  "prompt": "The sleek futuristic concept car moves smoothly to the right on the dark reflective surface.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

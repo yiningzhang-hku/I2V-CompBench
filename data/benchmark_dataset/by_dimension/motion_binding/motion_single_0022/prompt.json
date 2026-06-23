@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The bust sculpture of Cristiano Ronaldo in a Juventus jersey moves to the right while remaining stable in identity, scene, and camera framing.",
+  "prompt": "The bust sculpture of Cristiano Ronaldo in a Juventus jersey shifts to the right while remaining stable in position and orientation.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

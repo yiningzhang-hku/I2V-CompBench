@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The monarch butterfly gently unfolds its wings and lifts off from the white flowers in the sunlit garden.",
+  "prompt": "The glowing butterfly slowly flutters its translucent wings in the dark, maintaining its position against the black background.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

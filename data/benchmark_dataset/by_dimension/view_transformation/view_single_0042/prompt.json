@@ -3,9 +3,9 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "common",
-  "prompt": "The camera slowly pans right, revealing the full width of the arched doorway and the man's full silhouette.",
+  "difficulty": "easy",
+  "rarity": "rare",
+  "prompt": "The camera slowly pans left, revealing more of the glowing nebula's facial features against the starry backdrop.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

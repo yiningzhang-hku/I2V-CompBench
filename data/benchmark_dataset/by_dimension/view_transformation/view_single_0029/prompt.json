@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "rare",
-  "prompt": "The camera slowly pans right, revealing more of the surrounding trees and the cottage in the distance.",
+  "prompt": "The camera slowly pans right, revealing more of the lush green grass and trees surrounding the stone well and arbor.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

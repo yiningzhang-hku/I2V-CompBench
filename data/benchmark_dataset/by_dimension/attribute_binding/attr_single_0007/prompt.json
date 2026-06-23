@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The subject's vibrant green and purple patterns shift and pulse with a glowing, rhythmic intensity, enhancing the surreal aura.",
+  "prompt": "The subject's glowing green and purple patterns shift and pulse rhythmically, with floral motifs subtly reconfiguring into new symmetrical designs.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

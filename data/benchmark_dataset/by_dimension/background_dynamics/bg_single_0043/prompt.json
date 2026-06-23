@@ -4,8 +4,8 @@
   "subtype": "background_change_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
-  "prompt": "The cloudy sky shifts gradually, with the clouds swirling in slow motion while the jellyfish remain still.",
+  "rarity": "common",
+  "prompt": "The swirling cosmic backdrop shifts dynamically with pulses of neon floral energy, while the subject remains still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

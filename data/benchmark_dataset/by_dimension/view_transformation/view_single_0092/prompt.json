@@ -3,9 +3,9 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "medium",
   "rarity": "rare",
-  "prompt": "The camera smoothly pans left, revealing the full extent of the atrium's geometric design and glass railings.",
+  "prompt": "The camera slowly pans right along the forest path, maintaining the children's position and the stable background.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

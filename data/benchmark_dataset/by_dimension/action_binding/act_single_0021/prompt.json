@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The woman with vibrant pink hair and a flowing blue skirt slowly raises her arms, her skirt fluttering in the gentle breeze.",
+  "prompt": "The woman with vibrant pink hair and a flowing blue skirt begins to slowly twirl in the dreamy surreal landscape under the soft blue sky.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

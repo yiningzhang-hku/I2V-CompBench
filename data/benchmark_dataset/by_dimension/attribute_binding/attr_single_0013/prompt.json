@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The Buddha's golden robes subtly shimmer as a gentle aura pulses around the halo.",
+  "prompt": "The Buddha's expression gradually shifts from serene to contemplative, maintaining the same pose and setting.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

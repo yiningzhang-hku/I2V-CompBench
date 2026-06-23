@@ -3,9 +3,9 @@
   "dimension": "attribute_binding",
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The vibrant red rose gradually intensifies in color while the black ink swirls dynamically around it, maintaining a stable white background.",
+  "difficulty": "easy",
+  "rarity": "common",
+  "prompt": "The snake's yellow and black pattern shifts subtly as it continues swimming through the jungle river.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

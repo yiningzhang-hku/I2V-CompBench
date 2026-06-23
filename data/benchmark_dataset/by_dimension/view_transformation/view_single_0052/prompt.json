@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "common",
-  "prompt": "The camera slowly pans right, revealing more of the winding stream and distant mountains while maintaining the scene's spatial stability.",
+  "prompt": "The camera smoothly pans left, tracking the dancer's motion while maintaining the background's stability.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

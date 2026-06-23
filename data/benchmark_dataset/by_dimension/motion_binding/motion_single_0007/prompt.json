@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The pale elf-like figure with long white hair and dark vine-like attire shifts steadily to the right within the misty, shadowy forest of twisted trees.",
+  "prompt": "The subject shifts to the right while remaining in the same position relative to the stable forest background.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

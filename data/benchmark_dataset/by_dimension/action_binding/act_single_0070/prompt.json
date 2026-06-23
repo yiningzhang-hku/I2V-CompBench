@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
-  "rarity": "common",
-  "prompt": "The man slowly raises his hand and reaches toward the window, his gaze still fixed on the distant lights.",
+  "difficulty": "easy",
+  "rarity": "rare",
+  "prompt": "The grotesque humanoid creature crawls forward on the red carpet, its movements slow and deliberate in the dimly lit room.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

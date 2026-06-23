@@ -4,8 +4,8 @@
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
-  "prompt": "The Su-35 fighter jet moves steadily to the right while maintaining formation.",
+  "rarity": "common",
+  "prompt": "The glowing wave moves steadily to the right across the rocky shore under the dark sky.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The sky shifts subtly as the red planet glows brighter and distant stars pulse faintly, while the subject remains still.",
+  "prompt": "The star-filled sky shifts subtly, with the red planet and glowing celestial bodies slowly drifting across the frame, while the subject remains still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

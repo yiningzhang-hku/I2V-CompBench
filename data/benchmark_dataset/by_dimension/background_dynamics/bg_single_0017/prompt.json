@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The fiery flames around the hooded figure shift and surge dynamically while the subject remains still.",
+  "prompt": "The fiery flames around the skeletal figure intensify and shift dynamically, while the subject remains still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

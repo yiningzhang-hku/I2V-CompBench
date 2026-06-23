@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "rare",
-  "prompt": "The camera slowly pans left, revealing more of the tangled roots and the faint light source beyond.",
+  "prompt": "The camera slowly pans left, revealing more of the tangled roots and the faint sunlight filtering through the canopy.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

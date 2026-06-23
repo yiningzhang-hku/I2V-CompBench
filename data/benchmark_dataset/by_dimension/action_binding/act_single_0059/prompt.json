@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The pilot in the helmet and goggles slowly turns their head toward the fiery explosion outside the cockpit window.",
+  "difficulty": "easy",
+  "rarity": "common",
+  "prompt": "The subject walks steadily forward along the corridor, maintaining a regal posture under the vibrant teal sky.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

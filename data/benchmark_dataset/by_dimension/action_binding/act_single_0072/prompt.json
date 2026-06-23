@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
-  "rarity": "common",
-  "prompt": "The woman in the orange patterned dress lifts her other leg higher, maintaining her playful pose beside the smoking volcano.",
+  "difficulty": "easy",
+  "rarity": "rare",
+  "prompt": "The white unicorn slowly lowers its head, its glowing horn pulsing gently as it breathes in the starlit field.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

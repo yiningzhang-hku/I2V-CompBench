@@ -4,8 +4,8 @@
   "subtype": "single_subject_action",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
-  "prompt": "The white unicorn lifts its head and gently lowers it, its horn pulsing with a soft glow in the moonlit field.",
+  "rarity": "common",
+  "prompt": "The black wolf with glowing yellow eyes and red markings continues prowling forward through the snowy forest, its gaze unwavering.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

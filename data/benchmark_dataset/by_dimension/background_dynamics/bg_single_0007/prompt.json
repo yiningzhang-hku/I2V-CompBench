@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The green background gradually shifts to a soft blue tone while the subject remains still.",
+  "prompt": "The solid green background gradually shifts to a soft gradient blue, while the subject remains still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

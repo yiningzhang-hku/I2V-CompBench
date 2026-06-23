@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The young woman's expression subtly shifts from a gentle smile to a more serene, contemplative look.",
+  "prompt": "The young woman's expression subtly shifts from a gentle smile to a more animated, joyful grin.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

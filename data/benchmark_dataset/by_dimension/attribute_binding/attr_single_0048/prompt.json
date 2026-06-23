@@ -3,9 +3,9 @@
   "dimension": "attribute_binding",
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The blue paint slowly drips down the white marble bust's hair, maintaining the same pose and background.",
+  "difficulty": "easy",
+  "rarity": "common",
+  "prompt": "The marble statue's expression subtly shifts from solemn to contemplative, maintaining its position and surroundings.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

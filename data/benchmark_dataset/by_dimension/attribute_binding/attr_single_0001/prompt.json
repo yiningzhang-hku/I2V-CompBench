@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The cartoon elephant gently lifts its trunk higher, showing a subtle change in posture while remaining in the same position.",
+  "prompt": "The cartoon elephant gently lifts its trunk upward, showing a subtle change in expression while remaining in place.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

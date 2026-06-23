@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The calico cat slowly blinks, its green eyes remaining focused while its ears twitch slightly.",
+  "prompt": "The cute green baby dinosaur blinks and gently raises its tiny arms while maintaining its position on the white background.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

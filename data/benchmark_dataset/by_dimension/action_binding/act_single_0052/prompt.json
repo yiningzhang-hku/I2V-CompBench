@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The subject raises the torch higher, maintaining the same expression and position in the scene.",
+  "difficulty": "easy",
+  "rarity": "common",
+  "prompt": "The subject slowly raises its arms, maintaining a fixed stance with no camera movement.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

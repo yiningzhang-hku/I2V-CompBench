@@ -3,9 +3,9 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The car moves to the right through the rain-slicked streets, maintaining the same lighting and background.",
+  "prompt": "The hooded skeletal figure moves steadily to the right within the misty graveyard.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

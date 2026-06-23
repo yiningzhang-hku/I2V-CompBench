@@ -4,8 +4,8 @@
   "subtype": "background_change_single",
   "input_mode": "single_image",
   "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The lush green background subtly shifts as leaves rustle in a gentle breeze, while the peacock remains still.",
+  "rarity": "common",
+  "prompt": "The  , while the the subject stays still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

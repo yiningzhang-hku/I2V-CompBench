@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The subject's pupil gradually constricts, revealing more of the iris while maintaining the same gaze and facial expression.",
+  "prompt": "The eye's pupil gradually constricts while the blue iris remains unchanged under the warm lighting.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

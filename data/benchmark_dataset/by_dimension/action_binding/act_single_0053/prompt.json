@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The small bird with a white face and brown wings flaps its wings vigorously while maintaining its mid-flight position against the warm blurred background.",
+  "difficulty": "easy",
+  "rarity": "common",
+  "prompt": "The anthropomorphic fox confidently adjusts its sunglasses and taps its foot rhythmically on the sandy beach.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

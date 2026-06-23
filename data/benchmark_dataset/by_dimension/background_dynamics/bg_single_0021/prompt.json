@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The fiery chamber's background flickers with shifting shadows and glowing embers, while the subject remains still.",
+  "prompt": "The fiery chamber's background slowly shifts with flickering shadows and glowing embers, while the subject remains still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

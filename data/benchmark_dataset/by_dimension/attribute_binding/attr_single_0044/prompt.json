@@ -3,9 +3,9 @@
   "dimension": "attribute_binding",
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The wilted rose on the birthday card gradually straightens and blooms, revealing fresh petals.",
+  "prompt": "The subject's silhouette gradually transforms from pixelated black and white dots to a smooth, solid black figure.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

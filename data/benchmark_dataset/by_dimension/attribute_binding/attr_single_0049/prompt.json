@@ -3,9 +3,9 @@
   "dimension": "attribute_binding",
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The hooded figure slowly raises the tattered flag, revealing more of its worn fabric in the overcast sky.",
+  "difficulty": "easy",
+  "rarity": "common",
+  "prompt": "The woman's armor subtly shifts in texture, revealing a faint glowing pattern beneath the silver and gold surface.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

@@ -4,8 +4,8 @@
   "subtype": "single_subject_action",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
-  "prompt": "The grotesque humanoid creature crawls forward on the red carpet, its movements slow and deliberate in the dimly lit room.",
+  "rarity": "common",
+  "prompt": "The subject activates the device, causing a pulse of light to radiate from it.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

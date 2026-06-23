@@ -3,9 +3,9 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The man in the golden crown and ornate white uniform shifts to the right while maintaining his position in the grand arched hall.",
+  "prompt": "The brown bear moves to the right while maintaining its identity and the stable forest background.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

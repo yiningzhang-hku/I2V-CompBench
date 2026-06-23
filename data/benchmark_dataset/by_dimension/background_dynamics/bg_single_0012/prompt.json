@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The background shifts subtly from dark shadows to a faint gradient of gray, while the subject remains still.",
+  "prompt": "The background shifts subtly from dark shadows to a faint glow, while the subject remains still in the frame.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

@@ -3,9 +3,9 @@
   "dimension": "attribute_binding",
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The subject's white hair gradually transforms into red hair while maintaining the same pose and background.",
+  "prompt": "The elf's golden hair gently glows with a soft inner light, enhancing her ethereal presence in the misty forest.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

@@ -3,9 +3,9 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The warrior in dark armor steps to the right along the stone corridor, moving deeper into the fiery tunnel.",
+  "prompt": "The hooded man shifts steadily to the right while remaining in the same frame.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

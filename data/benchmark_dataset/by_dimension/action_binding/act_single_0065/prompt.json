@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The man in 18th-century attire lifts a goblet and takes a sip from the banquet table in the opulent hall.",
+  "prompt": "The man with green hair and beard slowly raises his hand, maintaining his position and the vibrant abstract style.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

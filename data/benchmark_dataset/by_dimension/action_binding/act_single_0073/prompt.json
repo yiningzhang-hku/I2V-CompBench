@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
-  "rarity": "common",
-  "prompt": "The elderly man with a white beard continues smiling warmly, his expression remaining steady in the sunlit park.",
+  "difficulty": "easy",
+  "rarity": "rare",
+  "prompt": "The young woman slowly turns her head back toward the camera, her wet hair catching the sunlight.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

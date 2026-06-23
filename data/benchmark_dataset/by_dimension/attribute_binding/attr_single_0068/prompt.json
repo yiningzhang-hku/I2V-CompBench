@@ -3,9 +3,9 @@
   "dimension": "attribute_binding",
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
-  "rarity": "rare",
-  "prompt": "The woman in the blue shirt and yellow skirt remains in place, her expression shifting from determined to relieved as the smoke swirls around her.",
+  "difficulty": "easy",
+  "rarity": "common",
+  "prompt": "The man's hair style changes subtly while maintaining his beard and clothing, with no movement in the scene or camera.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "common",
-  "prompt": "The camera slowly pans right, maintaining the woman's position and the stable cityscape background.",
+  "prompt": "The camera slowly pans right, maintaining the crowd's spatial position and stable background.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

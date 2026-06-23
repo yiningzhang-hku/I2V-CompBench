@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The pastel-hued coastal landscape slowly shifts, with the pink sky deepening into lavender tones, while the subject remains still.",
+  "prompt": "The sky shifts from pink to deep violet, and the coastal landscape gently ripples as if stirred by a distant breeze.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

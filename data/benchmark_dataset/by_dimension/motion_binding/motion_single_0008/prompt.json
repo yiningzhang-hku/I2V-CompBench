@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The monk in orange robes walks steadily to the right within the sunlit courtyard.",
+  "prompt": "The monk in orange robes walks steadily to the right across the sunlit courtyard.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

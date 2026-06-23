@@ -4,8 +4,8 @@
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
-  "prompt": "The sleek train moves steadily to the right through the tunnel, maintaining its position and orientation.",
+  "rarity": "common",
+  "prompt": "The red-cloaked figure moves steadily to the right along the sunlit path through the towering surreal forest.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

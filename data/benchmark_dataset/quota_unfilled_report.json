@@ -6,9 +6,9 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "medium",
       "rarity": "common",
-      "target_count": 48,
+      "target_count": 114,
       "actual_count": 8,
-      "shortfall": 40,
+      "shortfall": 106,
       "diagnosis": {
         "no_candidate": 13,
         "no_reference_asset": 0,
@@ -22,9 +22,9 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "medium",
       "rarity": "rare",
-      "target_count": 12,
+      "target_count": 29,
       "actual_count": 5,
-      "shortfall": 7,
+      "shortfall": 24,
       "diagnosis": {
         "no_candidate": 13,
         "no_reference_asset": 0,
@@ -38,9 +38,25 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "hard",
       "rarity": "common",
-      "target_count": 19,
+      "target_count": 46,
       "actual_count": 17,
-      "shortfall": 2,
+      "shortfall": 29,
+      "diagnosis": {
+        "no_candidate": 25,
+        "no_reference_asset": 0,
+        "quality_below_threshold": 0,
+        "blocking_flag": 0
+      }
+    },
+    {
+      "bucket_id": "attribute_binding__single_image__hard__rare",
+      "dimension": "attribute_binding",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "hard",
+      "rarity": "rare",
+      "target_count": 11,
+      "actual_count": 8,
+      "shortfall": 3,
       "diagnosis": {
         "no_candidate": 25,
         "no_reference_asset": 0,
@@ -54,9 +70,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "easy",
       "rarity": "common",
-      "target_count": 19,
+      "target_count": 3,
       "actual_count": 0,
-      "shortfall": 19,
+      "shortfall": 3,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 135,
@@ -70,9 +86,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "easy",
       "rarity": "rare",
-      "target_count": 5,
+      "target_count": 1,
       "actual_count": 0,
-      "shortfall": 5,
+      "shortfall": 1,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 135,
@@ -86,9 +102,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "medium",
       "rarity": "common",
-      "target_count": 32,
+      "target_count": 6,
       "actual_count": 0,
-      "shortfall": 32,
+      "shortfall": 6,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 166,
@@ -102,9 +118,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "medium",
       "rarity": "rare",
-      "target_count": 8,
+      "target_count": 2,
       "actual_count": 0,
-      "shortfall": 8,
+      "shortfall": 2,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 166,
@@ -118,9 +134,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "hard",
       "rarity": "common",
-      "target_count": 13,
+      "target_count": 2,
       "actual_count": 0,
-      "shortfall": 13,
+      "shortfall": 2,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 0,
@@ -134,9 +150,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "hard",
       "rarity": "rare",
-      "target_count": 3,
+      "target_count": 1,
       "actual_count": 0,
-      "shortfall": 3,
+      "shortfall": 1,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 0,
@@ -150,9 +166,9 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "medium",
       "rarity": "common",
-      "target_count": 56,
+      "target_count": 114,
       "actual_count": 9,
-      "shortfall": 47,
+      "shortfall": 105,
       "diagnosis": {
         "no_candidate": 18,
         "no_reference_asset": 0,
@@ -166,9 +182,9 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "medium",
       "rarity": "rare",
-      "target_count": 14,
+      "target_count": 29,
       "actual_count": 9,
-      "shortfall": 5,
+      "shortfall": 20,
       "diagnosis": {
         "no_candidate": 18,
         "no_reference_asset": 0,
@@ -182,9 +198,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "easy",
       "rarity": "common",
-      "target_count": 14,
+      "target_count": 3,
       "actual_count": 0,
-      "shortfall": 14,
+      "shortfall": 3,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 471,
@@ -198,9 +214,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "easy",
       "rarity": "rare",
-      "target_count": 4,
+      "target_count": 1,
       "actual_count": 0,
-      "shortfall": 4,
+      "shortfall": 1,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 471,
@@ -214,9 +230,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "medium",
       "rarity": "common",
-      "target_count": 24,
+      "target_count": 6,
       "actual_count": 0,
-      "shortfall": 24,
+      "shortfall": 6,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 580,
@@ -230,9 +246,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "medium",
       "rarity": "rare",
-      "target_count": 6,
+      "target_count": 2,
       "actual_count": 0,
-      "shortfall": 6,
+      "shortfall": 2,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 580,
@@ -246,9 +262,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "hard",
       "rarity": "common",
-      "target_count": 10,
+      "target_count": 2,
       "actual_count": 0,
-      "shortfall": 10,
+      "shortfall": 2,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 0,
@@ -262,9 +278,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "hard",
       "rarity": "rare",
-      "target_count": 2,
+      "target_count": 1,
       "actual_count": 0,
-      "shortfall": 2,
+      "shortfall": 1,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 0,
@@ -278,9 +294,9 @@
       "input_mode_or_subtype": "type_a_absolute_single",
       "difficulty": "medium",
       "rarity": "common",
-      "target_count": 40,
+      "target_count": 120,
       "actual_count": 6,
-      "shortfall": 34,
+      "shortfall": 114,
       "diagnosis": {
         "no_candidate": 11,
         "no_reference_asset": 0,
@@ -294,9 +310,9 @@
       "input_mode_or_subtype": "type_a_absolute_single",
       "difficulty": "medium",
       "rarity": "rare",
-      "target_count": 10,
+      "target_count": 30,
       "actual_count": 5,
-      "shortfall": 5,
+      "shortfall": 25,
       "diagnosis": {
         "no_candidate": 11,
         "no_reference_asset": 0,
@@ -305,192 +321,16 @@
       }
     },
     {
-      "bucket_id": "motion_binding__type_b_relative_single__easy__common",
+      "bucket_id": "motion_binding__type_a_absolute_single__hard__common",
       "dimension": "motion_binding",
-      "input_mode_or_subtype": "type_b_relative_single",
-      "difficulty": "easy",
-      "rarity": "common",
-      "target_count": 17,
-      "actual_count": 0,
-      "shortfall": 17,
-      "diagnosis": {
-        "no_candidate": 0,
-        "no_reference_asset": 0,
-        "quality_below_threshold": 0,
-        "blocking_flag": 0
-      }
-    },
-    {
-      "bucket_id": "motion_binding__type_b_relative_single__easy__rare",
-      "dimension": "motion_binding",
-      "input_mode_or_subtype": "type_b_relative_single",
-      "difficulty": "easy",
-      "rarity": "rare",
-      "target_count": 4,
-      "actual_count": 0,
-      "shortfall": 4,
-      "diagnosis": {
-        "no_candidate": 0,
-        "no_reference_asset": 0,
-        "quality_below_threshold": 0,
-        "blocking_flag": 0
-      }
-    },
-    {
-      "bucket_id": "motion_binding__type_b_relative_single__medium__common",
-      "dimension": "motion_binding",
-      "input_mode_or_subtype": "type_b_relative_single",
-      "difficulty": "medium",
-      "rarity": "common",
-      "target_count": 28,
-      "actual_count": 0,
-      "shortfall": 28,
-      "diagnosis": {
-        "no_candidate": 0,
-        "no_reference_asset": 0,
-        "quality_below_threshold": 0,
-        "blocking_flag": 0
-      }
-    },
-    {
-      "bucket_id": "motion_binding__type_b_relative_single__medium__rare",
-      "dimension": "motion_binding",
-      "input_mode_or_subtype": "type_b_relative_single",
-      "difficulty": "medium",
-      "rarity": "rare",
-      "target_count": 7,
-      "actual_count": 0,
-      "shortfall": 7,
-      "diagnosis": {
-        "no_candidate": 0,
-        "no_reference_asset": 0,
-        "quality_below_threshold": 0,
-        "blocking_flag": 0
-      }
-    },
-    {
-      "bucket_id": "motion_binding__type_b_relative_single__hard__common",
-      "dimension": "motion_binding",
-      "input_mode_or_subtype": "type_b_relative_single",
+      "input_mode_or_subtype": "type_a_absolute_single",
       "difficulty": "hard",
       "rarity": "common",
-      "target_count": 11,
-      "actual_count": 0,
-      "shortfall": 11,
+      "target_count": 48,
+      "actual_count": 25,
+      "shortfall": 23,
       "diagnosis": {
-        "no_candidate": 0,
-        "no_reference_asset": 0,
-        "quality_below_threshold": 0,
-        "blocking_flag": 0
-      }
-    },
-    {
-      "bucket_id": "motion_binding__type_b_relative_single__hard__rare",
-      "dimension": "motion_binding",
-      "input_mode_or_subtype": "type_b_relative_single",
-      "difficulty": "hard",
-      "rarity": "rare",
-      "target_count": 3,
-      "actual_count": 0,
-      "shortfall": 3,
-      "diagnosis": {
-        "no_candidate": 0,
-        "no_reference_asset": 0,
-        "quality_below_threshold": 0,
-        "blocking_flag": 0
-      }
-    },
-    {
-      "bucket_id": "motion_binding__type_c_multi_motion__easy__common",
-      "dimension": "motion_binding",
-      "input_mode_or_subtype": "type_c_multi_motion",
-      "difficulty": "easy",
-      "rarity": "common",
-      "target_count": 7,
-      "actual_count": 0,
-      "shortfall": 7,
-      "diagnosis": {
-        "no_candidate": 0,
-        "no_reference_asset": 159,
-        "quality_below_threshold": 0,
-        "blocking_flag": 0
-      }
-    },
-    {
-      "bucket_id": "motion_binding__type_c_multi_motion__easy__rare",
-      "dimension": "motion_binding",
-      "input_mode_or_subtype": "type_c_multi_motion",
-      "difficulty": "easy",
-      "rarity": "rare",
-      "target_count": 2,
-      "actual_count": 0,
-      "shortfall": 2,
-      "diagnosis": {
-        "no_candidate": 0,
-        "no_reference_asset": 159,
-        "quality_below_threshold": 0,
-        "blocking_flag": 0
-      }
-    },
-    {
-      "bucket_id": "motion_binding__type_c_multi_motion__medium__common",
-      "dimension": "motion_binding",
-      "input_mode_or_subtype": "type_c_multi_motion",
-      "difficulty": "medium",
-      "rarity": "common",
-      "target_count": 12,
-      "actual_count": 0,
-      "shortfall": 12,
-      "diagnosis": {
-        "no_candidate": 0,
-        "no_reference_asset": 186,
-        "quality_below_threshold": 0,
-        "blocking_flag": 0
-      }
-    },
-    {
-      "bucket_id": "motion_binding__type_c_multi_motion__medium__rare",
-      "dimension": "motion_binding",
-      "input_mode_or_subtype": "type_c_multi_motion",
-      "difficulty": "medium",
-      "rarity": "rare",
-      "target_count": 3,
-      "actual_count": 0,
-      "shortfall": 3,
-      "diagnosis": {
-        "no_candidate": 0,
-        "no_reference_asset": 186,
-        "quality_below_threshold": 0,
-        "blocking_flag": 0
-      }
-    },
-    {
-      "bucket_id": "motion_binding__type_c_multi_motion__hard__common",
-      "dimension": "motion_binding",
-      "input_mode_or_subtype": "type_c_multi_motion",
-      "difficulty": "hard",
-      "rarity": "common",
-      "target_count": 5,
-      "actual_count": 0,
-      "shortfall": 5,
-      "diagnosis": {
-        "no_candidate": 0,
-        "no_reference_asset": 0,
-        "quality_below_threshold": 0,
-        "blocking_flag": 0
-      }
-    },
-    {
-      "bucket_id": "motion_binding__type_c_multi_motion__hard__rare",
-      "dimension": "motion_binding",
-      "input_mode_or_subtype": "type_c_multi_motion",
-      "difficulty": "hard",
-      "rarity": "rare",
-      "target_count": 1,
-      "actual_count": 0,
-      "shortfall": 1,
-      "diagnosis": {
-        "no_candidate": 0,
+        "no_candidate": 52,
         "no_reference_asset": 0,
         "quality_below_threshold": 0,
         "blocking_flag": 0
@@ -502,11 +342,27 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "medium",
       "rarity": "common",
-      "target_count": 64,
+      "target_count": 96,
       "actual_count": 46,
-      "shortfall": 18,
+      "shortfall": 50,
       "diagnosis": {
         "no_candidate": 231,
+        "no_reference_asset": 0,
+        "quality_below_threshold": 0,
+        "blocking_flag": 0
+      }
+    },
+    {
+      "bucket_id": "background_dynamics__single_image__hard__common",
+      "dimension": "background_dynamics",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "hard",
+      "rarity": "common",
+      "target_count": 38,
+      "actual_count": 30,
+      "shortfall": 8,
+      "diagnosis": {
+        "no_candidate": 205,
         "no_reference_asset": 0,
         "quality_below_threshold": 0,
         "blocking_flag": 0
@@ -518,9 +374,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "easy",
       "rarity": "common",
-      "target_count": 10,
+      "target_count": 14,
       "actual_count": 0,
-      "shortfall": 10,
+      "shortfall": 14,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 0,
@@ -534,9 +390,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "easy",
       "rarity": "rare",
-      "target_count": 2,
+      "target_count": 4,
       "actual_count": 0,
-      "shortfall": 2,
+      "shortfall": 4,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 0,
@@ -550,9 +406,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "medium",
       "rarity": "common",
-      "target_count": 16,
+      "target_count": 24,
       "actual_count": 0,
-      "shortfall": 16,
+      "shortfall": 24,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 0,
@@ -566,9 +422,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "medium",
       "rarity": "rare",
-      "target_count": 4,
+      "target_count": 6,
       "actual_count": 0,
-      "shortfall": 4,
+      "shortfall": 6,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 0,
@@ -582,9 +438,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "hard",
       "rarity": "common",
-      "target_count": 6,
+      "target_count": 10,
       "actual_count": 0,
-      "shortfall": 6,
+      "shortfall": 10,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 0,
@@ -614,9 +470,9 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "easy",
       "rarity": "common",
-      "target_count": 46,
+      "target_count": 68,
       "actual_count": 27,
-      "shortfall": 19,
+      "shortfall": 41,
       "diagnosis": {
         "no_candidate": 113,
         "no_reference_asset": 0,
@@ -630,9 +486,9 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "medium",
       "rarity": "common",
-      "target_count": 76,
+      "target_count": 114,
       "actual_count": 24,
-      "shortfall": 52,
+      "shortfall": 90,
       "diagnosis": {
         "no_candidate": 74,
         "no_reference_asset": 0,
@@ -646,9 +502,9 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "hard",
       "rarity": "common",
-      "target_count": 30,
+      "target_count": 46,
       "actual_count": 5,
-      "shortfall": 25,
+      "shortfall": 41,
       "diagnosis": {
         "no_candidate": 37,
         "no_reference_asset": 0,
@@ -662,9 +518,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "easy",
       "rarity": "common",
-      "target_count": 2,
+      "target_count": 3,
       "actual_count": 0,
-      "shortfall": 2,
+      "shortfall": 3,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 0,
@@ -694,9 +550,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "medium",
       "rarity": "common",
-      "target_count": 4,
+      "target_count": 6,
       "actual_count": 0,
-      "shortfall": 4,
+      "shortfall": 6,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 0,
@@ -710,9 +566,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "medium",
       "rarity": "rare",
-      "target_count": 1,
+      "target_count": 2,
       "actual_count": 0,
-      "shortfall": 1,
+      "shortfall": 2,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 0,
@@ -735,8 +591,24 @@
         "quality_below_threshold": 0,
         "blocking_flag": 0
       }
+    },
+    {
+      "bucket_id": "view_transformation__multi_image__hard__rare",
+      "dimension": "view_transformation",
+      "input_mode_or_subtype": "multi_image",
+      "difficulty": "hard",
+      "rarity": "rare",
+      "target_count": 1,
+      "actual_count": 0,
+      "shortfall": 1,
+      "diagnosis": {
+        "no_candidate": 0,
+        "no_reference_asset": 0,
+        "quality_below_threshold": 0,
+        "blocking_flag": 0
+      }
     }
   ],
-  "total_target": 1000,
-  "total_sampled": 456
+  "total_target": 1500,
+  "total_sampled": 716
 }

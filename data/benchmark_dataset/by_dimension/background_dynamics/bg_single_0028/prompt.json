@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The background shifts subtly as the car interior changes from a calm setting to one with 30 roaming dogs visible through the windows.",
+  "prompt": "The background shifts to show 30 roaming dogs entering the scene, while the subject remains still in the car.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

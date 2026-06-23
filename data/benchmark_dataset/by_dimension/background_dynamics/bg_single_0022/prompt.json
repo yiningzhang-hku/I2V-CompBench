@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The hazy city skyline gradually shifts as distant lights flicker and fade, while the subject remains still on the rooftop.",
+  "prompt": "The hazy cityscape gradually clears, revealing distant skyscrapers as the sky lightens subtly.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

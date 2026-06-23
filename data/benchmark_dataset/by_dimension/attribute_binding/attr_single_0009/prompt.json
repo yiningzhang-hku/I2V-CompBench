@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The tiny orange ferret pup slowly opens its eyes while keeping its paws clasped, against the white background.",
+  "prompt": "The ferret pup slowly opens its eyes, revealing curiosity while remaining still on the white background.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

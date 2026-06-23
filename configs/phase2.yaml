@@ -4,7 +4,7 @@ output_dir: "data/benchmark_dataset"
 
 quota:
   num_per_dimension_pilot: 20
-  num_per_dimension_full: 200
+  num_per_dimension_full: 300
   skip_dimensions:
     - spatial_composition
     - interaction_reasoning
@@ -17,15 +17,15 @@ quota:
     hard: 0.20
   input_mode_ratio:
     attribute_binding:
-      single_image: 0.6
-      multi_image: 0.4
+      single_image: 0.95
+      multi_image: 0.05
     action_binding:
-      single_image: 0.70
-      multi_image: 0.30
+      single_image: 0.95
+      multi_image: 0.05
     motion_binding:
-      type_a_absolute_single: 0.5
-      type_b_relative_single: 0.35
-      type_c_multi_motion: 0.15
+      type_a_absolute_single: 1.0
+      type_b_relative_single: 0.0
+      type_c_multi_motion: 0.0
     spatial_composition:
       single_image: 0.2
       multi_image: 0.8

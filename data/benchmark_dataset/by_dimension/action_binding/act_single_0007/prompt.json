@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The man in the gray suit adjusts his jacket, maintaining his position against the dark and light background with the blue pocket square.",
+  "prompt": "The man in the gray suit confidently adjusts his jacket, smoothly moving his hand to reposition the blue pocket square.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

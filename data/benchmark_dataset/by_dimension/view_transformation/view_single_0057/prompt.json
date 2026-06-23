@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "common",
-  "prompt": "The camera slowly pans right, maintaining the subject's spatial position and stable background in the high-tech industrial setting.",
+  "prompt": "The camera  of the scene.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

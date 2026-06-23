@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The white unicorn's pink mane gradually shifts to a golden hue while it remains still in the glowing forest pond.",
+  "prompt": "The white unicorn's pink mane gradually glows brighter, illuminating the surrounding fireflies.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

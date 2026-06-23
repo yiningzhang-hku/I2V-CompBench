@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "rare",
-  "prompt": "The camera smoothly pans left, revealing the full dynamic pose of the martial artist in the cyberpunk environment.",
+  "prompt": "The camera slowly pans right, revealing more of the skyline while maintaining the same focal distance.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

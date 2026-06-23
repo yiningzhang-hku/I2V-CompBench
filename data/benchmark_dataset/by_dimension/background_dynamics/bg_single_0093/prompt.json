@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "common",
-  "prompt": "The sunset gradually deepens into twilight, with the forested landscape beyond the window shifting from warm hues to cooler tones as the sky darkens.",
+  "prompt": "The golden light shifts as the cascading waterfalls flow and birds glide through the valley, while the subject remains still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

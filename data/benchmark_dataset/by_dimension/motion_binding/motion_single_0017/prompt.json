@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The subject moves steadily to the right while maintaining identity, scene context, and camera framing.",
+  "prompt": "The subject moves to the right while maintaining identity, scene context, and camera framing.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

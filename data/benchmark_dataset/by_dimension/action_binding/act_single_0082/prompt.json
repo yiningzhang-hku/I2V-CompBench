@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
-  "rarity": "common",
-  "prompt": "The man slowly removes his aviator sunglasses and fake mustache, revealing his natural expression while keeping the maroon jacket and graphic tee.",
+  "difficulty": "easy",
+  "rarity": "rare",
+  "prompt": "The Batman action figure slowly raises its arms upward while maintaining its position on the white background.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

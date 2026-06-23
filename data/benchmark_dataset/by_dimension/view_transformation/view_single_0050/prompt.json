@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "common",
-  "prompt": "The camera slowly pans left, maintaining the spatial position of the subjects and keeping the background stable.",
+  "prompt": "The camera slowly pans left, revealing the full urban street environment around the person in the pink alien costume.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

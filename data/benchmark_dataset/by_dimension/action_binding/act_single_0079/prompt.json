@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
-  "rarity": "common",
-  "prompt": "The subject slowly raises their hand toward the glowing lanterns, then gently places it on their chest.",
+  "difficulty": "easy",
+  "rarity": "rare",
+  "prompt": "The military helicopter lowers its landing gear further as it maintains a steady hover over the snowy terrain.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

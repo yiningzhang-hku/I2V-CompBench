@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The cybernetic woman slowly raises her mechanical arm, glowing eyes scanning the futuristic cityscape.",
+  "prompt": "The woman slowly raises her arms above her head, palms facing upward, in the golden field under the bright blue sky.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

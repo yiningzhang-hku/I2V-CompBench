@@ -4,8 +4,8 @@
   "subtype": "background_change_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
-  "prompt": "The mist around the mountains gradually thickens, and the red trees in the reflection ripple softly, while the pagoda remains still.",
+  "rarity": "common",
+  "prompt": "The cosmic backdrop of purple and pink nebulae and swirling galaxies gradually shifts and pulses with subtle motion, while the subject remains still.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

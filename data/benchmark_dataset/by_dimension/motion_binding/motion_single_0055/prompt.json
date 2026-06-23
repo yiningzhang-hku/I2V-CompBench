@@ -3,9 +3,9 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The subject in the white robe moves steadily to the right across the snowy landscape.",
+  "prompt": "LeBron James moves to the right while remaining in the same frame and position relative to the background.",
   "evaluator_tools": [
     "grounding",
     "dot_motion",

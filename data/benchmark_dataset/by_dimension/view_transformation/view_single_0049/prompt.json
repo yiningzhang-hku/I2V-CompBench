@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "common",
-  "prompt": "The camera slowly pans right, tracking the synchronized movement of the decaying zombies in the foreground.",
+  "prompt": "The camera slowly pans left, maintaining the spatial position of the two women and keeping the background stable.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

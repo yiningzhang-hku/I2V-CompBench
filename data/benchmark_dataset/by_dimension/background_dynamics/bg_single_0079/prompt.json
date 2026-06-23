@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "common",
-  "prompt": "The background shifts subtly as the bouquet of white flowers and green foliage gently sways in a breeze, while the subject remains still.",
+  "prompt": "Raindrops streak down the windshield of the vintage car, and the streetlights flicker as the city's atmosphere deepens in the 1930s noir setting.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

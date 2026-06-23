@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The elderly woman slowly adjusts her hospital gown, revealing a subtle change in the pattern of the polka dots.",
+  "prompt": "The elderly woman slowly smiles, revealing a subtle change in facial expression while remaining still in the same position.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

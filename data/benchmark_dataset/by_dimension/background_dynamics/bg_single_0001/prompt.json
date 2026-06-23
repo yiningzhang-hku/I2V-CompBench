@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The golden structure subtly shifts and pulses with organic motion, while the cityscape below remains stable and the camera stays fixed.",
+  "prompt": "The golden structure subtly shifts in form, with flowing organic elements reconfiguring while the subject remains still and the background stays stable.",
   "evaluator_tools": [
     "grounding",
     "optical_flow",

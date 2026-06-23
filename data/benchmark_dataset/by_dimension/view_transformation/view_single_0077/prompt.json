@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "medium",
   "rarity": "rare",
-  "prompt": "The camera slowly pans left, revealing more of the dimly lit hall and the silhouetted figures.",
+  "prompt": "The camera slowly pans right, revealing the full width of the lake and the distant figure standing under the tree.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

@@ -3,9 +3,9 @@
   "dimension": "attribute_binding",
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
-  "prompt": "The spiky dinosaur's fierce expression intensifies as its mouth opens wider in a continuous roar.",
+  "prompt": "The subject's glowing blue skin shifts to a deep violet, while its fiery orange hair transitions to a soft silver hue.",
   "evaluator_tools": [
     "grounding",
     "vlm_attribute",

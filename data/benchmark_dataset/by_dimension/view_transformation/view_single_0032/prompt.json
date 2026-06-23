@@ -5,7 +5,7 @@
   "input_mode": "single_image",
   "difficulty": "easy",
   "rarity": "rare",
-  "prompt": "The camera smoothly pans left along the racetrack, following the drifting sports car while keeping the grandstand stable in the background.",
+  "prompt": "The camera smoothly pans left along the racetrack, following the drifting car while keeping the scene and background stable.",
   "evaluator_tools": [
     "depth",
     "optical_flow",

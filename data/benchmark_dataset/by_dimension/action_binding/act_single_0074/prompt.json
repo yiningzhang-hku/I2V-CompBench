@@ -3,9 +3,9 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
-  "rarity": "common",
-  "prompt": "The subject slowly raises its large ears, then blinks rapidly in the dim, red-and-purple-lit space.",
+  "difficulty": "easy",
+  "rarity": "rare",
+  "prompt": "The dragon's body tenses as it releases a continuous stream of green lightning, its rider gripping tightly to the head.",
   "evaluator_tools": [
     "grounding",
     "vlm_existence",

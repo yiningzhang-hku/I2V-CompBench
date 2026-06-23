@@ -4,8 +4,8 @@
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
   "difficulty": "medium",
-  "rarity": "rare",
-  "prompt": "The camera slowly pans right, revealing more of the snowy village and the glowing Christmas tree.",
+  "rarity": "common",
+  "prompt": "The camera slowly pans left, revealing more of the stained-glass window and the glowing slipper's reflection.",
   "evaluator_tools": [
     "depth",
     "optical_flow",
