@@ -46,9 +46,10 @@ This repository hosts **two parallel snapshots** of the same benchmark. Pick the
 | Version | Path | Questions | Layout | Best for |
 | --- | --- | ---: | --- | --- |
 | **v2** ⭐ | [`v2/`](./tree/main/v2) | **650** | T2V-CompBench-style (`prompts/`, `meta_data/`, `first_frames/`) | Drop-in compatible with [T2V-CompBench](https://github.com/KaiyueSun98/T2V-CompBench) eval scripts |
-| v1 | [`by_dimension/`](./tree/main/by_dimension) | 409 | Per-question folder (`<dim>/<qid>/{prompt.json, first_frame*.png}`) | Browsing single questions, debugging |
+| v2 (alt) | [`v2_by_dimension/`](./tree/main/v2_by_dimension) | 650 | Per-question folder (`<dim>/<qid>/{prompt.json, first_frame*.png}`) | Browsing / debugging single v2 questions |
+| v1 | [`by_dimension/`](./tree/main/by_dimension) | 409 | Per-question folder (same layout as `v2_by_dimension/`) | Reproducing earlier experiments |
 
-**Recommendation**: use **v2** for evaluation runs. v1 is kept for reproducibility of earlier experiments.
+**Recommendation**: use **v2** for evaluation runs. `v2_by_dimension/` is the same v2 data in v1's per-folder layout for tooling that prefers per-sample directories. v1 is kept for reproducibility of earlier experiments.
 
 ---
 
