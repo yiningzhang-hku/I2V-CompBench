@@ -177,6 +177,9 @@ src/i2vcompbench/quality/
   aspect_experiment.py
   subject_tier.py
   difficulty.py
+  orthogonal.py
+  ablation.py
+  cost_decision.py
   human_annotation.py
   statistics.py
   final_selection.py
@@ -209,6 +212,9 @@ data/benchmark_dataset/quality_experiments/
     aspect/
     subject/
     difficulty/
+    orthogonal/
+    ablation/
+    decision/
     human/
     selection/
     report/
@@ -295,6 +301,32 @@ selection:
   require_image_exists: true
   require_schema_complete: true
   require_dimension_verified: true
+
+orthogonal:
+  enabled: true
+  quadrant_sizes:
+    A_control: 80
+    B_lexical_probe: 60
+    C_subject_probe: 60
+    D_compound_probe: 40
+  zipf_threshold_lexical: 4.0
+  subject_tier_split: ["T1_common", "T2_longtail"]  # 归入common的tier
+
+ablation:
+  enabled: true
+  evaluation_set: "validation"  # 在验证集上运行
+  conditions: ["baseline", "text_only", "image_only", "sampling_only", "text_image", "full"]
+  statistical_test: "wilcoxon"
+  alpha: 0.05
+  correction: "bonferroni"
+
+decision:
+  weights:
+    quality: 0.60
+    time: 0.25
+    complexity: 0.15
+  max_total_budget_hours: 8
+  prefer_deterministic: true
 ```
 
 配置加载后必须执行比例求和、路径存在性、方法枚举和数值范围校验。
@@ -321,6 +353,9 @@ class QualityCandidate(BaseModel):
     first_frame_path: str
     source_manifest_hash: str
     source_plan_hash: str | None = None
+    quadrant: Literal[
+        "A_control", "B_lexical_probe", "C_subject_probe", "D_compound_probe"
+    ] | None = None
 ```
 
 ### 6.2 TargetRepairResult
@@ -357,7 +392,11 @@ TARGET_TYPE_BY_DIMENSION = {
 ```python
 class PromptVariantResult(BaseModel):
     question_id: str
-    method: Literal["A0", "A1", "A2", "A3", "A4", "B0", "B1", "B2", "B3"]
+    method: Literal[
+        "A0", "A1", "A2", "A3", "A4", "A5", "A6",
+        "B0", "B1", "B2", "B3",
+    ]
+    source_layer: Literal["P1-Source-Off", "P1-Source-On"] = "P1-Source-Off"
     prompt_before: str
     prompt_after: str
     word_count: int
@@ -365,6 +404,11 @@ class PromptVariantResult(BaseModel):
     structural_issues: list[str]
     semantic_consistency: float | None = None
     dimension_consistent: bool | None = None
+    rare_modifier_rate: float | None = None
+    mean_zipf_score: float | None = None
+    clip_sim_delta: float | None = None
+    perplexity_mean: float | None = None
+    semantic_preservation_rate: float | None = None
     api_calls: int = 0
     status: Literal["pass", "failed", "needs_manual_review"]
 ```
@@ -447,6 +491,12 @@ aspect-variants
 aspect-metrics
 tag-subjects
 calibrate-difficulty
+orthogonal-assign
+orthogonal-analyze
+ablation-run
+ablation-analyze
+cost-estimate
+decision-matrix
 prepare-human
 import-human
 select-final
@@ -598,15 +648,38 @@ target_repair/raw_responses/{qid}.txt
 
 规则函数必须是纯函数，并有单元测试。
 
-### 10.2 A0—A4
+### 10.2 A0—A6（逐层消融）
 
-- A0：原prompt；
-- A1：仅修改polish指令；
-- A2：常见同义词映射；
-- A3：异常prompt定向LLM简化；
-- A4：A2 + A3 + 结构化目标复核。
+设计原则：每层严格包含上一层，可通过逐层对比量化每个策略的增量贡献。
 
-A2禁止：
+- **A0**：原prompt（基线，不做任何修改）；
+- **A1**：仅修改Polish指令模板（在`prompt_polish.txt`中增加词汇约束规则#9–#11，属于软约束）；
+- **A2**：A1 + 确定性同义词映射表替换（`RARE_TO_COMMON`映射，如`ethereal→glowing`）；
+- **A3**：A2 + Zipf词频硬门控（wordfreq Zipf < 3.5 触发retry）；
+- **A4**：A3 + RareWordBlocker解码层硬拒绝（`LogitsProcessor`级别禁止rare token生成）；
+- **A5**：A4 + CLIP-Sim反向验证（polish前后CLIP-Sim下降>0.02则回退）；
+- **A6**：A5 + GPT-2 Perplexity过滤（perplexity > 50触发retry）。
+
+#### 源头预洗消融因子
+
+- **P1-Source-Off**：不对Phase 1 VLM输出做预洗（当前状态）；
+- **P1-Source-On**：在`_resolve_slots`前插入`_prewash_slot_value`，对VLM返回的修饰词做前置清洗。
+
+总计形成 **7（A层）× 2（源头层）= 14个实验条件**。
+
+通过消融可回答：
+
+1. 仅改指令有多大效果？（A1 vs A0）
+2. 同义词映射的增量是多少？（A2 vs A1）
+3. Zipf硬门控的增量是多少？（A3 vs A2）
+4. 解码层硬拒绝在Zipf之上还有多少增量？（A4 vs A3）
+5. CLIP-Sim后验检查能进一步降低多少？（A5 vs A4）
+6. Perplexity过滤的额外贡献？（A6 vs A5）
+7. 源头预洗的独立贡献是多少？（Source-On vs Source-Off在各A层的差异）
+
+#### A系列禁止修改项
+
+A2的确定性映射表禁止：
 
 - 修改主体noun；
 - 修改动作核心动词；
@@ -614,7 +687,7 @@ A2禁止：
 - 修改相机指令；
 - 删除否定词。
 
-A3/A4的LLM输入必须包含不可变字段：目标主体、目标关系、目标维度和preservation set。
+A3/A4/A5/A6的LLM输入必须包含不可变字段：目标主体、目标关系、目标维度和preservation set。
 
 ### 10.3 B0—B3
 
@@ -635,17 +708,37 @@ prompt/metrics_by_method.json
 prompt/fallback_comparison.json
 prompt/manual_annotation_tasks.jsonl
 prompt/failure_examples.jsonl
+prompt/source_layer_comparison.json
 ```
+
+每条`variants.jsonl`必须包含以下额外指标字段：
+
+| 指标 | 含义 | 目标 |
+|------|------|------|
+| `rare_modifier_rate` | 低频修饰词比例 | <1% |
+| `mean_zipf_score` | prompt中非名词词汇的平均Zipf分数 | >4.5 |
+| `clip_sim_delta` | polish前后CLIP-Sim变化 | ≥-0.02 |
+| `perplexity_mean` | GPT-2平均困惑度 | <50 |
+| `semantic_preservation_rate` | 与原prompt的语义相似度（sentence-transformers cosine） | ≥0.95 |
 
 ### 10.5 胜出规则
 
 先应用硬门槛：
 
-- 目标语义保持率≥95%；
+- 目标语义保持率（`semantic_preservation_rate`）≥95%；
 - 维度纯度≥95%；
-- 无效prompt率为0。
+- 无效prompt率为0；
+- `clip_sim_delta` ≥ -0.02（不得显著偏离原始语义）；
+- `perplexity_mean` < 50（生成文本必须流畅自然）。
 
-满足硬门槛后，按低频修饰词率、自然度和API成本选择正式方法。
+满足硬门槛后，按以下优先级排序选择正式方法：
+
+1. `rare_modifier_rate`最低（主目标）；
+2. `mean_zipf_score`最高；
+3. `semantic_preservation_rate`最高；
+4. API成本最低。
+
+若多个方法均满足硬门槛且质量差异在95% CI内不显著，优先选择Pareto前沿上处理时间更短、确定性更高的方法（参见§16.4）。
 
 ## 11. Step 4：图像清晰度实验
 
@@ -667,7 +760,10 @@ prompt/failure_examples.jsonl
 - C1：Lanczos + 轻度Unsharp；
 - C2：Real-ESRGAN；
 - C3：SwinIR；
-- C4：Real-ESRGAN + GFPGAN，仅可选消融。
+- C4：Real-ESRGAN + GFPGAN，仅可选消融；
+- C5：Real-ESRGAN + Unsharp Masking（sigma=1.5, amount=0.5）；
+- C6：Real-ESRGAN + CLAHE（clipLimit=2.0, tileGridSize=8×8）；
+- C7：Real-ESRGAN + Unsharp + CLAHE（完整组合流水线，对应分析报告§2.5.6推荐方案）。
 
 每个输出路径：
 
@@ -687,7 +783,8 @@ clarity/images/{method}/{question_id}.png
 - BRISQUE；
 - DINOv2全图与主体区域相似度；
 - 人脸身份相似度（仅人脸子集）；
-- Grounding目标检测成功率。
+- Grounding目标检测成功率；
+- `enhancement_chain_contribution`：每个后处理环节的增量贡献（用NIQE差值量化，仅适用于C5/C6/C7组合流水线）。
 
 缺少bbox时，主体区域指标记为null，不得使用整图指标假装主体指标。
 
@@ -704,6 +801,37 @@ clarity/video_probe_manifest.jsonl
 ### 11.5 胜出规则
 
 身份改变率不得显著高于C0；DINO主体相似度不得超过配置容差下降。满足保真门槛后，选择人工清晰度和主体检测成功率最高的方法。
+
+若多个方法均满足硬门槛且质量差异在95% CI内不显著，优先选择Pareto前沿上处理时间更短、确定性更高的方法（参见§16.4）。
+
+### 11.6 组合消融设计
+
+目标：量化C5/C6/C7中锐化和对比度增强各自的增量贡献，以及组合是否存在边际递减。
+
+消融路径：
+
+```text
+路径A：C2 (SR-only) → C5 (SR+Sharpen) → C7 (SR+Sharpen+CLAHE)
+路径B：C2 (SR-only) → C6 (SR+CLAHE) → C7 (SR+Sharpen+CLAHE)
+```
+
+对每个环节报告：
+
+| 对比 | 量化指标 | 含义 |
+|------|---------|------|
+| C5 - C2 | ΔNIQE, ΔLaplacian | Unsharp Masking的独立增量 |
+| C6 - C2 | ΔNIQE, ΔBRISQUE | CLAHE的独立增量 |
+| C7 - C5 | ΔNIQE, ΔBRISQUE | 在已有USM基础上叠加CLAHE的边际收益 |
+| C7 - C6 | ΔNIQE, ΔLaplacian | 在已有CLAHE基础上叠加USM的边际收益 |
+
+若 `C7 - C5` 的增量小于 `C6 - C2` 的独立增量，则存在边际递减，需在报告中标注。
+
+输出：
+
+```text
+clarity/ablation_chain_metrics.json
+clarity/ablation_chain_plot.png
+```
 
 ## 12. Step 5：尺寸与比例实验
 
@@ -730,7 +858,52 @@ aspect/ratio_probe_manifest.jsonl
 - D4 saliency_crop；
 - D5 outpainting，仅可选上界。
 
-### 12.3 Saliency Crop要求
+### 12.3 混合策略整体验证
+
+新增实验臂：
+
+- **D6_hybrid_conservative**：stretch(≤4%) + saliency_crop(4–20%) + blur_padding(>20%)；
+- **D7_hybrid_aggressive**：stretch(≤4%) + saliency_crop(4–30%) + outpainting(>30%)。
+
+对比设计：
+
+- D6/D7 vs 最佳单一方法（从D0–D5中选出的winner）；
+- 使用验证集120张全量运行，按宽高比分桶报告（近方图/中等比/极端比三桶）；
+- 每桶至少30张有效样本。
+
+输出：
+
+```text
+aspect/hybrid_comparison.json
+aspect/hybrid_per_bucket.csv
+```
+
+### 12.4 阈值敏感性分析
+
+对混合路由器的两个阈值进行网格搜索：
+
+- `stretch_threshold`：[0.02, 0.04, 0.06, 0.08]
+- `saliency_threshold`：[0.15, 0.20, 0.25, 0.30, 0.35]
+
+每组合在60张ratio阶段样本上运行，报告：
+
+| 指标 | 说明 |
+|------|------|
+| 主体保留率 | GroundingDINO recall（IoU≥0.5） |
+| CLIP-Sim(image, prompt) | 图文对齐 |
+| NIQE分数 | 无参考图像质量 |
+| 各档位实际触发比例 | stretch/saliency_crop/padding各路由实际被触发的比例 |
+
+输出：
+
+```text
+aspect/threshold_sensitivity_heatmap.json
+aspect/threshold_sensitivity_plot.png
+```
+
+最终阈值选择标准：在主体保留率≥95%前提下，选CLIP-Sim最高的组合。
+
+### 12.5 Saliency Crop要求
 
 必须：
 
@@ -739,11 +912,11 @@ aspect/ratio_probe_manifest.jsonl
 - 无bbox时不得假装主体感知，回退到padding并记录原因；
 - 输出裁剪前后主体保留率。
 
-### 12.4 Outpainting限制
+### 12.6 Outpainting限制
 
 Outpainting输出不得进入正式主流程，除非人工验证和语义保持实验明确通过。默认仅作对比上界。
 
-### 12.5 正式混合策略
+### 12.7 正式混合策略
 
 Coding Agent实现可配置路由器：
 
@@ -868,6 +1041,88 @@ difficulty/labels_new.jsonl
 difficulty/confusion_matrix.csv
 ```
 
+## 14bis. Step 7b：词汇×主体正交诊断实验
+
+### 14bis.1 目的
+
+验证"生僻词影响"和"生僻主体影响"是否可独立分离，为论文第5章提供正交诊断能力的数据支撑。本实验解耦两类失败模式：
+
+- 文本编码器对low-frequency modifier的鲁棒性缺失；
+- 视觉概念层对长尾主体的识别能力不足。
+
+### 14bis.2 四象限定义
+
+| 象限 | 提示词 | 主体 | 测量能力 |
+|------|--------|------|---------|
+| **A (控制组)** | Common（所有修饰词Zipf≥4.0） | T1/T2 (common) | 纯组合能力基线 |
+| **B (词汇探针)** | Rare（含≥1个Zipf<4.0修饰词） | T1/T2 (common) | 文本编码器对rare token的鲁棒性 |
+| **C (主体探针)** | Common（所有修饰词Zipf≥4.0） | T3/T4 (rare) | 视觉概念层对长尾主体的识别能力 |
+| **D (复合探针)** | Rare | T3/T4 (rare) | 交互效应（仅诊断用，不入总分） |
+
+判定规则：
+
+- **Common prompt**：prompt中所有非名词/专名词汇的Zipf分数均≥4.0；
+- **Rare prompt**：prompt中存在至少1个非名词/专名词汇Zipf<4.0；
+- **Common主体**：subject tier为T1_common或T2_longtail；
+- **Rare主体**：subject tier为T3_finegrained或T4_rare_fictional。
+
+### 14bis.3 样本分配
+
+从3517条候选中按以下规则分配：
+
+| 象限 | 最低数量 | 抽样策略 |
+|------|---------|---------|
+| A控制组 | ≥80条 | 从quality合格池中随机抽样，确保prompt全为common词 |
+| B词汇探针 | ≥60条 | 保留或人工注入rare修饰词，主体限T1/T2 |
+| C主体探针 | ≥60条 | prompt做common化处理，主体限T3/T4 |
+| D复合探针 | ≥40条 | 保留rare prompt + T3/T4主体 |
+
+总计≥240条作为正交诊断子集，从正式1500条中划出或作为附加探针集。
+
+### 14bis.4 与P1/P4的关系
+
+- P1的A系列实验在**A+B象限子集**上运行，验证词汇简化对B象限得分的提升是否显著高于A象限（预期：B象限提升>A象限提升）；
+- P4的分层采样在**A+C象限子集**上验证，确认T3/T4主体在C象限的得分下降是否独立于词汇因素。
+
+### 14bis.5 统计分析
+
+使用2×2 ANOVA：
+
+- **主效应1（词汇）**：B-A 和 D-C 的平均差异；
+- **主效应2（主体）**：C-A 和 D-B 的平均差异；
+- **交互效应**：(D-C) - (B-A) 是否显著≠0。
+
+报告要求：
+
+- effect size（Cohen's d）和95% CI；
+- 若交互效应显著（p<0.05），说明两类因素不可独立分离，在论文中需讨论混淆路径；
+- 若交互效应不显著，两类治理（P1词汇治理、P4主体采样）可独立优化。
+
+### 14bis.6 输出
+
+```text
+orthogonal/quadrant_assignments.jsonl
+orthogonal/anova_results.json
+orthogonal/effect_sizes.json
+orthogonal/interaction_plot.png
+```
+
+### 14bis.7 Schema扩展
+
+在QualityCandidate中增加：
+
+```python
+quadrant: Literal["A_control", "B_lexical_probe", "C_subject_probe", "D_compound_probe"] | None = None
+```
+
+### 14bis.8 与正式1500条的关系
+
+正交诊断子集可以是正式1500条的子集（标注quadrant字段），也可以是额外探针集。规则：
+
+- A象限样本同时计入正式样本配额；
+- D象限样本**不入总分计算**，仅在论文中作为诊断证据；
+- 若作为子集，不得因诊断需要降低正式样本的质量门槛。
+
 ## 15. Step 8：人工标注工具
 
 ### 15.1 导出
@@ -930,7 +1185,106 @@ difficulty/confusion_matrix.csv
 
 同层候选质量排序权重必须在配置中定义。不得把任务难度作为质量低的惩罚项。
 
-### 16.4 View供给风险
+### 16.4 成本-效果联合决策框架
+
+#### 目的
+
+在质量胜出规则之外引入工程可行性维度，帮助选择在时间/计算约束下的最优方案。
+
+#### 成本维度定义
+
+每个实验方法需记录：
+
+```python
+class MethodCost(BaseModel):
+    method_id: str
+    experiment: Literal["prompt", "clarity", "aspect"]
+    requires_gpu: bool
+    requires_api: bool
+    gpu_vram_gb: float | None
+    api_calls_per_sample: float
+    api_cost_per_call_usd: float | None
+    processing_time_per_sample_sec: float  # 实测或估算
+    total_time_4092_samples_min: float
+    model_weight_size_gb: float | None
+    additional_dependencies: list[str]
+    deterministic: bool  # 是否每次运行结果相同
+```
+
+#### 预填成本估算表
+
+要求在实验运行前预填估算，运行后更新实测值：
+
+| 方法 | GPU | API | 单张耗时 | 4092张总时 | 额外依赖 | 确定性 |
+|------|-----|-----|---------|-----------|---------|--------|
+| A0 (原prompt) | - | - | 0s | 0min | - | ✓ |
+| A1 (改指令) | - | ✓ | 2s | 137min | - | ✗ |
+| A2 (映射表) | - | - | 0.01s | 1min | wordfreq | ✓ |
+| A3 (+Zipf门控) | - | ✓ | 2s | 137min | wordfreq | ✗ |
+| A4 (+RareWordBlocker) | ✓ | - | 3s | 205min | transformers | ✗ |
+| A5 (+CLIP-Sim) | ✓ | - | 1s | 68min | clip | ✗ |
+| A6 (+Perplexity) | ✓ | - | 0.5s | 34min | transformers | ✓ |
+| C0 (Lanczos) | - | - | 0.05s | 3min | PIL | ✓ |
+| C2 (Real-ESRGAN) | ✓ | - | 0.5s | 34min | realesrgan | ✓ |
+| C7 (SR+USM+CLAHE) | ✓ | - | 0.6s | 41min | realesrgan,opencv | ✓ |
+| D3 (blur_padding) | - | - | 0.05s | 3min | PIL | ✓ |
+| D4 (saliency_crop) | ✓ | - | 0.2s | 14min | grounding-dino | ✓ |
+| D5 (outpainting) | ✓ | - | 5s | 341min | diffusers | ✗ |
+
+#### 决策矩阵
+
+方案选择使用加权评分：
+
+```python
+def method_score(quality_gain: float, cost: MethodCost, weights: dict) -> float:
+    """
+    quality_gain: 相对基线的质量提升（归一化到[0,1]）
+    weights: 从配置读取
+    """
+    time_penalty = min(1.0, cost.total_time_4092_samples_min / 480)  # 8h为最大预算
+    determinism_bonus = 0.1 if cost.deterministic else 0.0
+    
+    score = (
+        weights["quality"] * quality_gain
+        - weights["time"] * time_penalty
+        - weights["complexity"] * len(cost.additional_dependencies) * 0.05
+        + determinism_bonus
+    )
+    return score
+```
+
+权重配置（见§5 `configs/quality_experiments.yaml`）：
+
+```yaml
+decision:
+  weights:
+    quality: 0.60
+    time: 0.25
+    complexity: 0.15
+  max_total_budget_hours: 8
+  prefer_deterministic: true
+```
+
+#### Pareto前沿分析
+
+对每个问题域（prompt/clarity/aspect），绘制质量提升 vs 处理时间的散点图，标出Pareto前沿上的方法。只有Pareto前沿上的方法才是合理候选。
+
+输出：
+
+```text
+decision/method_costs.jsonl
+decision/pareto_frontier.json
+decision/decision_matrix.csv
+decision/pareto_plots/{experiment}.png
+```
+
+#### 与胜出规则的关系
+
+§10.5/§11.5/§12.7的胜出规则增加一条：
+
+> 若多个方法均满足硬门槛且质量差异在95% CI内不显著，优先选择Pareto前沿上处理时间更短、确定性更高的方法。
+
+### 16.5 View供给风险
 
 View候选只有365条。若硬门控后不足300条：
 
@@ -940,7 +1294,7 @@ View候选只有365条。若硬门控后不足300条：
 - 不从其他维度补齐；
 - 不自动生成新题。
 
-### 16.5 输出
+### 16.6 输出
 
 ```text
 selection/final_1500_manifest.jsonl
@@ -952,6 +1306,61 @@ selection/rejected_examples.jsonl
 ```
 
 正式manifest路径必须为POSIX风格相对路径，不写Windows反斜杠和机器绝对路径。
+
+## 16bis. Step 9b：组合消融实验
+
+### 16bis.1 目的
+
+验证各治理层的独立贡献和联合收益，回答"如果只能选一个方案，应该优先做什么"。
+
+### 16bis.2 消融条件
+
+| 条件 | Text治理 | Image增强 | Sampling策略 | 说明 |
+|------|----------|-----------|------------|------|
+| **Baseline** | A0 (原prompt) | C0 (Lanczos) | 无Tier配额 | 当前产物原始状态 |
+| **+Text** | A_winner | C0 | 无Tier配额 | 仅修复prompt |
+| **+Image** | A0 | C_winner | 无Tier配额 | 仅增强图像 |
+| **+Sampling** | A0 | C0 | Tier配额+难度校准 | 仅改采样策略 |
+| **+Text+Image** | A_winner | C_winner | 无Tier配额 | 文本+图像联合 |
+| **Full** | A_winner | C_winner + D_winner | Tier配额+难度校准 | 所有治理层叠加 |
+
+其中`A_winner`、`C_winner`、`D_winner`分别为§10、§11、§12实验的胜出方法。
+
+### 16bis.3 样本与评估
+
+在验证集250条上运行所有6个条件。每条件输出：
+
+| 指标类别 | 具体指标 |
+|---------|---------|
+| Prompt质量 | rare_rate, fk_grade, perplexity |
+| 图像质量 | NIQE, Laplacian variance, DINOv2 sim |
+| 结构完整率 | Schema pass rate |
+| 综合可用率 | 同时通过所有硬门控的比例 |
+
+### 16bis.4 统计检验
+
+- **配对比较**：每对条件使用McNemar检验（pass/fail二分类）或Wilcoxon符号秩检验（连续分数）；
+- **多重比较校正**：Bonferroni或FDR（Benjamini-Hochberg）；
+- 报告每对比较的p-value和effect size；
+- 至少报告以下关键对比的显著性：
+
+| 对比 | 验证目标 |
+|------|---------|
+| Baseline vs Full | 总效果 |
+| +Text vs Baseline | 文本治理独立效果 |
+| +Image vs Baseline | 图像增强独立效果 |
+| +Text+Image vs +Text | 图像在文本已修复基础上的增量 |
+| Full vs +Text+Image | 采样策略在前两者之上的增量 |
+
+### 16bis.5 输出
+
+```text
+ablation/conditions.jsonl
+ablation/per_sample_scores.jsonl
+ablation/pairwise_tests.json
+ablation/ablation_summary_table.csv
+ablation/contribution_bar_chart.png
+```
 
 ## 17. Step 10：论文报告生成
 
@@ -968,15 +1377,18 @@ report/final_dataset_card.md
 至少包含：
 
 1. 3517条候选的基线问题统计；
-2. A0—A4 Prompt对比；
+2. A0—A6 Prompt逐层消融对比（含源头预洗因子）；
 3. B0—B3 fallback修复率；
-4. C0—C4清晰度与身份保持；
-5. 4:3/16:9和D0—D5尺寸策略对比；
+4. C0—C7清晰度与身份保持（含组合消融链）；
+5. 4:3/16:9和D0—D7尺寸策略对比（含混合策略与阈值敏感性）；
 6. 自然抽样与主体分层抽样对比；
 7. G0—G3难度标定对比；
 8. Baseline、+Text、+Image、+Sampling、Full组合消融；
 9. 正式1500条的五维、难度、罕见度和主体分布；
-10. 失败案例与限制。
+10. 失败案例与限制；
+11. 正交诊断2×2 ANOVA结果与交互效应图；
+12. 组合消融贡献柱状图与配对检验结果；
+13. 各问题域Pareto前沿图与最终方案选择依据。
 
 报告生成器只读取结构化结果，不重新计算模型指标。
 
@@ -1049,15 +1461,15 @@ audit → split → local prompt rules → tag subjects → difficulty → selec
 
 ### Task 4：Prompt与fallback实验
 
-工作：实现A0—A4、B0—B3、规则、指标和人工任务。
+工作：实现A0—A6逐层消融（含源头预洗因子）、B0—B3、规则、指标和人工任务。
 
-完成标准：117条fallback均有明确pass/reject结果；不存在无效prompt通过。
+完成标准：117条fallback均有明确pass/reject结果；不存在无效prompt通过；14个消融条件均有完整指标。
 
 ### Task 5：图像实验
 
-工作：实现图像变体、指标、清晰度和尺寸实验。
+工作：实现图像变体（含C5—C7组合流水线和D6—D7混合策略）、指标、清晰度消融链和尺寸阈值敏感性实验。
 
-完成标准：所有变体不覆盖原图；缺少模型时可恢复并清晰报告。
+完成标准：所有变体不覆盖原图；缺少模型时可恢复并清晰报告；组合消融链和阈值热力图输出可生成。
 
 ### Task 6：主体与难度
 
@@ -1070,6 +1482,18 @@ audit → split → local prompt rules → tag subjects → difficulty → selec
 工作：硬门控、边际配额、1500条选择、数据卡和论文表格。
 
 完成标准：满足§20验收；不足时输出shortfall而非伪造完成。
+
+### Task 7b：正交诊断
+
+工作：实现象限分配（`orthogonal-assign`）、2×2 ANOVA分析（`orthogonal-analyze`）和效应量报告。
+
+完成标准：至少240条分配到四象限；ANOVA结果含主效应和交互效应的p值与Cohen's d。
+
+### Task 8：组合消融与决策
+
+工作：实现消融条件运行器（`ablation-run`）、统计检验（`ablation-analyze`）、成本估算（`cost-estimate`）和Pareto分析（`decision-matrix`）。
+
+完成标准：6个条件在验证集上有完整分数；配对检验结果和决策矩阵可生成；每个问题域Pareto前沿图可输出。
 
 ## 20. 最终验收标准
 
@@ -1088,7 +1512,10 @@ audit → split → local prompt rules → tag subjects → difficulty → selec
 - 方法胜出规则在看验证集结果之前冻结；
 - 人工标注一致性有统计报告；
 - 图像方法同时报告清晰度和身份保持，不只报告锐度；
-- 所有实验结果可由结构化产物重新生成报告。
+- 所有实验结果可由结构化产物重新生成报告；
+- 正交诊断ANOVA报告含主效应p值和effect size；
+- 组合消融至少6个条件有完整结果；
+- 每个问题域的方案选择有Pareto依据而非仅质量单指标。
 
 ### 20.3 正式集验收
 
