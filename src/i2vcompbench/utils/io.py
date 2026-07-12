@@ -182,7 +182,12 @@ class Phase1Bundle:
     @property
     def image_parse(self) -> Dict[str, Dict[str, Any]]:
         if self._image_parse is None:
-            p = self._candidate_files(["image_parse.jsonl"])
+            p = self._candidate_files([
+                "image_parse_v2.jsonl",
+                "image_parse.jsonl",
+                "image_parse/image_parse_v2.jsonl",
+                "image_parse/image_parse.jsonl",
+            ])
             if p is None:
                 self._image_parse = {}
             else:
@@ -193,7 +198,12 @@ class Phase1Bundle:
     @property
     def text_parse(self) -> Dict[str, Dict[str, Any]]:
         if self._text_parse is None:
-            p = self._candidate_files(["text_parse.jsonl"])
+            p = self._candidate_files([
+                "text_parse_v2.jsonl",
+                "text_parse.jsonl",
+                "text_parse/text_parse_v2.jsonl",
+                "text_parse/text_parse.jsonl",
+            ])
             if p is None:
                 self._text_parse = {}
             else:
@@ -204,7 +214,10 @@ class Phase1Bundle:
     @property
     def aligned(self) -> Dict[str, Dict[str, Any]]:
         if self._aligned is None:
-            p = self._candidate_files(["aligned_instances.jsonl"])
+            p = self._candidate_files([
+                "aligned_instances.jsonl",
+                "align/aligned_instances.jsonl",
+            ])
             if p is None:
                 self._aligned = {}
             else:

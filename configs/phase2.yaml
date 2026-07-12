@@ -1,27 +1,27 @@
-mode: full                        # 全量模式：每维度300题
+mode: full                        # 论文正式版：五个维度各300题
 phase1_bundle_dir: "E:/I2V-CompBench/outputs/phase1"
 output_dir: "data/benchmark_dataset"
 
 quota:
   num_per_dimension_pilot: 20
-  num_per_dimension_full: 10000    # 不强制每维度数量，按实际candidate_recipes生成
+  num_per_dimension_full: 300
   skip_dimensions:
     - spatial_composition
     - interaction_reasoning
   rarity:
-    common: 0.8
-    rare: 0.2
+    common: 0.7
+    rare: 0.3
   difficulty:
-    easy: 0.30
-    medium: 0.50
-    hard: 0.20
+    easy: 0.40
+    medium: 0.35
+    hard: 0.25
   input_mode_ratio:
     attribute_binding:
-      single_image: 0.95
-      multi_image: 0.05
+      single_image: 1.0
+      multi_image: 0.0
     action_binding:
-      single_image: 0.95
-      multi_image: 0.05
+      single_image: 1.0
+      multi_image: 0.0
     motion_binding:
       type_a_absolute_single: 1.0
       type_b_relative_single: 0.0
@@ -30,11 +30,11 @@ quota:
       single_image: 0.2
       multi_image: 0.8
     background_dynamics:
-      single_image: 0.80
-      multi_image: 0.20
+      single_image: 1.0
+      multi_image: 0.0
     view_transformation:
-      single_image: 0.95
-      multi_image: 0.05
+      single_image: 1.0
+      multi_image: 0.0
     interaction_reasoning:
       single_image: 0.5
       multi_image: 0.5
@@ -44,7 +44,7 @@ quota:
       - motion_binding
       - spatial_composition
       - view_transformation
-    pair_ratio: 0.5      # 期望成对题占目标桶数的比例
+    pair_ratio: 0.0      # 对照视频由合作者的 Phase 3 动态生成，不占本文1500条主数据
 
 api:
   base_url: "https://api.siliconflow.cn/v1"
@@ -83,4 +83,37 @@ prompt_finalize:
   min_words: 8
   max_words: 25
   max_words_interaction: 30
+  max_retries: 3
   enforce_dimension_isolation: true
+
+# 第5章质量实验与正式集筛选配置。先完成target repair和质量门控，
+# 再按边际分布从每个维度筛选300条；质量不达标时不得降级阈值凑数。
+quality_experiments:
+  random_seed: 20260712
+  development_per_dimension: 50
+  validation_per_dimension: 50
+  require_target_noun: true
+  require_target_change: true
+  reject_failed_fallback: true
+  target_aspect_ratios_to_compare: ["4:3", "16:9"]
+
+final_selection:
+  dimensions:
+    - attribute_binding
+    - action_binding
+    - motion_binding
+    - background_dynamics
+    - view_transformation
+  per_dimension: 300
+  difficulty_ratio:
+    easy: 0.40
+    medium: 0.35
+    hard: 0.25
+  rarity_ratio:
+    common: 0.70
+    rare: 0.30
+  subject_tier_ratio:
+    T1_common: 0.55
+    T2_longtail: 0.28
+    T3_finegrained: 0.12
+    T4_rare_fictional: 0.05

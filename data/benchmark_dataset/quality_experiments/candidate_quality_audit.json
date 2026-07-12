@@ -1,0 +1,62 @@
+{
+  "source_manifest": "/Users/yiningzhang/Desktop/I2V-CompBench/data/benchmark_dataset/phase3_manifest.jsonl",
+  "seed": 20260712,
+  "dimensions": [
+    "attribute_binding",
+    "action_binding",
+    "motion_binding",
+    "background_dynamics",
+    "view_transformation"
+  ],
+  "candidate_count": 3517,
+  "candidate_count_by_dimension": {
+    "action_binding": 1013,
+    "attribute_binding": 517,
+    "background_dynamics": 946,
+    "motion_binding": 676,
+    "view_transformation": 365
+  },
+  "eligible_without_model_repair": 0,
+  "prompt_and_file_gate_pass_by_dimension": {
+    "action_binding": 948,
+    "attribute_binding": 502,
+    "background_dynamics": 927,
+    "motion_binding": 658,
+    "view_transformation": 361
+  },
+  "blocking_issue_counts": {
+    "generic_target_description": 3517,
+    "missing_target_change": 3517,
+    "missing_target_noun": 3517,
+    "word_count_out_of_range": 121,
+    "repeated_article": 113,
+    "final_failed_check": 99,
+    "empty_slot": 18
+  },
+  "known_rare_modifier_counts": {
+    "swirls": 52,
+    "aura": 16,
+    "mystical": 14,
+    "eerie": 11,
+    "radiant": 11,
+    "celestial": 10,
+    "ethereal": 10,
+    "menacing": 10,
+    "iridescent": 10,
+    "translucent": 9,
+    "grotesque": 8,
+    "solemn": 7,
+    "contemplative": 6,
+    "contemplation": 5,
+    "malevolence": 2,
+    "motifs": 1,
+    "sclera": 1,
+    "spectral": 1
+  },
+  "development_count": 250,
+  "validation_count": 250,
+  "notes": [
+    "Development/validation splits intentionally include flawed rows for quality-method comparison.",
+    "No official 1500-row selection is produced until target repair and quality gates pass."
+  ]
+}

@@ -79,8 +79,9 @@ _STATIC_LEAD_TOKENS = {
 }
 _BE_VERBS = {"is", "are", "was", "were", "be", "being", "been", "am"}
 
-# view_transformation 维度不允许的 camera 词汇
-VIEW_CAMERA_BLACKLIST: List[str] = [
+# view_transformation 必须包含的显式运镜线索。旧实现把这些词当作黑名单，
+# 会系统性拒绝合法的 View prompt，与 required_active 约束相反。
+VIEW_CAMERA_CUES: List[str] = [
     "camera pans", "camera pan", "camera tilts", "camera tilt",
     "camera zooms", "camera zoom", "dolly", "crane shot", "tracking shot",
     "zoom in", "zoom out", "pan left", "pan right", "tilt up", "tilt down",
@@ -118,12 +119,12 @@ def _has_active_verb(text: str) -> bool:
     return False
 
 
-def _hits_view_camera_blacklist(text: str) -> List[str]:
-    """view_transformation 维度的 camera 词检查。"""
+def _hits_view_camera_cues(text: str) -> List[str]:
+    """返回 view_transformation prompt 中出现的显式运镜线索。"""
     if not text:
         return []
     low = text.lower()
-    return [w for w in VIEW_CAMERA_BLACKLIST if w in low]
+    return [w for w in VIEW_CAMERA_CUES if w in low]
 
 
 # ============================================================
@@ -253,21 +254,28 @@ def _enforce_constraints(
     dimension: str,
 ) -> Dict[str, Any]:
     """统一返回 ok / hits / word_count / failed_check（首条命中的失败原因）。"""
+    prompt = (prompt or "").strip()
     hits = find_forbidden_hits(prompt, forbidden)
     wc = count_words(prompt)
     failed_check: Optional[str] = None
 
-    if not (min_words <= wc <= max_words):
+    if not prompt:
+        failed_check = "empty_prompt"
+    elif re.search(r"\{[^{}]+\}", prompt):
+        failed_check = "unresolved_placeholder"
+    elif re.search(r"\b(the|a|an)\s+\1\b", prompt, flags=re.IGNORECASE):
+        failed_check = "repeated_article"
+    elif re.search(r"\b(the|a|an)\s*[,.;:]", prompt, flags=re.IGNORECASE):
+        failed_check = "empty_slot"
+    elif not (min_words <= wc <= max_words):
         failed_check = "out_of_range"
     elif hits:
         failed_check = "forbidden_hit"
     elif not _has_active_verb(prompt):
         failed_check = "missing_active_verb"
     elif dimension == "view_transformation":
-        cam_hits = _hits_view_camera_blacklist(prompt)
-        if cam_hits:
-            failed_check = "view_camera_cheat"
-            hits = list(hits) + cam_hits
+        if not _hits_view_camera_cues(prompt):
+            failed_check = "missing_camera_motion"
 
     return {
         "ok": failed_check is None,
@@ -291,6 +299,7 @@ def finalize_prompts(config: Dict[str, Any]) -> List[FinalPromptEntry]:
     min_words = int(pf_cfg.get("min_words", 8))
     max_words_default = int(pf_cfg.get("max_words", 25))
     max_words_inter = int(pf_cfg.get("max_words_interaction", 30))
+    max_retries = max(1, int(pf_cfg.get("max_retries", 2)))
 
     template = _load_polish_template()
     try:
@@ -323,31 +332,35 @@ def finalize_prompts(config: Dict[str, Any]) -> List[FinalPromptEntry]:
         polish_prompt = _format_polish_prompt(
             template, plan, frame_desc, min_words, max_words
         )
-        raw = client.call_llm(polish_prompt) if template else ""
-        parsed = _parse_polish_response(raw) if raw else None
-
         forbidden = (plan.get("dimension_isolation") or {}).get("forbidden_words") or []
         candidate_prompt: str = ""
         used_fallback = False
-        polish_attempts = 1
+        polish_attempts = 0
         vlm_caption = frame_desc
 
-        if parsed:
-            candidate_prompt = str(parsed.get("prompt") or "")
-
-        if candidate_prompt:
+        # 带失败原因重试，避免第一次格式/长度错误就直接落到坏 fallback。
+        retry_prompt = polish_prompt
+        for attempt in range(max_retries):
+            polish_attempts = attempt + 1
+            raw = client.call_llm(retry_prompt) if template else ""
+            parsed = _parse_polish_response(raw) if raw else None
+            candidate_prompt = str(parsed.get("prompt") or "") if parsed else ""
             check = _enforce_constraints(
                 candidate_prompt, forbidden, min_words, max_words, dimension
             )
-            if not check["ok"]:
-                logger.info(
-                    f"[{qid}] polish failed checks ({check}); falling back to draft"
-                )
-                candidate_prompt = ""
+            if check["ok"]:
+                break
+            logger.info(f"[{qid}] polish attempt {attempt + 1} failed: {check}")
+            candidate_prompt = ""
+            retry_prompt = (
+                polish_prompt
+                + "\n\nPREVIOUS ATTEMPT FAILED: "
+                + str(check["failed_check"])
+                + ". Correct that failure and return STRICT JSON only."
+            )
 
         if not candidate_prompt:
             candidate_prompt = plan.get("prompt_draft") or ""
-            polish_attempts += 1
             used_fallback = True
 
         check_final = _enforce_constraints(

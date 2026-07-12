@@ -335,6 +335,12 @@ def export_dataset(config: Dict[str, Any]) -> List[BenchmarkSample]:
             continue
         manifest = manifests[qid]
         final = finals[qid]
+        # 有 failed_check 的条目仅用于审计，禁止进入正式 manifest。
+        if final.get("failed_check"):
+            logger.info(
+                f"[{qid}] final prompt failed {final.get('failed_check')}; skipping"
+            )
+            continue
         prompt_text = final.get("prompt") or final.get("i2v_prompt")  # 兼容旧产物
         if not prompt_text:
             logger.info(f"[{qid}] empty prompt; skipping")
@@ -345,6 +351,18 @@ def export_dataset(config: Dict[str, Any]) -> List[BenchmarkSample]:
         input_image_paths = _resolve_input_image_paths(manifest, input_mode)
         target_subjects = _resolve_target_subjects(plan)
         target_relation = _resolve_target_relation(plan)
+        # Phase 3 不允许从 prompt 反推目标。泛化占位或空 noun 均视为
+        # 结构化阻断项，必须先经过 target repair 再导出。
+        if any(
+            not (s.noun or "").strip()
+            or (s.description or "").strip().lower() in {"", "the subject", "subject"}
+            for s in target_subjects
+        ):
+            logger.info(f"[{qid}] unresolved target_subjects; skipping")
+            continue
+        if target_relation is None or not target_relation.value.strip():
+            logger.info(f"[{qid}] unresolved target change; skipping")
+            continue
         preservation_set = _resolve_preservation_set(plan)
         phase3_source_type, legacy_source_type = _resolve_source_type(
             plan, manifest, input_mode

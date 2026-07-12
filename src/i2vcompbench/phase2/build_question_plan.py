@@ -75,6 +75,48 @@ def _slots_from_text_parse(
             for k, v in slots_block.items():
                 if isinstance(v, (str, int, float, bool)):
                     slots_out[k] = v
+
+    # Phase 1 的主 schema 将各维度槽位保存在顶层列表中，而不是统一的
+    # `slots` 节点。早期 Phase 2 只读取后者，导致主体、动作、属性和运镜
+    # 槽位全部回退为空值。这里显式兼容 Phase 1 Step 3 的真实字段。
+    slot_field_by_dimension = {
+        "attribute_binding": "attribute_change_slots",
+        "action_binding": "action_slots",
+        "motion_binding": "motion_slots",
+        "background_dynamics": "background_change_slots",
+        "view_transformation": "camera_movement_slots",
+    }
+    raw_items = text_parse_row.get(slot_field_by_dimension.get(dimension, "")) or []
+    item = raw_items[0] if isinstance(raw_items, list) and raw_items else {}
+    if isinstance(item, dict):
+        target = item.get("target_subject")
+        if target:
+            slots_out["target_subject"] = target
+            slots_out["target_subject_noun"] = target
+
+        if dimension == "attribute_binding":
+            before = item.get("from_value") or item.get("attribute_before") or ""
+            after = item.get("to_value") or item.get("attribute_after") or ""
+            slots_out.update({
+                "attribute_before": before,
+                "attribute_after": after,
+                "attribute_type": item.get("attribute_type") or "attribute",
+                "operation": "gradually changes to",
+            })
+        elif dimension == "action_binding":
+            verb = str(item.get("action_verb") or "").strip()
+            detail = str(item.get("action_detail") or "").strip()
+            slots_out["action_phrase"] = " ".join(x for x in (verb, detail) if x)
+        elif dimension == "motion_binding":
+            slots_out["direction"] = item.get("direction") or ""
+        elif dimension == "background_dynamics":
+            region = item.get("target_region") or "background"
+            change = str(item.get("change_type") or "").strip()
+            state = str(item.get("to_state") or "").strip()
+            slots_out["scene_phrase"] = region
+            slots_out["scene_dynamic"] = " ".join(x for x in (change, state) if x)
+        elif dimension == "view_transformation":
+            slots_out["camera_motion"] = item.get("command") or ""
     return slots_out
 
 
@@ -85,10 +127,24 @@ def _slots_from_aligned(aligned_row: Dict[str, Any]) -> Dict[str, Any]:
         return out
     targets = aligned_row.get("target_instances") or []
     refs = aligned_row.get("reference_instances") or []
+    # Phase 1 AlignedSample 的正式字段名是 aligned_subjects。
+    if not targets:
+        targets = aligned_row.get("aligned_subjects") or []
     if targets:
         first = targets[0]
-        out.setdefault("target_subject", first.get("description") or first.get("subject_id") or "the subject")
-        out.setdefault("target_subject_id", first.get("subject_id", "s1"))
+        target_name = (
+            first.get("text_subject_name")
+            or first.get("image_subject_name")
+            or first.get("description")
+            or first.get("subject_id")
+        )
+        if target_name:
+            out.setdefault("target_subject", target_name)
+            out.setdefault("target_subject_noun", target_name)
+        out.setdefault(
+            "target_subject_id",
+            first.get("instance_id") or first.get("subject_id") or "s1",
+        )
     if refs:
         first = refs[0]
         out.setdefault("reference_subject", first.get("description") or first.get("subject_id") or "the reference")
@@ -105,6 +161,13 @@ def _slots_from_image_parse(image_parse_row: Dict[str, Any]) -> Dict[str, Any]:
         out["background"] = bg.get("category") or bg.get("description") or ""
     elif isinstance(bg, str):
         out["background"] = bg
+    subjects = image_parse_row.get("subjects") or []
+    if isinstance(subjects, list) and subjects:
+        first = subjects[0] if isinstance(subjects[0], dict) else {}
+        name = first.get("name") or first.get("instance_description")
+        if name:
+            out.setdefault("target_subject", name)
+            out.setdefault("target_subject_noun", name)
     return out
 
 
@@ -124,13 +187,20 @@ def _resolve_slots(
     slots.update(_slots_from_text_parse(text_row, sampled["dimension"]))
 
     # ensure essential keys exist
-    slots.setdefault("target_subject", "the subject")
+    slots.setdefault("target_subject", "")
     slots.setdefault("reference_subject", "the reference subject")
-    slots.setdefault("direction", "to the right")
+    slots.setdefault("direction", "")
     slots.setdefault("target_relation", "right_of")
     slots.setdefault("start_position", "left")
     slots.setdefault("background", "neutral background")
     slots.setdefault("attribute_change", "")
+    slots.setdefault("attribute_before", "")
+    slots.setdefault("attribute_after", "")
+    slots.setdefault("operation", "gradually changes to")
+    slots.setdefault("action_phrase", "")
+    slots.setdefault("scene_phrase", slots.get("background", ""))
+    slots.setdefault("scene_dynamic", "")
+    slots.setdefault("camera_motion", "")
     slots.setdefault("subtype", sampled.get("subtype", ""))
     return slots
 
@@ -189,8 +259,8 @@ def _build_target_plan(
         target_subjects.append(sr)
         return sr
 
-    primary_desc = str(slots.get("target_subject", "the subject"))
-    primary_noun = slots.get("target_subject_noun") or slots.get("target_subject_id")
+    primary_desc = str(slots.get("target_subject") or "")
+    primary_noun = slots.get("target_subject_noun")
     _push(primary_desc, str(primary_noun) if primary_noun else None)
 
     # 多主体场景：spatial / interaction 维度 + multi_image 都可能需要 s2
@@ -205,8 +275,8 @@ def _build_target_plan(
     ):
         _push(str(secondary_desc), None)
 
-    # target_relation（spatial / interaction 维度必填）
-    # Phase 3 §2.6：{type, value, subj, obj}
+    # target_relation 作为通用结构化变化字段。五个正式维度同样需要显式
+    # value，避免下游只能重新解析自然语言 prompt 才知道要评什么。
     relation_str = str(slots.get("target_relation") or "")
     target_relation: Optional[TargetRelation] = None
     dim = sampled.get("dimension")
@@ -219,6 +289,20 @@ def _build_target_plan(
             value=relation_str,
             subj=subj,
             obj=obj,
+        )
+    elif expected_state.strip():
+        relation_type_by_dim = {
+            "attribute_binding": "attribute",
+            "action_binding": "action",
+            "motion_binding": "motion",
+            "background_dynamics": "background",
+            "view_transformation": "view",
+        }
+        target_relation = TargetRelation(
+            type=relation_type_by_dim.get(str(dim), "transform"),
+            value=expected_state,
+            subj="s1",
+            obj=None,
         )
 
     return TargetPlan(
