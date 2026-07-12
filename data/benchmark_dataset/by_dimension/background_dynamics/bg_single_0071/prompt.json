@@ -4,7 +4,7 @@
   "subtype": "background_change_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The cloudy sky darkens gradually, casting shifting shadows across the hoplites' shields while the formation remains still.",
   "evaluator_tools": [
     "grounding",

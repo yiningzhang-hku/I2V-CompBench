@@ -4,7 +4,7 @@
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The camera smoothly pans left along the racetrack, following the drifting car while keeping the scene and background stable.",
   "evaluator_tools": [
     "depth",

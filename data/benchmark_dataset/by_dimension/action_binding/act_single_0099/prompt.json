@@ -3,8 +3,8 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
+  "difficulty": "easy",
+  "rarity": "common",
   "prompt": "The warrior raises their sword, the red cape flaring as lightning flashes above.",
   "evaluator_tools": [
     "grounding",

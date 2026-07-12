@@ -4,7 +4,7 @@
   "subtype": "single_subject_action",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The luminous blue whale gently pulses its tail, sending ripples through the swirling cosmic particles around it.",
   "evaluator_tools": [
     "grounding",

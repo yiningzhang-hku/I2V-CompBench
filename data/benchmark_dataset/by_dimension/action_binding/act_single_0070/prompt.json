@@ -4,7 +4,7 @@
   "subtype": "single_subject_action",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The grotesque humanoid creature crawls forward on the red carpet, its movements slow and deliberate in the dimly lit room.",
   "evaluator_tools": [
     "grounding",

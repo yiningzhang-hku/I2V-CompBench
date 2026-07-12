@@ -4,7 +4,7 @@
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The subject's attribute changes while maintaining identity, scene context, and stable background.",
   "evaluator_tools": [
     "grounding",

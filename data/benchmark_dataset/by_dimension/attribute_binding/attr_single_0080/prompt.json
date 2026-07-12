@@ -4,7 +4,7 @@
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The motorcycle's chrome finish gradually reflects a brighter glow, enhancing its metallic sheen under the night lights.",
   "evaluator_tools": [
     "grounding",

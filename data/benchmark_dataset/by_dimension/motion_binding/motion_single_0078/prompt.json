@@ -4,7 +4,7 @@
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The raccoon slowly moves to the right, remaining in the same frame and maintaining its position relative to the tree trunk.",
   "evaluator_tools": [
     "grounding",

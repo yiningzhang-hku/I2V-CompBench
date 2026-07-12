@@ -1,79 +1,79 @@
 # Benchmark Dataset Card (mode=full)
 
-- Total samples (per-dim files): **650**
-- phase3_manifest.jsonl rows: **650**
+- Total samples (per-dim files): **3517**
+- phase3_manifest.jsonl rows: **3517**
 - Consistency check: **PASS**
 
 ## 1. Per-dimension counts
 
 | dimension | total | single_image | multi_image |
 | --- | --- | --- | --- |
-| attribute_binding | 121 | 121 | 0 |
-| action_binding | 150 | 150 | 0 |
-| motion_binding | 133 | 133 | 0 |
+| attribute_binding | 517 | 517 | 0 |
+| action_binding | 1013 | 1013 | 0 |
+| motion_binding | 676 | 676 | 0 |
 | spatial_composition | 0 | 0 | 0 |
-| background_dynamics | 133 | 133 | 0 |
-| view_transformation | 113 | 113 | 0 |
+| background_dynamics | 946 | 946 | 0 |
+| view_transformation | 365 | 365 | 0 |
 | interaction_reasoning | 0 | 0 | 0 |
 
 ## 2. Quota vs actual
 
 | bucket | target | actual | shortfall |
 | --- | --- | --- | --- |
-| action_binding::multi_image::easy::common | 3 | 0 | 3 |
-| action_binding::multi_image::easy::rare | 1 | 0 | 1 |
-| action_binding::multi_image::hard::common | 2 | 0 | 2 |
-| action_binding::multi_image::hard::rare | 1 | 0 | 1 |
-| action_binding::multi_image::medium::common | 6 | 0 | 6 |
-| action_binding::multi_image::medium::rare | 2 | 0 | 2 |
-| action_binding::single_image::easy::common | 68 | 0 | 68 |
-| action_binding::single_image::easy::rare | 17 | 0 | 17 |
-| action_binding::single_image::hard::common | 46 | 0 | 46 |
-| action_binding::single_image::hard::rare | 11 | 0 | 11 |
-| action_binding::single_image::medium::common | 114 | 0 | 114 |
-| action_binding::single_image::medium::rare | 29 | 0 | 29 |
-| attribute_binding::multi_image::easy::common | 3 | 0 | 3 |
-| attribute_binding::multi_image::easy::rare | 1 | 0 | 1 |
-| attribute_binding::multi_image::hard::common | 2 | 0 | 2 |
-| attribute_binding::multi_image::hard::rare | 1 | 0 | 1 |
-| attribute_binding::multi_image::medium::common | 6 | 0 | 6 |
-| attribute_binding::multi_image::medium::rare | 2 | 0 | 2 |
-| attribute_binding::single_image::easy::common | 68 | 0 | 68 |
-| attribute_binding::single_image::easy::rare | 17 | 0 | 17 |
-| attribute_binding::single_image::hard::common | 46 | 0 | 46 |
-| attribute_binding::single_image::hard::rare | 11 | 0 | 11 |
-| attribute_binding::single_image::medium::common | 114 | 0 | 114 |
-| attribute_binding::single_image::medium::rare | 29 | 0 | 29 |
-| background_dynamics::multi_image::easy::common | 14 | 0 | 14 |
-| background_dynamics::multi_image::easy::rare | 4 | 0 | 4 |
-| background_dynamics::multi_image::hard::common | 10 | 0 | 10 |
-| background_dynamics::multi_image::hard::rare | 2 | 0 | 2 |
-| background_dynamics::multi_image::medium::common | 24 | 0 | 24 |
-| background_dynamics::multi_image::medium::rare | 6 | 0 | 6 |
-| background_dynamics::single_image::easy::common | 58 | 0 | 58 |
-| background_dynamics::single_image::easy::rare | 14 | 0 | 14 |
-| background_dynamics::single_image::hard::common | 38 | 0 | 38 |
-| background_dynamics::single_image::hard::rare | 10 | 0 | 10 |
-| background_dynamics::single_image::medium::common | 96 | 0 | 96 |
-| background_dynamics::single_image::medium::rare | 24 | 0 | 24 |
-| motion_binding::type_a_absolute_single::easy::common | 72 | 71 | 1 |
-| motion_binding::type_a_absolute_single::easy::rare | 18 | 18 | 0 |
-| motion_binding::type_a_absolute_single::hard::common | 48 | 24 | 24 |
-| motion_binding::type_a_absolute_single::hard::rare | 12 | 11 | 1 |
-| motion_binding::type_a_absolute_single::medium::common | 120 | 4 | 116 |
-| motion_binding::type_a_absolute_single::medium::rare | 30 | 5 | 25 |
-| view_transformation::multi_image::easy::common | 3 | 0 | 3 |
-| view_transformation::multi_image::easy::rare | 1 | 0 | 1 |
-| view_transformation::multi_image::hard::common | 2 | 0 | 2 |
-| view_transformation::multi_image::hard::rare | 1 | 0 | 1 |
-| view_transformation::multi_image::medium::common | 6 | 0 | 6 |
-| view_transformation::multi_image::medium::rare | 2 | 0 | 2 |
-| view_transformation::single_image::easy::common | 68 | 0 | 68 |
-| view_transformation::single_image::easy::rare | 17 | 0 | 17 |
-| view_transformation::single_image::hard::common | 46 | 0 | 46 |
-| view_transformation::single_image::hard::rare | 11 | 0 | 11 |
-| view_transformation::single_image::medium::common | 114 | 0 | 114 |
-| view_transformation::single_image::medium::rare | 29 | 0 | 29 |
+| action_binding::multi_image::easy::common | 120 | 0 | 120 |
+| action_binding::multi_image::easy::rare | 30 | 0 | 30 |
+| action_binding::multi_image::hard::common | 80 | 0 | 80 |
+| action_binding::multi_image::hard::rare | 20 | 0 | 20 |
+| action_binding::multi_image::medium::common | 200 | 0 | 200 |
+| action_binding::multi_image::medium::rare | 50 | 0 | 50 |
+| action_binding::single_image::easy::common | 2280 | 0 | 2280 |
+| action_binding::single_image::easy::rare | 570 | 0 | 570 |
+| action_binding::single_image::hard::common | 1520 | 0 | 1520 |
+| action_binding::single_image::hard::rare | 380 | 0 | 380 |
+| action_binding::single_image::medium::common | 3800 | 0 | 3800 |
+| action_binding::single_image::medium::rare | 950 | 0 | 950 |
+| attribute_binding::multi_image::easy::common | 120 | 0 | 120 |
+| attribute_binding::multi_image::easy::rare | 30 | 0 | 30 |
+| attribute_binding::multi_image::hard::common | 80 | 0 | 80 |
+| attribute_binding::multi_image::hard::rare | 20 | 0 | 20 |
+| attribute_binding::multi_image::medium::common | 200 | 0 | 200 |
+| attribute_binding::multi_image::medium::rare | 50 | 0 | 50 |
+| attribute_binding::single_image::easy::common | 2280 | 0 | 2280 |
+| attribute_binding::single_image::easy::rare | 570 | 0 | 570 |
+| attribute_binding::single_image::hard::common | 1520 | 0 | 1520 |
+| attribute_binding::single_image::hard::rare | 380 | 0 | 380 |
+| attribute_binding::single_image::medium::common | 3800 | 0 | 3800 |
+| attribute_binding::single_image::medium::rare | 950 | 0 | 950 |
+| background_dynamics::multi_image::easy::common | 480 | 0 | 480 |
+| background_dynamics::multi_image::easy::rare | 120 | 0 | 120 |
+| background_dynamics::multi_image::hard::common | 320 | 0 | 320 |
+| background_dynamics::multi_image::hard::rare | 80 | 0 | 80 |
+| background_dynamics::multi_image::medium::common | 800 | 0 | 800 |
+| background_dynamics::multi_image::medium::rare | 200 | 0 | 200 |
+| background_dynamics::single_image::easy::common | 1920 | 0 | 1920 |
+| background_dynamics::single_image::easy::rare | 480 | 0 | 480 |
+| background_dynamics::single_image::hard::common | 1280 | 0 | 1280 |
+| background_dynamics::single_image::hard::rare | 320 | 0 | 320 |
+| background_dynamics::single_image::medium::common | 3200 | 0 | 3200 |
+| background_dynamics::single_image::medium::rare | 800 | 0 | 800 |
+| motion_binding::type_a_absolute_single::easy::common | 2400 | 297 | 2103 |
+| motion_binding::type_a_absolute_single::easy::rare | 600 | 275 | 325 |
+| motion_binding::type_a_absolute_single::hard::common | 1600 | 36 | 1564 |
+| motion_binding::type_a_absolute_single::hard::rare | 400 | 43 | 357 |
+| motion_binding::type_a_absolute_single::medium::common | 4000 | 10 | 3990 |
+| motion_binding::type_a_absolute_single::medium::rare | 1000 | 15 | 985 |
+| view_transformation::multi_image::easy::common | 120 | 0 | 120 |
+| view_transformation::multi_image::easy::rare | 30 | 0 | 30 |
+| view_transformation::multi_image::hard::common | 80 | 0 | 80 |
+| view_transformation::multi_image::hard::rare | 20 | 0 | 20 |
+| view_transformation::multi_image::medium::common | 200 | 0 | 200 |
+| view_transformation::multi_image::medium::rare | 50 | 0 | 50 |
+| view_transformation::single_image::easy::common | 2280 | 0 | 2280 |
+| view_transformation::single_image::easy::rare | 570 | 0 | 570 |
+| view_transformation::single_image::hard::common | 1520 | 0 | 1520 |
+| view_transformation::single_image::hard::rare | 380 | 0 | 380 |
+| view_transformation::single_image::medium::common | 3800 | 0 | 3800 |
+| view_transformation::single_image::medium::rare | 950 | 0 | 950 |
 
 ## 3. Contrastive pair coverage
 
@@ -91,4 +91,4 @@
 
 ## 5. QC status histogram
 
-pass=650, fail=51, needs_manual_review=15
+pass=3517, fail=471, needs_manual_review=104

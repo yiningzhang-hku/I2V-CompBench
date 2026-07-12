@@ -4,7 +4,7 @@
   "subtype": "background_change_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The cloudy sky gradually shifts, with the jellyfish drifting slowly through the atmosphere while the ocean remains calm and still.",
   "evaluator_tools": [
     "grounding",

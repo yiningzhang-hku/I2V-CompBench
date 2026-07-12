@@ -3,8 +3,8 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
+  "difficulty": "easy",
+  "rarity": "common",
   "prompt": "The pilot in the helmet and goggles slowly turns their head toward the fiery explosion outside the cockpit window.",
   "evaluator_tools": [
     "grounding",

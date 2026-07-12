@@ -3,7 +3,7 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The monarch butterfly gently unfolds its wings and lifts off from the cluster of white flowers in the sunlit garden.",
   "evaluator_tools": [

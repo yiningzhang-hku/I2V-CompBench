@@ -3,7 +3,7 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The soccer player in the white uniform moves to the right while remaining in the same position relative to the stable background and camera framing.",
   "evaluator_tools": [

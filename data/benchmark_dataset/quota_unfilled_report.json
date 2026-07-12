@@ -1,16 +1,48 @@
 {
   "unfilled_buckets": [
     {
+      "bucket_id": "attribute_binding__single_image__easy__common",
+      "dimension": "attribute_binding",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "easy",
+      "rarity": "common",
+      "target_count": 2280,
+      "actual_count": 331,
+      "shortfall": 1949,
+      "diagnosis": {
+        "no_candidate": 481,
+        "no_reference_asset": 0,
+        "quality_below_threshold": 0,
+        "blocking_flag": 0
+      }
+    },
+    {
+      "bucket_id": "attribute_binding__single_image__easy__rare",
+      "dimension": "attribute_binding",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "easy",
+      "rarity": "rare",
+      "target_count": 570,
+      "actual_count": 150,
+      "shortfall": 420,
+      "diagnosis": {
+        "no_candidate": 481,
+        "no_reference_asset": 0,
+        "quality_below_threshold": 0,
+        "blocking_flag": 0
+      }
+    },
+    {
       "bucket_id": "attribute_binding__single_image__medium__common",
       "dimension": "attribute_binding",
       "input_mode_or_subtype": "single_image",
       "difficulty": "medium",
       "rarity": "common",
-      "target_count": 114,
-      "actual_count": 8,
-      "shortfall": 106,
+      "target_count": 3800,
+      "actual_count": 10,
+      "shortfall": 3790,
       "diagnosis": {
-        "no_candidate": 13,
+        "no_candidate": 18,
         "no_reference_asset": 0,
         "quality_below_threshold": 0,
         "blocking_flag": 0
@@ -22,11 +54,11 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "medium",
       "rarity": "rare",
-      "target_count": 29,
-      "actual_count": 5,
-      "shortfall": 24,
+      "target_count": 950,
+      "actual_count": 8,
+      "shortfall": 942,
       "diagnosis": {
-        "no_candidate": 13,
+        "no_candidate": 18,
         "no_reference_asset": 0,
         "quality_below_threshold": 0,
         "blocking_flag": 0
@@ -38,11 +70,11 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "hard",
       "rarity": "common",
-      "target_count": 46,
-      "actual_count": 17,
-      "shortfall": 29,
+      "target_count": 1520,
+      "actual_count": 28,
+      "shortfall": 1492,
       "diagnosis": {
-        "no_candidate": 25,
+        "no_candidate": 37,
         "no_reference_asset": 0,
         "quality_below_threshold": 0,
         "blocking_flag": 0
@@ -54,11 +86,11 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "hard",
       "rarity": "rare",
-      "target_count": 11,
-      "actual_count": 8,
-      "shortfall": 3,
+      "target_count": 380,
+      "actual_count": 9,
+      "shortfall": 371,
       "diagnosis": {
-        "no_candidate": 25,
+        "no_candidate": 37,
         "no_reference_asset": 0,
         "quality_below_threshold": 0,
         "blocking_flag": 0
@@ -70,12 +102,12 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "easy",
       "rarity": "common",
-      "target_count": 3,
+      "target_count": 120,
       "actual_count": 0,
-      "shortfall": 3,
+      "shortfall": 120,
       "diagnosis": {
         "no_candidate": 0,
-        "no_reference_asset": 135,
+        "no_reference_asset": 215,
         "quality_below_threshold": 0,
         "blocking_flag": 0
       }
@@ -86,12 +118,12 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "easy",
       "rarity": "rare",
-      "target_count": 1,
+      "target_count": 30,
       "actual_count": 0,
-      "shortfall": 1,
+      "shortfall": 30,
       "diagnosis": {
         "no_candidate": 0,
-        "no_reference_asset": 135,
+        "no_reference_asset": 215,
         "quality_below_threshold": 0,
         "blocking_flag": 0
       }
@@ -102,12 +134,12 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "medium",
       "rarity": "common",
-      "target_count": 6,
+      "target_count": 200,
       "actual_count": 0,
-      "shortfall": 6,
+      "shortfall": 200,
       "diagnosis": {
         "no_candidate": 0,
-        "no_reference_asset": 166,
+        "no_reference_asset": 248,
         "quality_below_threshold": 0,
         "blocking_flag": 0
       }
@@ -118,12 +150,12 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "medium",
       "rarity": "rare",
-      "target_count": 2,
+      "target_count": 50,
       "actual_count": 0,
-      "shortfall": 2,
+      "shortfall": 50,
       "diagnosis": {
         "no_candidate": 0,
-        "no_reference_asset": 166,
+        "no_reference_asset": 248,
         "quality_below_threshold": 0,
         "blocking_flag": 0
       }
@@ -134,9 +166,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "hard",
       "rarity": "common",
-      "target_count": 2,
+      "target_count": 80,
       "actual_count": 0,
-      "shortfall": 2,
+      "shortfall": 80,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 0,
@@ -150,11 +182,43 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "hard",
       "rarity": "rare",
-      "target_count": 1,
+      "target_count": 20,
       "actual_count": 0,
-      "shortfall": 1,
+      "shortfall": 20,
       "diagnosis": {
         "no_candidate": 0,
+        "no_reference_asset": 0,
+        "quality_below_threshold": 0,
+        "blocking_flag": 0
+      }
+    },
+    {
+      "bucket_id": "action_binding__single_image__easy__common",
+      "dimension": "action_binding",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "easy",
+      "rarity": "common",
+      "target_count": 2280,
+      "actual_count": 686,
+      "shortfall": 1594,
+      "diagnosis": {
+        "no_candidate": 917,
+        "no_reference_asset": 0,
+        "quality_below_threshold": 0,
+        "blocking_flag": 0
+      }
+    },
+    {
+      "bucket_id": "action_binding__single_image__easy__rare",
+      "dimension": "action_binding",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "easy",
+      "rarity": "rare",
+      "target_count": 570,
+      "actual_count": 231,
+      "shortfall": 339,
+      "diagnosis": {
+        "no_candidate": 917,
         "no_reference_asset": 0,
         "quality_below_threshold": 0,
         "blocking_flag": 0
@@ -166,11 +230,11 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "medium",
       "rarity": "common",
-      "target_count": 114,
-      "actual_count": 9,
-      "shortfall": 105,
+      "target_count": 3800,
+      "actual_count": 20,
+      "shortfall": 3780,
       "diagnosis": {
-        "no_candidate": 18,
+        "no_candidate": 32,
         "no_reference_asset": 0,
         "quality_below_threshold": 0,
         "blocking_flag": 0
@@ -182,11 +246,43 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "medium",
       "rarity": "rare",
-      "target_count": 29,
-      "actual_count": 9,
-      "shortfall": 20,
+      "target_count": 950,
+      "actual_count": 12,
+      "shortfall": 938,
       "diagnosis": {
-        "no_candidate": 18,
+        "no_candidate": 32,
+        "no_reference_asset": 0,
+        "quality_below_threshold": 0,
+        "blocking_flag": 0
+      }
+    },
+    {
+      "bucket_id": "action_binding__single_image__hard__common",
+      "dimension": "action_binding",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "hard",
+      "rarity": "common",
+      "target_count": 1520,
+      "actual_count": 102,
+      "shortfall": 1418,
+      "diagnosis": {
+        "no_candidate": 131,
+        "no_reference_asset": 0,
+        "quality_below_threshold": 0,
+        "blocking_flag": 0
+      }
+    },
+    {
+      "bucket_id": "action_binding__single_image__hard__rare",
+      "dimension": "action_binding",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "hard",
+      "rarity": "rare",
+      "target_count": 380,
+      "actual_count": 29,
+      "shortfall": 351,
+      "diagnosis": {
+        "no_candidate": 131,
         "no_reference_asset": 0,
         "quality_below_threshold": 0,
         "blocking_flag": 0
@@ -198,12 +294,12 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "easy",
       "rarity": "common",
-      "target_count": 3,
+      "target_count": 120,
       "actual_count": 0,
-      "shortfall": 3,
+      "shortfall": 120,
       "diagnosis": {
         "no_candidate": 0,
-        "no_reference_asset": 471,
+        "no_reference_asset": 797,
         "quality_below_threshold": 0,
         "blocking_flag": 0
       }
@@ -214,12 +310,12 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "easy",
       "rarity": "rare",
-      "target_count": 1,
+      "target_count": 30,
       "actual_count": 0,
-      "shortfall": 1,
+      "shortfall": 30,
       "diagnosis": {
         "no_candidate": 0,
-        "no_reference_asset": 471,
+        "no_reference_asset": 797,
         "quality_below_threshold": 0,
         "blocking_flag": 0
       }
@@ -230,12 +326,12 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "medium",
       "rarity": "common",
-      "target_count": 6,
+      "target_count": 200,
       "actual_count": 0,
-      "shortfall": 6,
+      "shortfall": 200,
       "diagnosis": {
         "no_candidate": 0,
-        "no_reference_asset": 580,
+        "no_reference_asset": 960,
         "quality_below_threshold": 0,
         "blocking_flag": 0
       }
@@ -246,12 +342,12 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "medium",
       "rarity": "rare",
-      "target_count": 2,
+      "target_count": 50,
       "actual_count": 0,
-      "shortfall": 2,
+      "shortfall": 50,
       "diagnosis": {
         "no_candidate": 0,
-        "no_reference_asset": 580,
+        "no_reference_asset": 960,
         "quality_below_threshold": 0,
         "blocking_flag": 0
       }
@@ -262,9 +358,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "hard",
       "rarity": "common",
-      "target_count": 2,
+      "target_count": 80,
       "actual_count": 0,
-      "shortfall": 2,
+      "shortfall": 80,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 0,
@@ -278,11 +374,43 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "hard",
       "rarity": "rare",
-      "target_count": 1,
+      "target_count": 20,
       "actual_count": 0,
-      "shortfall": 1,
+      "shortfall": 20,
       "diagnosis": {
         "no_candidate": 0,
+        "no_reference_asset": 0,
+        "quality_below_threshold": 0,
+        "blocking_flag": 0
+      }
+    },
+    {
+      "bucket_id": "motion_binding__type_a_absolute_single__easy__common",
+      "dimension": "motion_binding",
+      "input_mode_or_subtype": "type_a_absolute_single",
+      "difficulty": "easy",
+      "rarity": "common",
+      "target_count": 2400,
+      "actual_count": 306,
+      "shortfall": 2094,
+      "diagnosis": {
+        "no_candidate": 592,
+        "no_reference_asset": 0,
+        "quality_below_threshold": 0,
+        "blocking_flag": 0
+      }
+    },
+    {
+      "bucket_id": "motion_binding__type_a_absolute_single__easy__rare",
+      "dimension": "motion_binding",
+      "input_mode_or_subtype": "type_a_absolute_single",
+      "difficulty": "easy",
+      "rarity": "rare",
+      "target_count": 600,
+      "actual_count": 286,
+      "shortfall": 314,
+      "diagnosis": {
+        "no_candidate": 592,
         "no_reference_asset": 0,
         "quality_below_threshold": 0,
         "blocking_flag": 0
@@ -294,11 +422,11 @@
       "input_mode_or_subtype": "type_a_absolute_single",
       "difficulty": "medium",
       "rarity": "common",
-      "target_count": 120,
-      "actual_count": 6,
-      "shortfall": 114,
+      "target_count": 4000,
+      "actual_count": 12,
+      "shortfall": 3988,
       "diagnosis": {
-        "no_candidate": 11,
+        "no_candidate": 29,
         "no_reference_asset": 0,
         "quality_below_threshold": 0,
         "blocking_flag": 0
@@ -310,11 +438,11 @@
       "input_mode_or_subtype": "type_a_absolute_single",
       "difficulty": "medium",
       "rarity": "rare",
-      "target_count": 30,
-      "actual_count": 5,
-      "shortfall": 25,
+      "target_count": 1000,
+      "actual_count": 17,
+      "shortfall": 983,
       "diagnosis": {
-        "no_candidate": 11,
+        "no_candidate": 29,
         "no_reference_asset": 0,
         "quality_below_threshold": 0,
         "blocking_flag": 0
@@ -326,11 +454,43 @@
       "input_mode_or_subtype": "type_a_absolute_single",
       "difficulty": "hard",
       "rarity": "common",
-      "target_count": 48,
-      "actual_count": 25,
-      "shortfall": 23,
+      "target_count": 1600,
+      "actual_count": 42,
+      "shortfall": 1558,
       "diagnosis": {
-        "no_candidate": 52,
+        "no_candidate": 88,
+        "no_reference_asset": 0,
+        "quality_below_threshold": 0,
+        "blocking_flag": 0
+      }
+    },
+    {
+      "bucket_id": "motion_binding__type_a_absolute_single__hard__rare",
+      "dimension": "motion_binding",
+      "input_mode_or_subtype": "type_a_absolute_single",
+      "difficulty": "hard",
+      "rarity": "rare",
+      "target_count": 400,
+      "actual_count": 46,
+      "shortfall": 354,
+      "diagnosis": {
+        "no_candidate": 88,
+        "no_reference_asset": 0,
+        "quality_below_threshold": 0,
+        "blocking_flag": 0
+      }
+    },
+    {
+      "bucket_id": "background_dynamics__single_image__easy__common",
+      "dimension": "background_dynamics",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "easy",
+      "rarity": "common",
+      "target_count": 1920,
+      "actual_count": 158,
+      "shortfall": 1762,
+      "diagnosis": {
+        "no_candidate": 729,
         "no_reference_asset": 0,
         "quality_below_threshold": 0,
         "blocking_flag": 0
@@ -342,11 +502,27 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "medium",
       "rarity": "common",
-      "target_count": 96,
-      "actual_count": 46,
-      "shortfall": 50,
+      "target_count": 3200,
+      "actual_count": 84,
+      "shortfall": 3116,
       "diagnosis": {
-        "no_candidate": 231,
+        "no_candidate": 383,
+        "no_reference_asset": 0,
+        "quality_below_threshold": 0,
+        "blocking_flag": 0
+      }
+    },
+    {
+      "bucket_id": "background_dynamics__single_image__medium__rare",
+      "dimension": "background_dynamics",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "medium",
+      "rarity": "rare",
+      "target_count": 800,
+      "actual_count": 299,
+      "shortfall": 501,
+      "diagnosis": {
+        "no_candidate": 383,
         "no_reference_asset": 0,
         "quality_below_threshold": 0,
         "blocking_flag": 0
@@ -358,11 +534,11 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "hard",
       "rarity": "common",
-      "target_count": 38,
-      "actual_count": 30,
-      "shortfall": 8,
+      "target_count": 1280,
+      "actual_count": 61,
+      "shortfall": 1219,
       "diagnosis": {
-        "no_candidate": 205,
+        "no_candidate": 386,
         "no_reference_asset": 0,
         "quality_below_threshold": 0,
         "blocking_flag": 0
@@ -374,9 +550,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "easy",
       "rarity": "common",
-      "target_count": 14,
+      "target_count": 480,
       "actual_count": 0,
-      "shortfall": 14,
+      "shortfall": 480,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 0,
@@ -390,9 +566,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "easy",
       "rarity": "rare",
-      "target_count": 4,
+      "target_count": 120,
       "actual_count": 0,
-      "shortfall": 4,
+      "shortfall": 120,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 0,
@@ -406,9 +582,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "medium",
       "rarity": "common",
-      "target_count": 24,
+      "target_count": 800,
       "actual_count": 0,
-      "shortfall": 24,
+      "shortfall": 800,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 0,
@@ -422,9 +598,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "medium",
       "rarity": "rare",
-      "target_count": 6,
+      "target_count": 200,
       "actual_count": 0,
-      "shortfall": 6,
+      "shortfall": 200,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 0,
@@ -438,9 +614,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "hard",
       "rarity": "common",
-      "target_count": 10,
+      "target_count": 320,
       "actual_count": 0,
-      "shortfall": 10,
+      "shortfall": 320,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 0,
@@ -454,9 +630,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "hard",
       "rarity": "rare",
-      "target_count": 2,
+      "target_count": 80,
       "actual_count": 0,
-      "shortfall": 2,
+      "shortfall": 80,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 0,
@@ -470,11 +646,27 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "easy",
       "rarity": "common",
-      "target_count": 68,
-      "actual_count": 27,
-      "shortfall": 41,
+      "target_count": 2280,
+      "actual_count": 43,
+      "shortfall": 2237,
       "diagnosis": {
-        "no_candidate": 113,
+        "no_candidate": 178,
+        "no_reference_asset": 0,
+        "quality_below_threshold": 0,
+        "blocking_flag": 0
+      }
+    },
+    {
+      "bucket_id": "view_transformation__single_image__easy__rare",
+      "dimension": "view_transformation",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "easy",
+      "rarity": "rare",
+      "target_count": 570,
+      "actual_count": 135,
+      "shortfall": 435,
+      "diagnosis": {
+        "no_candidate": 178,
         "no_reference_asset": 0,
         "quality_below_threshold": 0,
         "blocking_flag": 0
@@ -486,11 +678,27 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "medium",
       "rarity": "common",
-      "target_count": 114,
-      "actual_count": 24,
-      "shortfall": 90,
+      "target_count": 3800,
+      "actual_count": 40,
+      "shortfall": 3760,
       "diagnosis": {
-        "no_candidate": 74,
+        "no_candidate": 120,
+        "no_reference_asset": 0,
+        "quality_below_threshold": 0,
+        "blocking_flag": 0
+      }
+    },
+    {
+      "bucket_id": "view_transformation__single_image__medium__rare",
+      "dimension": "view_transformation",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "medium",
+      "rarity": "rare",
+      "target_count": 950,
+      "actual_count": 80,
+      "shortfall": 870,
+      "diagnosis": {
+        "no_candidate": 120,
         "no_reference_asset": 0,
         "quality_below_threshold": 0,
         "blocking_flag": 0
@@ -502,11 +710,27 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "hard",
       "rarity": "common",
-      "target_count": 46,
-      "actual_count": 5,
-      "shortfall": 41,
+      "target_count": 1520,
+      "actual_count": 10,
+      "shortfall": 1510,
       "diagnosis": {
-        "no_candidate": 37,
+        "no_candidate": 67,
+        "no_reference_asset": 0,
+        "quality_below_threshold": 0,
+        "blocking_flag": 0
+      }
+    },
+    {
+      "bucket_id": "view_transformation__single_image__hard__rare",
+      "dimension": "view_transformation",
+      "input_mode_or_subtype": "single_image",
+      "difficulty": "hard",
+      "rarity": "rare",
+      "target_count": 380,
+      "actual_count": 57,
+      "shortfall": 323,
+      "diagnosis": {
+        "no_candidate": 67,
         "no_reference_asset": 0,
         "quality_below_threshold": 0,
         "blocking_flag": 0
@@ -518,9 +742,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "easy",
       "rarity": "common",
-      "target_count": 3,
+      "target_count": 120,
       "actual_count": 0,
-      "shortfall": 3,
+      "shortfall": 120,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 0,
@@ -534,9 +758,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "easy",
       "rarity": "rare",
-      "target_count": 1,
+      "target_count": 30,
       "actual_count": 0,
-      "shortfall": 1,
+      "shortfall": 30,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 0,
@@ -550,9 +774,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "medium",
       "rarity": "common",
-      "target_count": 6,
+      "target_count": 200,
       "actual_count": 0,
-      "shortfall": 6,
+      "shortfall": 200,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 0,
@@ -566,9 +790,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "medium",
       "rarity": "rare",
-      "target_count": 2,
+      "target_count": 50,
       "actual_count": 0,
-      "shortfall": 2,
+      "shortfall": 50,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 0,
@@ -582,9 +806,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "hard",
       "rarity": "common",
-      "target_count": 2,
+      "target_count": 80,
       "actual_count": 0,
-      "shortfall": 2,
+      "shortfall": 80,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 0,
@@ -598,9 +822,9 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "hard",
       "rarity": "rare",
-      "target_count": 1,
+      "target_count": 20,
       "actual_count": 0,
-      "shortfall": 1,
+      "shortfall": 20,
       "diagnosis": {
         "no_candidate": 0,
         "no_reference_asset": 0,
@@ -609,6 +833,6 @@
       }
     }
   ],
-  "total_target": 1500,
-  "total_sampled": 716
+  "total_target": 50000,
+  "total_sampled": 4092
 }

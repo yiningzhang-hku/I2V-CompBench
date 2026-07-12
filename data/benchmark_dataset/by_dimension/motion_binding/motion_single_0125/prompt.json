@@ -3,7 +3,7 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The dark-haired elf with golden shoulder armor shifts to the right while maintaining the same pose and background.",
   "evaluator_tools": [

@@ -4,7 +4,7 @@
   "subtype": "background_change_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The mist in the forest thickens and swirls around the cloaked figure, while the subject remains still.",
   "evaluator_tools": [
     "grounding",

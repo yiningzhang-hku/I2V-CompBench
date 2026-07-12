@@ -3,8 +3,8 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
-  "rarity": "rare",
+  "difficulty": "easy",
+  "rarity": "common",
   "prompt": "The toy figure with blue skin and orange accents raises its arm slowly while standing on the rocky cliff.",
   "evaluator_tools": [
     "grounding",

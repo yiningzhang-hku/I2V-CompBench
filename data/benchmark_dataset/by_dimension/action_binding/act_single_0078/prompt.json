@@ -4,7 +4,7 @@
   "subtype": "single_subject_action",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The dragon's jaws open wide as it lets out a thunderous roar, its claws digging into the stone ground.",
   "evaluator_tools": [
     "grounding",

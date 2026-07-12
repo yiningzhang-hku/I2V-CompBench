@@ -3,8 +3,8 @@
   "dimension": "background_dynamics",
   "subtype": "background_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
+  "difficulty": "easy",
+  "rarity": "common",
   "prompt": "The falling snow intensifies and the illuminated trees flicker gently, while the subject remains still.",
   "evaluator_tools": [
     "grounding",

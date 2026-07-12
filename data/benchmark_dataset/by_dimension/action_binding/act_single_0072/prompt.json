@@ -4,7 +4,7 @@
   "subtype": "single_subject_action",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The white unicorn slowly lowers its head, its glowing horn pulsing gently as it breathes in the starlit field.",
   "evaluator_tools": [
     "grounding",

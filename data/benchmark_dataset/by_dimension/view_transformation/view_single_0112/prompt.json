@@ -3,7 +3,7 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "rare",
   "prompt": "The camera slowly pans right, maintaining the kitten's position and the stable background.",
   "evaluator_tools": [

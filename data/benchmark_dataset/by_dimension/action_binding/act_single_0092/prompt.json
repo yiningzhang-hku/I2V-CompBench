@@ -3,7 +3,7 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The raven slowly spreads its wings and flaps once, creating a subtle ripple in the cosmic backdrop.",
   "evaluator_tools": [

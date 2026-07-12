@@ -4,7 +4,7 @@
   "subtype": "background_change_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The green glow above intensifies, casting shifting patterns on the stone path, while the subject remains still.",
   "evaluator_tools": [
     "grounding",

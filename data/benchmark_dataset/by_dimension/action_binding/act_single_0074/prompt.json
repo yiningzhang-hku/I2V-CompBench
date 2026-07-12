@@ -4,7 +4,7 @@
   "subtype": "single_subject_action",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The dragon's body tenses as it releases a continuous stream of green lightning, its rider gripping tightly to the head.",
   "evaluator_tools": [
     "grounding",

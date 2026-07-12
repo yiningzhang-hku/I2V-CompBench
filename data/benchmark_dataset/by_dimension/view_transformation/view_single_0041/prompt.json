@@ -4,7 +4,7 @@
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The camera slowly pans left, revealing more of the industrial structure on the alien planet's horizon.",
   "evaluator_tools": [
     "depth",

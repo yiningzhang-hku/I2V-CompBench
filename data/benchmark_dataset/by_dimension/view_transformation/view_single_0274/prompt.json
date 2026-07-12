@@ -1,0 +1,47 @@
+{
+  "question_id": "view_single_0274",
+  "dimension": "view_transformation",
+  "subtype": "camera_motion_single",
+  "input_mode": "single_image",
+  "difficulty": "medium",
+  "rarity": "rare",
+  "prompt": "The camera smoothly tracks forward, following the cavalry charge across the dusty plain.",
+  "evaluator_tools": [
+    "depth",
+    "optical_flow",
+    "vlm_existence"
+  ],
+  "expected_failure_modes": [
+    "wrong_camera",
+    "camera_pan_cheat",
+    "identity_lost"
+  ],
+  "preservation_set": [
+    {
+      "scope": "scene",
+      "constraint": "scene_context"
+    },
+    {
+      "scope": "primary_subject",
+      "constraint": "spatial_position"
+    },
+    {
+      "scope": "background",
+      "constraint": "stable"
+    }
+  ],
+  "target_subjects": [
+    {
+      "id": "s1",
+      "description": "the subject",
+      "noun": null,
+      "ref_image_idx": null
+    }
+  ],
+  "target_relation": null,
+  "contrastive_pair_id": null,
+  "contrastive_role": "original",
+  "input_files": [
+    "first_frame.png"
+  ]
+}

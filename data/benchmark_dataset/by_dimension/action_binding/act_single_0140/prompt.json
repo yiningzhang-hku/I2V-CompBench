@@ -3,7 +3,7 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The man in the cowboy hat and shirt slowly raises his hand and gestures toward the distant horizon.",
   "evaluator_tools": [

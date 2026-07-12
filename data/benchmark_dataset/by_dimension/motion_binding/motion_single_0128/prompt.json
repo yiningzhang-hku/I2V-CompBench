@@ -3,8 +3,8 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
-  "rarity": "rare",
+  "difficulty": "easy",
+  "rarity": "common",
   "prompt": "The blue helicopter moves steadily to the right while maintaining its position relative to the forest canopy.",
   "evaluator_tools": [
     "grounding",

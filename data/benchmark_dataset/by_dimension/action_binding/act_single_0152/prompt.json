@@ -3,8 +3,8 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
-  "rarity": "rare",
+  "difficulty": "easy",
+  "rarity": "common",
   "prompt": "The black and white cow with long horns slowly lowers its head and grazes the golden grass in the field.",
   "evaluator_tools": [
     "grounding",

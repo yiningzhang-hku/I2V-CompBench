@@ -3,8 +3,8 @@
   "dimension": "background_dynamics",
   "subtype": "background_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
+  "difficulty": "easy",
+  "rarity": "common",
   "prompt": "The glowing lights in the magical forest gently shift and pulse, creating a dynamic ambient glow while the fox family remains still.",
   "evaluator_tools": [
     "grounding",

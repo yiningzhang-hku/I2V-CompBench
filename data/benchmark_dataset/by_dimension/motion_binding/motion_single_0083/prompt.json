@@ -4,7 +4,7 @@
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The vibrant surreal hamburger drifts smoothly to the right while remaining stable in the purple cosmic background.",
   "evaluator_tools": [
     "grounding",

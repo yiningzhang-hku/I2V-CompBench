@@ -3,7 +3,7 @@
   "dimension": "background_dynamics",
   "subtype": "background_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The warm light in the grand arched hallway gradually shifts, casting new patterns on the ornate walls while the subject remains still.",
   "evaluator_tools": [

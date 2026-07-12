@@ -5,7 +5,7 @@ paths:
   prompt_dir: "prompts"               # prompts 模板保留在工程内
 
 sampling:
-  max_samples: 6000           # 1000(已完成) + 5000(本次新增) = 6000 总量
+  max_samples: 10000          # TIP-I2V Eval 全量 (~10K)
   hf_split: "Eval"           # HuggingFace split: "Eval" (10K) / "Full" (1.7M)
 
 prior_package:
@@ -36,8 +36,8 @@ api:
     max_tokens: 4096           # 非思考模型不需要太大空间
     temperature: 0.0
 
-  batch_size: 10             # 并发请求数（非思考模型可以更高并发）
-  retry_count: 3
-  retry_delay: 2             # 秒 (指数退避基数)
-  timeout: 120               # 非思考模型响应快，120s足够
-  rate_limit_delay: 0.1      # 请求间隔秒数，防限流
+  batch_size: 10             # LLM不需要图片，TPM消耗低，可提高并发
+  retry_count: 5
+  retry_delay: 3             # 秒 (指数退避基数)
+  timeout: 180               # VLM复杂图片推理可能较慢
+  rate_limit_delay: 1.0      # LLM请求间隔短

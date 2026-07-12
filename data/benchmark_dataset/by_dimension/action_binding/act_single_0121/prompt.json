@@ -3,7 +3,7 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The teacher at the front of the classroom begins writing on the green chalkboard with chalk.",
   "evaluator_tools": [

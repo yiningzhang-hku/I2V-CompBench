@@ -3,7 +3,7 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The subject slowly raises their hand, maintaining the same position and perspective as the static scene.",
   "evaluator_tools": [

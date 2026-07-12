@@ -3,8 +3,8 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
+  "difficulty": "easy",
+  "rarity": "common",
   "prompt": "The dolphin continues its arc through the air, gliding smoothly before splashing back into the ocean waves.",
   "evaluator_tools": [
     "grounding",

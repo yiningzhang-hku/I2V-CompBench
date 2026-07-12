@@ -3,8 +3,8 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
+  "difficulty": "easy",
+  "rarity": "common",
   "prompt": "The comet moves to the right, maintaining its glowing tail and position relative to the stable cosmic background.",
   "evaluator_tools": [
     "grounding",

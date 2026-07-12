@@ -3,7 +3,7 @@
   "dimension": "background_dynamics",
   "subtype": "background_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The sunset gradually deepens into twilight, casting longer shadows across the forested landscape outside the window, while the subject remains still.",
   "evaluator_tools": [

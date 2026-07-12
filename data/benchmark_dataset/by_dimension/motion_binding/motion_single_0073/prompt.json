@@ -4,7 +4,7 @@
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The majestic brown horse moves steadily to the right across the vibrant field of orange flowers under the dramatic sunset sky.",
   "evaluator_tools": [
     "grounding",

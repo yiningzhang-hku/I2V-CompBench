@@ -4,7 +4,7 @@
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The camera slowly zooms in on the alien creature's face, focusing on the purple fleshy growth.",
   "evaluator_tools": [
     "depth",

@@ -3,8 +3,8 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
-  "rarity": "rare",
+  "difficulty": "easy",
+  "rarity": "common",
   "prompt": "The line of red ants moves steadily to the right along the wooden stick, maintaining the same scene and camera framing.",
   "evaluator_tools": [
     "grounding",

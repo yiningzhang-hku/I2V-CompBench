@@ -3,7 +3,7 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The subject ascends the spiraling staircase, moving steadily upward through the golden-lit, futuristic environment.",
   "evaluator_tools": [

@@ -4,7 +4,7 @@
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The elderly man's white beard gradually glows with a soft golden light, maintaining his seated meditation pose.",
   "evaluator_tools": [
     "grounding",

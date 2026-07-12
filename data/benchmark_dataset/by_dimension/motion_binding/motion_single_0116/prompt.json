@@ -3,7 +3,7 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The green-skinned witch moves to the right, maintaining her position relative to the moonlit house and cobblestone path.",
   "evaluator_tools": [

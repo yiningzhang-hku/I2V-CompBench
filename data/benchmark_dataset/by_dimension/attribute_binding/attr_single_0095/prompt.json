@@ -3,8 +3,8 @@
   "dimension": "attribute_binding",
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
+  "difficulty": "easy",
+  "rarity": "common",
   "prompt": "The giraffe's eyes slowly blink, showing a subtle change in facial expression while maintaining the same pose and background.",
   "evaluator_tools": [
     "grounding",

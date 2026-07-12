@@ -3,7 +3,7 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "rare",
   "prompt": "The camera slowly pans left, revealing the full height of the ghostly figure above the man on the floor.",
   "evaluator_tools": [

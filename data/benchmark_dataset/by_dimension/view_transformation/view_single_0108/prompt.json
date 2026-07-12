@@ -3,7 +3,7 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "rare",
   "prompt": "The camera smoothly pans left around the central atrium, maintaining the spatial position of the subject and keeping the background stable.",
   "evaluator_tools": [

@@ -3,7 +3,7 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The man with a mustache and cap turns the steering wheel slightly while maintaining focus, continuing to drive the vehicle.",
   "evaluator_tools": [

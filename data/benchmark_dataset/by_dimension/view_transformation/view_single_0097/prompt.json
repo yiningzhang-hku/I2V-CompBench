@@ -3,7 +3,7 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "rare",
   "prompt": "The camera slowly pans right, revealing more of the city skyline through the window.",
   "evaluator_tools": [

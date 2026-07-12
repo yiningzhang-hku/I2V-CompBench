@@ -4,7 +4,7 @@
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The camera slowly pans right, revealing more of the castle's western facade and surrounding gardens.",
   "evaluator_tools": [
     "depth",

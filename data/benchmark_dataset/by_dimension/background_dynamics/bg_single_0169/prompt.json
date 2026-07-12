@@ -3,8 +3,8 @@
   "dimension": "background_dynamics",
   "subtype": "background_change_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
-  "rarity": "common",
+  "difficulty": "easy",
+  "rarity": "rare",
   "prompt": "The sunlight shifts gradually, casting new shadows across the flower gardens and trees while the subject remains still.",
   "evaluator_tools": [
     "grounding",

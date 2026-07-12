@@ -3,8 +3,8 @@
   "dimension": "background_dynamics",
   "subtype": "background_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
+  "difficulty": "easy",
+  "rarity": "common",
   "prompt": "The mist in the background slowly shifts and thickens, revealing the shadowy figure more clearly while the subject remains still.",
   "evaluator_tools": [
     "grounding",

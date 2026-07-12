@@ -3,7 +3,7 @@
   "dimension": "background_dynamics",
   "subtype": "background_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The golden light shifts as the cascading waterfalls flow and birds glide through the valley, while the subject remains still.",
   "evaluator_tools": [

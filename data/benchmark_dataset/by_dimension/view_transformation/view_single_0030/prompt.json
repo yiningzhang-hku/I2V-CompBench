@@ -4,7 +4,7 @@
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The camera slowly pans right, revealing more of the city skyline while keeping the subject and background stable.",
   "evaluator_tools": [
     "depth",

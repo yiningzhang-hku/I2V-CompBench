@@ -3,7 +3,7 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The small creature with large ears slowly lifts its head and blinks, its wide eyes reflecting the dim red and purple light.",
   "evaluator_tools": [

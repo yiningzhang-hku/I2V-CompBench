@@ -3,8 +3,8 @@
   "dimension": "background_dynamics",
   "subtype": "background_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
+  "difficulty": "easy",
+  "rarity": "common",
   "prompt": "The glowing string lights gently flicker, and the starry night sky subtly shifts with slow-moving clouds.",
   "evaluator_tools": [
     "grounding",

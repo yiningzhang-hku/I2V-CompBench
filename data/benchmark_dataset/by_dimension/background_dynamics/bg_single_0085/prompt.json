@@ -3,7 +3,7 @@
   "dimension": "background_dynamics",
   "subtype": "background_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The glowing moon shifts subtly, and floating particles drift in slow, gentle currents around the still silhouetted couple.",
   "evaluator_tools": [

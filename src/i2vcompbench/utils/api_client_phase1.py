@@ -216,12 +216,20 @@ class SiliconFlowClient:
                     )
                 return content
             except Exception as e:
+                err_msg = str(e)
+                is_rate_limit = "429" in err_msg or "rate limiting" in err_msg.lower()
                 logger.warning(
                     f"Async VLM attempt {attempt + 1}/{self.retry_count} "
                     f"failed for {image_path}: {e}"
                 )
                 if attempt < self.retry_count - 1:
-                    await asyncio.sleep(self.retry_delay * (2 ** attempt))
+                    if is_rate_limit:
+                        # Longer backoff for rate limit errors
+                        wait_time = 30 * (2 ** attempt)
+                        logger.warning(f"Rate limit hit, waiting {wait_time}s before retry...")
+                        await asyncio.sleep(wait_time)
+                    else:
+                        await asyncio.sleep(self.retry_delay * (2 ** attempt))
 
         logger.error(f"Async VLM call failed after {self.retry_count} retries: {image_path}")
         return ""
@@ -246,11 +254,18 @@ class SiliconFlowClient:
                     )
                 return content
             except Exception as e:
+                err_msg = str(e)
+                is_rate_limit = "429" in err_msg or "rate limiting" in err_msg.lower()
                 logger.warning(
                     f"Async LLM attempt {attempt + 1}/{self.retry_count} failed: {e}"
                 )
                 if attempt < self.retry_count - 1:
-                    await asyncio.sleep(self.retry_delay * (2 ** attempt))
+                    if is_rate_limit:
+                        wait_time = 30 * (2 ** attempt)
+                        logger.warning(f"Rate limit hit, waiting {wait_time}s before retry...")
+                        await asyncio.sleep(wait_time)
+                    else:
+                        await asyncio.sleep(self.retry_delay * (2 ** attempt))
 
         logger.error(f"Async LLM call failed after {self.retry_count} retries")
         return ""

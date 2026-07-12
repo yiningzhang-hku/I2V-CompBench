@@ -3,7 +3,7 @@
   "dimension": "background_dynamics",
   "subtype": "background_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The fighter jets in the sky gradually shift position while the subject remains still, maintaining stable background framing.",
   "evaluator_tools": [

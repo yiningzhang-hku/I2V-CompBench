@@ -3,8 +3,8 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
-  "rarity": "rare",
+  "difficulty": "easy",
+  "rarity": "common",
   "prompt": "The white unicorn with a pink mane and golden horn lifts its front hoof and steps forward on the sandy beach.",
   "evaluator_tools": [
     "grounding",

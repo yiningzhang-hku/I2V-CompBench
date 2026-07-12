@@ -4,7 +4,7 @@
   "subtype": "single_subject_action",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The military helicopter lowers its landing gear further as it maintains a steady hover over the snowy terrain.",
   "evaluator_tools": [
     "grounding",

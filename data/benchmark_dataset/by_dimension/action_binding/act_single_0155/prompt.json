@@ -3,8 +3,8 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
-  "rarity": "rare",
+  "difficulty": "easy",
+  "rarity": "common",
   "prompt": "The black crow shifts its weight and spreads its wings slightly, then flaps once before settling back onto the branch under the glowing moon.",
   "evaluator_tools": [
     "grounding",

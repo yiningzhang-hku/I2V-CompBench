@@ -1,10 +1,10 @@
-mode: pilot                       # pilot / full
+mode: full                        # 全量模式：每维度300题
 phase1_bundle_dir: "E:/I2V-CompBench/outputs/phase1"
 output_dir: "data/benchmark_dataset"
 
 quota:
   num_per_dimension_pilot: 20
-  num_per_dimension_full: 300
+  num_per_dimension_full: 10000    # 不强制每维度数量，按实际candidate_recipes生成
   skip_dimensions:
     - spatial_composition
     - interaction_reasoning
@@ -71,7 +71,7 @@ construct:
   long_edge: 854                         # 480P long edge (854x480, 16:9); resize_long_edge(enlarge=True) 强制等比放大
   multi_reference_min_quality_score: 0.4
   reference_required_clean_background: true
-  enable_t2i: true                       # 反向题/干净 patch/维度纯净
+  enable_t2i: false                      # 关闭T2I，避免SiliconFlow IPM限流；纯TIP原图+reference_bank资产
 
 verify:
   max_retry_per_question: 3

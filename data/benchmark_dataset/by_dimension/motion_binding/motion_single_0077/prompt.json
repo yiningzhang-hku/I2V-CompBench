@@ -4,7 +4,7 @@
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The Russian Sukhoi Su-30 fighter jet moves steadily to the right while maintaining its formation and orientation.",
   "evaluator_tools": [
     "grounding",

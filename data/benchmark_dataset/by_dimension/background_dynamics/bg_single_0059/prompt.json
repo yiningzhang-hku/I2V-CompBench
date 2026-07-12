@@ -4,7 +4,7 @@
   "subtype": "background_change_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The fireplace flames flicker and dance, casting shifting shadows on the wooden walls, while the subject remains still.",
   "evaluator_tools": [
     "grounding",

@@ -3,7 +3,7 @@
   "dimension": "background_dynamics",
   "subtype": "background_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The wisteria gently sways in the breeze, and the sunlight shifts subtly across the cottage, while the subject remains still.",
   "evaluator_tools": [

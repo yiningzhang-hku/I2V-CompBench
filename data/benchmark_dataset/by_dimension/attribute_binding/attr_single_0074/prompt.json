@@ -4,7 +4,7 @@
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The hooded warrior's armor shifts from black to deep crimson, revealing glowing circuitry beneath the surface.",
   "evaluator_tools": [
     "grounding",

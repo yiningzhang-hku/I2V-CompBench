@@ -4,7 +4,7 @@
   "subtype": "single_subject_action",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The sleek stealth fighter jet maneuvers sharply through the skyline, its glowing accents pulsing with energy as it executes a high-speed evasive turn.",
   "evaluator_tools": [
     "grounding",

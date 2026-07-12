@@ -4,7 +4,7 @@
   "subtype": "background_change_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The overcast sky outside the broken window gradually darkens, and the wind causes loose debris to shift slightly on the floor.",
   "evaluator_tools": [
     "grounding",

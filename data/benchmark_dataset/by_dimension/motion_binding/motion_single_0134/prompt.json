@@ -3,8 +3,8 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
-  "rarity": "rare",
+  "difficulty": "easy",
+  "rarity": "common",
   "prompt": "The swirling night sky and river scene shifts slightly to the right while maintaining stable background and camera framing.",
   "evaluator_tools": [
     "grounding",

@@ -3,8 +3,8 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
+  "difficulty": "easy",
+  "rarity": "common",
   "prompt": "The woman in the pink floral kimono shifts gradually to the right while remaining in the same pose and position relative to the stable background.",
   "evaluator_tools": [
     "grounding",

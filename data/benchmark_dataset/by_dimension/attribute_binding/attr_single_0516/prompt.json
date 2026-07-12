@@ -1,0 +1,51 @@
+{
+  "question_id": "attr_single_0516",
+  "dimension": "attribute_binding",
+  "subtype": "attribute_change_single",
+  "input_mode": "single_image",
+  "difficulty": "hard",
+  "rarity": "common",
+  "prompt": "The woman in the red dress slowly turns her head to look directly at the figure in the adjacent window.",
+  "evaluator_tools": [
+    "grounding",
+    "vlm_attribute",
+    "vlm_existence"
+  ],
+  "expected_failure_modes": [
+    "wrong_attribute",
+    "object_missing",
+    "identity_lost"
+  ],
+  "preservation_set": [
+    {
+      "scope": "primary_subject",
+      "constraint": "identity"
+    },
+    {
+      "scope": "scene",
+      "constraint": "scene_context"
+    },
+    {
+      "scope": "camera",
+      "constraint": "camera_framing"
+    },
+    {
+      "scope": "background",
+      "constraint": "stable"
+    }
+  ],
+  "target_subjects": [
+    {
+      "id": "s1",
+      "description": "the subject",
+      "noun": null,
+      "ref_image_idx": null
+    }
+  ],
+  "target_relation": null,
+  "contrastive_pair_id": null,
+  "contrastive_role": "original",
+  "input_files": [
+    "first_frame.png"
+  ]
+}

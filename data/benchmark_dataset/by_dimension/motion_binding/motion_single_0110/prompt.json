@@ -3,7 +3,7 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The man in the white military-style uniform and golden crown shifts to the right while maintaining his position in the grand arched hall.",
   "evaluator_tools": [

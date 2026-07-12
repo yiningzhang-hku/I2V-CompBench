@@ -3,7 +3,7 @@
   "dimension": "background_dynamics",
   "subtype": "background_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The sunlight shifts across the desk, casting new shadows on the books and plants while the subject remains still.",
   "evaluator_tools": [

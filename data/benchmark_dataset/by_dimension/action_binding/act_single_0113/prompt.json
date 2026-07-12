@@ -3,7 +3,7 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The man slowly raises his hand and reaches toward the window, his gaze still fixed on the distant lights.",
   "evaluator_tools": [

@@ -4,7 +4,7 @@
   "subtype": "background_change_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The hazy atmosphere shifts subtly, with particles drifting slowly across the scene while the subject remains still.",
   "evaluator_tools": [
     "grounding",

@@ -3,8 +3,8 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
+  "difficulty": "easy",
+  "rarity": "common",
   "prompt": "The yellow military transport aircraft moves steadily to the right while maintaining its position relative to the stable sunset sky.",
   "evaluator_tools": [
     "grounding",

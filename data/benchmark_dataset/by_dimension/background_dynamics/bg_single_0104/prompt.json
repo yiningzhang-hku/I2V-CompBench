@@ -3,7 +3,7 @@
   "dimension": "background_dynamics",
   "subtype": "background_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The turquoise lake ripples gently, and the sky shifts from bright blue to a soft golden hue, while the subject remains still.",
   "evaluator_tools": [

@@ -4,7 +4,7 @@
   "subtype": "single_subject_action",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The dark horse statue slowly raises its head, maintaining its polished reflection on the glossy floor.",
   "evaluator_tools": [
     "grounding",

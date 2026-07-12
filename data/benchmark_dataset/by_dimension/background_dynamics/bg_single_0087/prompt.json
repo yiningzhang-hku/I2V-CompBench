@@ -3,7 +3,7 @@
   "dimension": "background_dynamics",
   "subtype": "background_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The glowing path beneath the phoenix shifts and pulses with energy, while the lotus flowers sway gently in the swirling clouds.",
   "evaluator_tools": [

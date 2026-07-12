@@ -3,7 +3,7 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The figure in the flowing blue robe moves steadily to the right across the desert dunes.",
   "evaluator_tools": [

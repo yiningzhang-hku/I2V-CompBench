@@ -1,0 +1,47 @@
+{
+  "question_id": "bg_single_0518",
+  "dimension": "background_dynamics",
+  "subtype": "background_change_single",
+  "input_mode": "single_image",
+  "difficulty": "easy",
+  "rarity": "rare",
+  "prompt": "The sky above the rock formation gradually darkens as clouds roll in, while the subject remains still.",
+  "evaluator_tools": [
+    "grounding",
+    "optical_flow",
+    "vlm_existence"
+  ],
+  "expected_failure_modes": [
+    "background_drift",
+    "non_target_drift",
+    "global_filter"
+  ],
+  "preservation_set": [
+    {
+      "scope": "primary_subject",
+      "constraint": "identity"
+    },
+    {
+      "scope": "camera",
+      "constraint": "camera_framing"
+    },
+    {
+      "scope": "background",
+      "constraint": "stable"
+    }
+  ],
+  "target_subjects": [
+    {
+      "id": "s1",
+      "description": "the subject",
+      "noun": null,
+      "ref_image_idx": null
+    }
+  ],
+  "target_relation": null,
+  "contrastive_pair_id": null,
+  "contrastive_role": "original",
+  "input_files": [
+    "first_frame.png"
+  ]
+}

@@ -4,7 +4,7 @@
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The woman in the vibrant yellow dress with a red heart design moves to the right while remaining in the same frame.",
   "evaluator_tools": [
     "grounding",

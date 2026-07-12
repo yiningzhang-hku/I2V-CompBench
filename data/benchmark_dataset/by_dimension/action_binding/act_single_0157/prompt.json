@@ -3,8 +3,8 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
-  "rarity": "rare",
+  "difficulty": "easy",
+  "rarity": "common",
   "prompt": "The subject raises their red lightsaber slowly, blade extending with a hum, against the stormy sky.",
   "evaluator_tools": [
     "grounding",

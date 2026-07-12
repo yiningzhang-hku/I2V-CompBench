@@ -3,8 +3,8 @@
   "dimension": "background_dynamics",
   "subtype": "background_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
+  "difficulty": "easy",
+  "rarity": "common",
   "prompt": "The sunlight shifts across the grass and porch, casting moving shadows as the trees gently sway in the breeze.",
   "evaluator_tools": [
     "grounding",

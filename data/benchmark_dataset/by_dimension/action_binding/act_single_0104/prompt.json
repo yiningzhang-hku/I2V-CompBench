@@ -3,7 +3,7 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The subject walks through the entrance of the white building with a blue door, continuing along the stone pathway surrounded by trees.",
   "evaluator_tools": [

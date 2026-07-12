@@ -3,7 +3,7 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The cybernetic woman activates her mechanical limbs, moving them in precise, deliberate motions within the neon-lit cityscape.",
   "evaluator_tools": [

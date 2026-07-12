@@ -1,0 +1,51 @@
+{
+  "question_id": "act_single_1023",
+  "dimension": "action_binding",
+  "subtype": "single_subject_action",
+  "input_mode": "single_image",
+  "difficulty": "hard",
+  "rarity": "common",
+  "prompt": "The cybernetic woman slowly raises her mechanical arm, glowing eyes fixed forward in the neon-lit cityscape.",
+  "evaluator_tools": [
+    "grounding",
+    "vlm_existence",
+    "optical_flow"
+  ],
+  "expected_failure_modes": [
+    "static_copy",
+    "object_missing",
+    "timing_wrong"
+  ],
+  "preservation_set": [
+    {
+      "scope": "primary_subject",
+      "constraint": "identity"
+    },
+    {
+      "scope": "scene",
+      "constraint": "scene_context"
+    },
+    {
+      "scope": "camera",
+      "constraint": "camera_framing"
+    },
+    {
+      "scope": "background",
+      "constraint": "stable"
+    }
+  ],
+  "target_subjects": [
+    {
+      "id": "s1",
+      "description": "the subject",
+      "noun": null,
+      "ref_image_idx": null
+    }
+  ],
+  "target_relation": null,
+  "contrastive_pair_id": null,
+  "contrastive_role": "original",
+  "input_files": [
+    "first_frame.png"
+  ]
+}

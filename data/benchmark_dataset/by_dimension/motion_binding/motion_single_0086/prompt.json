@@ -4,7 +4,7 @@
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The subject moves steadily to the right within the stable urban scene, remaining silhouetted against the beam of light.",
   "evaluator_tools": [
     "grounding",

@@ -4,7 +4,7 @@
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The green cat-like figurine moves steadily to the right while maintaining its position relative to the pink background.",
   "evaluator_tools": [
     "grounding",

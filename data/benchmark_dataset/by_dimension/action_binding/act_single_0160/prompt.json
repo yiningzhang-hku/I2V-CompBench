@@ -3,8 +3,8 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
-  "rarity": "rare",
+  "difficulty": "easy",
+  "rarity": "common",
   "prompt": "The cowboy slowly raises his hand and adjusts his brown hat, maintaining his position on the rural road.",
   "evaluator_tools": [
     "grounding",

@@ -4,7 +4,7 @@
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The black t-shirt's white gothic-style logo subtly shifts, revealing a faint glow around the central cross-like symbol.",
   "evaluator_tools": [
     "grounding",

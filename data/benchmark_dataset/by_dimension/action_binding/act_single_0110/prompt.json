@@ -3,7 +3,7 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The cartoon grim reaper raises the scythe with the glowing aura, its blade cutting through the mist in the dark forest.",
   "evaluator_tools": [

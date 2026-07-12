@@ -4,7 +4,7 @@
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The heavily armored tank moves steadily to the right across the arid desert landscape.",
   "evaluator_tools": [
     "grounding",

@@ -4,7 +4,7 @@
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The camera slowly pans left, maintaining focus on the man and the key-shaped object on his chest.",
   "evaluator_tools": [
     "depth",

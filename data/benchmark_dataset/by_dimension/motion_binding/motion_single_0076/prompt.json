@@ -4,7 +4,7 @@
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The vintage train moves to the right, its headlight cutting through the fog as it advances.",
   "evaluator_tools": [
     "grounding",

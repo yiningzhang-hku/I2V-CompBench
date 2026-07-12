@@ -3,7 +3,7 @@
   "dimension": "background_dynamics",
   "subtype": "background_change_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "rare",
   "prompt": "The fireworks display gradually intensifies, with new bursts illuminating the sky and rippling reflections shifting across the water's surface.",
   "evaluator_tools": [

@@ -1,6 +1,6 @@
 {
   "mode": "full",
-  "num_per_dimension": 300,
+  "num_per_dimension": 10000,
   "buckets": [
     {
       "bucket_id": "attribute_binding__single_image__easy__common",
@@ -8,7 +8,7 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "easy",
       "rarity": "common",
-      "target_count": 68,
+      "target_count": 2280,
       "contrastive_pair_required": true
     },
     {
@@ -17,7 +17,7 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "easy",
       "rarity": "rare",
-      "target_count": 17,
+      "target_count": 570,
       "contrastive_pair_required": true
     },
     {
@@ -26,7 +26,7 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "medium",
       "rarity": "common",
-      "target_count": 114,
+      "target_count": 3800,
       "contrastive_pair_required": true
     },
     {
@@ -35,7 +35,7 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "medium",
       "rarity": "rare",
-      "target_count": 29,
+      "target_count": 950,
       "contrastive_pair_required": true
     },
     {
@@ -44,7 +44,7 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "hard",
       "rarity": "common",
-      "target_count": 46,
+      "target_count": 1520,
       "contrastive_pair_required": true
     },
     {
@@ -53,7 +53,7 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "hard",
       "rarity": "rare",
-      "target_count": 11,
+      "target_count": 380,
       "contrastive_pair_required": true
     },
     {
@@ -62,7 +62,7 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "easy",
       "rarity": "common",
-      "target_count": 3,
+      "target_count": 120,
       "contrastive_pair_required": true
     },
     {
@@ -71,7 +71,7 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "easy",
       "rarity": "rare",
-      "target_count": 1,
+      "target_count": 30,
       "contrastive_pair_required": true
     },
     {
@@ -80,7 +80,7 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "medium",
       "rarity": "common",
-      "target_count": 6,
+      "target_count": 200,
       "contrastive_pair_required": true
     },
     {
@@ -89,7 +89,7 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "medium",
       "rarity": "rare",
-      "target_count": 2,
+      "target_count": 50,
       "contrastive_pair_required": true
     },
     {
@@ -98,7 +98,7 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "hard",
       "rarity": "common",
-      "target_count": 2,
+      "target_count": 80,
       "contrastive_pair_required": true
     },
     {
@@ -107,7 +107,7 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "hard",
       "rarity": "rare",
-      "target_count": 1,
+      "target_count": 20,
       "contrastive_pair_required": true
     },
     {
@@ -116,7 +116,7 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "easy",
       "rarity": "common",
-      "target_count": 68,
+      "target_count": 2280,
       "contrastive_pair_required": false
     },
     {
@@ -125,7 +125,7 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "easy",
       "rarity": "rare",
-      "target_count": 17,
+      "target_count": 570,
       "contrastive_pair_required": false
     },
     {
@@ -134,7 +134,7 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "medium",
       "rarity": "common",
-      "target_count": 114,
+      "target_count": 3800,
       "contrastive_pair_required": false
     },
     {
@@ -143,7 +143,7 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "medium",
       "rarity": "rare",
-      "target_count": 29,
+      "target_count": 950,
       "contrastive_pair_required": false
     },
     {
@@ -152,7 +152,7 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "hard",
       "rarity": "common",
-      "target_count": 46,
+      "target_count": 1520,
       "contrastive_pair_required": false
     },
     {
@@ -161,7 +161,7 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "hard",
       "rarity": "rare",
-      "target_count": 11,
+      "target_count": 380,
       "contrastive_pair_required": false
     },
     {
@@ -170,7 +170,7 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "easy",
       "rarity": "common",
-      "target_count": 3,
+      "target_count": 120,
       "contrastive_pair_required": false
     },
     {
@@ -179,7 +179,7 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "easy",
       "rarity": "rare",
-      "target_count": 1,
+      "target_count": 30,
       "contrastive_pair_required": false
     },
     {
@@ -188,7 +188,7 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "medium",
       "rarity": "common",
-      "target_count": 6,
+      "target_count": 200,
       "contrastive_pair_required": false
     },
     {
@@ -197,7 +197,7 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "medium",
       "rarity": "rare",
-      "target_count": 2,
+      "target_count": 50,
       "contrastive_pair_required": false
     },
     {
@@ -206,7 +206,7 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "hard",
       "rarity": "common",
-      "target_count": 2,
+      "target_count": 80,
       "contrastive_pair_required": false
     },
     {
@@ -215,7 +215,7 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "hard",
       "rarity": "rare",
-      "target_count": 1,
+      "target_count": 20,
       "contrastive_pair_required": false
     },
     {
@@ -224,7 +224,7 @@
       "input_mode_or_subtype": "type_a_absolute_single",
       "difficulty": "easy",
       "rarity": "common",
-      "target_count": 72,
+      "target_count": 2400,
       "contrastive_pair_required": true
     },
     {
@@ -233,7 +233,7 @@
       "input_mode_or_subtype": "type_a_absolute_single",
       "difficulty": "easy",
       "rarity": "rare",
-      "target_count": 18,
+      "target_count": 600,
       "contrastive_pair_required": true
     },
     {
@@ -242,7 +242,7 @@
       "input_mode_or_subtype": "type_a_absolute_single",
       "difficulty": "medium",
       "rarity": "common",
-      "target_count": 120,
+      "target_count": 4000,
       "contrastive_pair_required": true
     },
     {
@@ -251,7 +251,7 @@
       "input_mode_or_subtype": "type_a_absolute_single",
       "difficulty": "medium",
       "rarity": "rare",
-      "target_count": 30,
+      "target_count": 1000,
       "contrastive_pair_required": true
     },
     {
@@ -260,7 +260,7 @@
       "input_mode_or_subtype": "type_a_absolute_single",
       "difficulty": "hard",
       "rarity": "common",
-      "target_count": 48,
+      "target_count": 1600,
       "contrastive_pair_required": true
     },
     {
@@ -269,7 +269,7 @@
       "input_mode_or_subtype": "type_a_absolute_single",
       "difficulty": "hard",
       "rarity": "rare",
-      "target_count": 12,
+      "target_count": 400,
       "contrastive_pair_required": true
     },
     {
@@ -278,7 +278,7 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "easy",
       "rarity": "common",
-      "target_count": 58,
+      "target_count": 1920,
       "contrastive_pair_required": false
     },
     {
@@ -287,7 +287,7 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "easy",
       "rarity": "rare",
-      "target_count": 14,
+      "target_count": 480,
       "contrastive_pair_required": false
     },
     {
@@ -296,7 +296,7 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "medium",
       "rarity": "common",
-      "target_count": 96,
+      "target_count": 3200,
       "contrastive_pair_required": false
     },
     {
@@ -305,7 +305,7 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "medium",
       "rarity": "rare",
-      "target_count": 24,
+      "target_count": 800,
       "contrastive_pair_required": false
     },
     {
@@ -314,7 +314,7 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "hard",
       "rarity": "common",
-      "target_count": 38,
+      "target_count": 1280,
       "contrastive_pair_required": false
     },
     {
@@ -323,7 +323,7 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "hard",
       "rarity": "rare",
-      "target_count": 10,
+      "target_count": 320,
       "contrastive_pair_required": false
     },
     {
@@ -332,7 +332,7 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "easy",
       "rarity": "common",
-      "target_count": 14,
+      "target_count": 480,
       "contrastive_pair_required": false
     },
     {
@@ -341,7 +341,7 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "easy",
       "rarity": "rare",
-      "target_count": 4,
+      "target_count": 120,
       "contrastive_pair_required": false
     },
     {
@@ -350,7 +350,7 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "medium",
       "rarity": "common",
-      "target_count": 24,
+      "target_count": 800,
       "contrastive_pair_required": false
     },
     {
@@ -359,7 +359,7 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "medium",
       "rarity": "rare",
-      "target_count": 6,
+      "target_count": 200,
       "contrastive_pair_required": false
     },
     {
@@ -368,7 +368,7 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "hard",
       "rarity": "common",
-      "target_count": 10,
+      "target_count": 320,
       "contrastive_pair_required": false
     },
     {
@@ -377,7 +377,7 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "hard",
       "rarity": "rare",
-      "target_count": 2,
+      "target_count": 80,
       "contrastive_pair_required": false
     },
     {
@@ -386,7 +386,7 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "easy",
       "rarity": "common",
-      "target_count": 68,
+      "target_count": 2280,
       "contrastive_pair_required": true
     },
     {
@@ -395,7 +395,7 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "easy",
       "rarity": "rare",
-      "target_count": 17,
+      "target_count": 570,
       "contrastive_pair_required": true
     },
     {
@@ -404,7 +404,7 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "medium",
       "rarity": "common",
-      "target_count": 114,
+      "target_count": 3800,
       "contrastive_pair_required": true
     },
     {
@@ -413,7 +413,7 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "medium",
       "rarity": "rare",
-      "target_count": 29,
+      "target_count": 950,
       "contrastive_pair_required": true
     },
     {
@@ -422,7 +422,7 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "hard",
       "rarity": "common",
-      "target_count": 46,
+      "target_count": 1520,
       "contrastive_pair_required": true
     },
     {
@@ -431,7 +431,7 @@
       "input_mode_or_subtype": "single_image",
       "difficulty": "hard",
       "rarity": "rare",
-      "target_count": 11,
+      "target_count": 380,
       "contrastive_pair_required": true
     },
     {
@@ -440,7 +440,7 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "easy",
       "rarity": "common",
-      "target_count": 3,
+      "target_count": 120,
       "contrastive_pair_required": true
     },
     {
@@ -449,7 +449,7 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "easy",
       "rarity": "rare",
-      "target_count": 1,
+      "target_count": 30,
       "contrastive_pair_required": true
     },
     {
@@ -458,7 +458,7 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "medium",
       "rarity": "common",
-      "target_count": 6,
+      "target_count": 200,
       "contrastive_pair_required": true
     },
     {
@@ -467,7 +467,7 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "medium",
       "rarity": "rare",
-      "target_count": 2,
+      "target_count": 50,
       "contrastive_pair_required": true
     },
     {
@@ -476,7 +476,7 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "hard",
       "rarity": "common",
-      "target_count": 2,
+      "target_count": 80,
       "contrastive_pair_required": true
     },
     {
@@ -485,7 +485,7 @@
       "input_mode_or_subtype": "multi_image",
       "difficulty": "hard",
       "rarity": "rare",
-      "target_count": 1,
+      "target_count": 20,
       "contrastive_pair_required": true
     }
   ]

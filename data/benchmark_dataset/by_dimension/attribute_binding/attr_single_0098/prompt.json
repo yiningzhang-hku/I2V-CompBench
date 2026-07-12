@@ -3,8 +3,8 @@
   "dimension": "attribute_binding",
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
+  "difficulty": "easy",
+  "rarity": "common",
   "prompt": "The hooded figure slowly raises the tattered flag, revealing more of its faded emblem under the overcast sky.",
   "evaluator_tools": [
     "grounding",

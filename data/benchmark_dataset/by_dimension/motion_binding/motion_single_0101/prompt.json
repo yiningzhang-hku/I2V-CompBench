@@ -3,8 +3,8 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
+  "difficulty": "easy",
+  "rarity": "common",
   "prompt": "The majestic gorilla moves steadily to the right within the misty jungle, maintaining its identity and the stable scene context.",
   "evaluator_tools": [
     "grounding",

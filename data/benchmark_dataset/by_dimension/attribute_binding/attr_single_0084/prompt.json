@@ -4,7 +4,7 @@
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The polar bear slowly removes the dirty winter coat, revealing a bare, shivering body beneath.",
   "evaluator_tools": [
     "grounding",

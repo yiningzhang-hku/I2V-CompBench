@@ -3,7 +3,7 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The majestic black bear slowly moves to the right within the misty forest, maintaining the same scene context and camera framing.",
   "evaluator_tools": [

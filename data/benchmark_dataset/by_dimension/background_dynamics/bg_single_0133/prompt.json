@@ -3,8 +3,8 @@
   "dimension": "background_dynamics",
   "subtype": "background_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
+  "difficulty": "easy",
+  "rarity": "common",
   "prompt": "The rain-slicked city street at night shifts as glowing streetlights flicker and distant skyscrapers pulse with changing light, while the subject remains still.",
   "evaluator_tools": [
     "grounding",

@@ -4,7 +4,7 @@
   "subtype": "single_subject_action",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The subject raises its paw and touches the glowing blue sphere, causing the lightning bolts to surge outward.",
   "evaluator_tools": [
     "grounding",

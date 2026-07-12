@@ -3,7 +3,7 @@
   "dimension": "background_dynamics",
   "subtype": "background_change_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "rare",
   "prompt": "The sunlight shifts across the garden, casting moving shadows through the trees while the cottage remains still.",
   "evaluator_tools": [

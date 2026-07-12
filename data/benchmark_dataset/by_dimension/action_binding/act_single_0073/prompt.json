@@ -4,7 +4,7 @@
   "subtype": "single_subject_action",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The young woman slowly turns her head back toward the camera, her wet hair catching the sunlight.",
   "evaluator_tools": [
     "grounding",

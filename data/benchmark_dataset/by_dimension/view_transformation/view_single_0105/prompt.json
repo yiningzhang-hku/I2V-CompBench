@@ -3,7 +3,7 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "rare",
   "prompt": "The camera slowly pans left, revealing more of the desert landscape under the glowing moon.",
   "evaluator_tools": [

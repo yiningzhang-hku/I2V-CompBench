@@ -4,7 +4,7 @@
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The subject's glowing eyes shift from red to blue while the neon-pink and purple energy aura pulses rhythmically.",
   "evaluator_tools": [
     "grounding",

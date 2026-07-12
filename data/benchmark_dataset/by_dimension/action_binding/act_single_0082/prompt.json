@@ -4,7 +4,7 @@
   "subtype": "single_subject_action",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The Batman action figure slowly raises its arms upward while maintaining its position on the white background.",
   "evaluator_tools": [
     "grounding",

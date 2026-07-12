@@ -4,7 +4,7 @@
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The camera smoothly zooms in on the floating bunny-like creature while maintaining the stable black background and spatial position.",
   "evaluator_tools": [
     "depth",

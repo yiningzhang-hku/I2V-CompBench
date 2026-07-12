@@ -4,7 +4,7 @@
   "subtype": "background_change_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The mist around the pagoda gradually thickens and shifts, while the red trees remain still and the lake's reflection stays stable.",
   "evaluator_tools": [
     "grounding",

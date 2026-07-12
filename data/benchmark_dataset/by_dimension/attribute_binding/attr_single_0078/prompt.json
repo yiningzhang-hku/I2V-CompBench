@@ -4,7 +4,7 @@
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The mermaid's turquoise hair and tail gradually shift to shimmering silver as she continues swimming underwater.",
   "evaluator_tools": [
     "grounding",

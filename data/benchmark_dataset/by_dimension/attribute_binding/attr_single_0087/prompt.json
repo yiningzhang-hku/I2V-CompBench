@@ -3,7 +3,7 @@
   "dimension": "attribute_binding",
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The boy slowly closes his eyes, maintaining his position and expression in the sunlit forest.",
   "evaluator_tools": [

@@ -3,7 +3,7 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The calico cat slowly lifts its front paws and stretches forward, maintaining its position and surroundings.",
   "evaluator_tools": [

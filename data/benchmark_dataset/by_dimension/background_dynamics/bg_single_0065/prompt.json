@@ -4,7 +4,7 @@
   "subtype": "background_change_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The swirling mist in the dimly lit hallway thickens and shifts around the still figure, while the ornate staircase remains unchanged.",
   "evaluator_tools": [
     "grounding",

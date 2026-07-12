@@ -4,7 +4,7 @@
   "subtype": "single_subject_action",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The glowing blue sphere slowly rotates in place within the circular structure, maintaining its position and luminosity.",
   "evaluator_tools": [
     "grounding",

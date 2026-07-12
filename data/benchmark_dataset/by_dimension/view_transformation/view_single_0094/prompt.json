@@ -3,7 +3,7 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "rare",
   "prompt": "The camera smoothly pans left along the mountain trail, following the cyclist's motion while keeping the scene context and background stable.",
   "evaluator_tools": [

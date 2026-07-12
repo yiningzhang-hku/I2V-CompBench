@@ -3,7 +3,7 @@
   "dimension": "attribute_binding",
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The glowing jellyfish-like creature pulses with intensified blue light, its tendrils shimmering subtly in the still frame.",
   "evaluator_tools": [

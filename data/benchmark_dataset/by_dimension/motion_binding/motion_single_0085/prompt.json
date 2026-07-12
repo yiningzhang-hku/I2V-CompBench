@@ -4,7 +4,7 @@
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The vibrant red crab moves steadily to the right across the rocky ocean floor.",
   "evaluator_tools": [
     "grounding",

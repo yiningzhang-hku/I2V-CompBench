@@ -4,7 +4,7 @@
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The jumping spider moves steadily to the right while remaining on the dark, moist surface.",
   "evaluator_tools": [
     "grounding",

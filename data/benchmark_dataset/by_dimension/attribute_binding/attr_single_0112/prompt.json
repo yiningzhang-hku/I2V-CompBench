@@ -3,7 +3,7 @@
   "dimension": "attribute_binding",
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The elderly scholar slowly closes his eyes, maintaining his seated position under the blossoming tree.",
   "evaluator_tools": [

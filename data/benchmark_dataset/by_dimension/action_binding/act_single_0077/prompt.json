@@ -4,7 +4,7 @@
   "subtype": "single_subject_action",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The black bird glides smoothly along the narrow path, wings unfurling as it continues its flight through the misty forest.",
   "evaluator_tools": [
     "grounding",

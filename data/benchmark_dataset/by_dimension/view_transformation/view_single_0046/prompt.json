@@ -3,8 +3,8 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "common",
+  "difficulty": "easy",
+  "rarity": "rare",
   "prompt": "The camera slowly pans left, revealing the vast emptiness of the desolate landscape behind the cloaked figure.",
   "evaluator_tools": [
     "depth",

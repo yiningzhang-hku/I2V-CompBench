@@ -1,0 +1,51 @@
+{
+  "question_id": "act_single_0563",
+  "dimension": "action_binding",
+  "subtype": "single_subject_action",
+  "input_mode": "single_image",
+  "difficulty": "easy",
+  "rarity": "common",
+  "prompt": "The knitted doll in the orange hooded jacket takes a step forward on the leaf-strewn forest path, moving through the autumn foliage.",
+  "evaluator_tools": [
+    "grounding",
+    "vlm_existence",
+    "optical_flow"
+  ],
+  "expected_failure_modes": [
+    "static_copy",
+    "object_missing",
+    "timing_wrong"
+  ],
+  "preservation_set": [
+    {
+      "scope": "primary_subject",
+      "constraint": "identity"
+    },
+    {
+      "scope": "scene",
+      "constraint": "scene_context"
+    },
+    {
+      "scope": "camera",
+      "constraint": "camera_framing"
+    },
+    {
+      "scope": "background",
+      "constraint": "stable"
+    }
+  ],
+  "target_subjects": [
+    {
+      "id": "s1",
+      "description": "the subject",
+      "noun": null,
+      "ref_image_idx": null
+    }
+  ],
+  "target_relation": null,
+  "contrastive_pair_id": null,
+  "contrastive_role": "original",
+  "input_files": [
+    "first_frame.png"
+  ]
+}

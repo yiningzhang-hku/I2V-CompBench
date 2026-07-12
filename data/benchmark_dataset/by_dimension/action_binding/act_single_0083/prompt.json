@@ -4,7 +4,7 @@
   "subtype": "single_subject_action",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The child in the Freddy Krueger costume slowly raises the clawed glove in a menacing gesture.",
   "evaluator_tools": [
     "grounding",

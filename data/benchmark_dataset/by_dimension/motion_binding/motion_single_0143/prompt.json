@@ -1,0 +1,51 @@
+{
+  "question_id": "motion_single_0143",
+  "dimension": "motion_binding",
+  "subtype": "type_a_absolute_single",
+  "input_mode": "single_image",
+  "difficulty": "easy",
+  "rarity": "common",
+  "prompt": "The vibrant orange crab moves steadily to the right across the wet river rocks.",
+  "evaluator_tools": [
+    "grounding",
+    "dot_motion",
+    "optical_flow"
+  ],
+  "expected_failure_modes": [
+    "wrong_direction",
+    "static_copy",
+    "camera_pan_cheat"
+  ],
+  "preservation_set": [
+    {
+      "scope": "primary_subject",
+      "constraint": "identity"
+    },
+    {
+      "scope": "scene",
+      "constraint": "scene_context"
+    },
+    {
+      "scope": "camera",
+      "constraint": "camera_framing"
+    },
+    {
+      "scope": "background",
+      "constraint": "stable"
+    }
+  ],
+  "target_subjects": [
+    {
+      "id": "s1",
+      "description": "the subject",
+      "noun": null,
+      "ref_image_idx": null
+    }
+  ],
+  "target_relation": null,
+  "contrastive_pair_id": null,
+  "contrastive_role": "original",
+  "input_files": [
+    "first_frame.png"
+  ]
+}

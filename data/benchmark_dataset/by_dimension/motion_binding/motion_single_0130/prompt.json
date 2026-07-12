@@ -3,8 +3,8 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
-  "rarity": "rare",
+  "difficulty": "easy",
+  "rarity": "common",
   "prompt": "The massive yellow tracked vehicle moves steadily to the right through the misty forest, with the dilapidated structure remaining stable in the background.",
   "evaluator_tools": [
     "grounding",

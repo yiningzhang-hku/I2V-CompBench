@@ -3,8 +3,8 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "common",
+  "difficulty": "easy",
+  "rarity": "rare",
   "prompt": "The camera smoothly pans left, revealing the full extent of the fiery urban scene and the red car in the background.",
   "evaluator_tools": [
     "depth",

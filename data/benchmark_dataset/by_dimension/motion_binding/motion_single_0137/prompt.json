@@ -3,8 +3,8 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
-  "rarity": "rare",
+  "difficulty": "easy",
+  "rarity": "common",
   "prompt": "The futuristic yellow train moves to the right through the dimly lit station, maintaining its sleek design and glowing blue headlights.",
   "evaluator_tools": [
     "grounding",

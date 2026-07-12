@@ -4,7 +4,7 @@
   "subtype": "single_subject_action",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The cloaked figure in red raises the sword, causing the ghostly figure to fully emerge from their shadow.",
   "evaluator_tools": [
     "grounding",

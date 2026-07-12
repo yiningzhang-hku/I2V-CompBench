@@ -4,7 +4,7 @@
   "subtype": "single_subject_action",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The subject slowly raises her cybernetic hand, fingers flexing as she activates a hidden interface on her forearm.",
   "evaluator_tools": [
     "grounding",

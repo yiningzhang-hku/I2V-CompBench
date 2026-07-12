@@ -3,7 +3,7 @@
   "dimension": "view_transformation",
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "rare",
   "prompt": "The camera slowly pans left, revealing the full length of the cylindrical spacecraft component within the dimly lit facility.",
   "evaluator_tools": [

@@ -4,7 +4,7 @@
   "subtype": "attribute_change_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The light green cup gradually changes its purple logo to a yellow one while remaining in the same position.",
   "evaluator_tools": [
     "grounding",

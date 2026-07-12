@@ -3,8 +3,8 @@
   "dimension": "background_dynamics",
   "subtype": "background_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
+  "difficulty": "easy",
+  "rarity": "common",
   "prompt": "The snowfall intensifies and the mist swirls slowly around the still figure, with no change in camera framing.",
   "evaluator_tools": [
     "grounding",

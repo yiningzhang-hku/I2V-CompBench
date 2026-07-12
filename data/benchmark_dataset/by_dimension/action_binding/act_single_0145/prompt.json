@@ -3,7 +3,7 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The colossal moss-covered giant slowly lowers its massive hand toward the golden hills under the dramatic sky.",
   "evaluator_tools": [

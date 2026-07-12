@@ -4,7 +4,7 @@
   "subtype": "single_subject_action",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The elf slowly blinks and turns their head slightly to the right, maintaining a still camera and stable background.",
   "evaluator_tools": [
     "grounding",

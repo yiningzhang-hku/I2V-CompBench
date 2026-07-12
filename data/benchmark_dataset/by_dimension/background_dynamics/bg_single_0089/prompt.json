@@ -3,7 +3,7 @@
   "dimension": "background_dynamics",
   "subtype": "background_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The dim lighting in the room gradually shifts as the laptop screen flickers, while the subject remains still.",
   "evaluator_tools": [

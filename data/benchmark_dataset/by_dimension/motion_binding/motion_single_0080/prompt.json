@@ -4,7 +4,7 @@
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The vibrant red spider moves to the right while maintaining its position relative to the stable background and camera framing.",
   "evaluator_tools": [
     "grounding",

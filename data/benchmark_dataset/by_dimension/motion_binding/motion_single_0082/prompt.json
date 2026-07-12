@@ -4,7 +4,7 @@
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The orange and red autumn leaves shift steadily to the right while the background remains unchanged.",
   "evaluator_tools": [
     "grounding",

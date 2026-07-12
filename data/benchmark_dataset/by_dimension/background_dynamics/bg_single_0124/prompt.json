@@ -3,8 +3,8 @@
   "dimension": "background_dynamics",
   "subtype": "background_change_single",
   "input_mode": "single_image",
-  "difficulty": "medium",
-  "rarity": "rare",
+  "difficulty": "easy",
+  "rarity": "common",
   "prompt": "The soft pink and purple background gradually shifts in hue and intensity, creating a dreamy, flowing effect while the subject remains still.",
   "evaluator_tools": [
     "grounding",

@@ -3,7 +3,7 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The warrior in dark armor steps to the right within the stone corridor, moving toward the glowing passage.",
   "evaluator_tools": [

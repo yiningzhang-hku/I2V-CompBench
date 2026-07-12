@@ -4,7 +4,7 @@
   "subtype": "camera_motion_single",
   "input_mode": "single_image",
   "difficulty": "easy",
-  "rarity": "rare",
+  "rarity": "common",
   "prompt": "The camera slowly pans left, revealing more of the glowing nebula's facial features against the starry backdrop.",
   "evaluator_tools": [
     "depth",

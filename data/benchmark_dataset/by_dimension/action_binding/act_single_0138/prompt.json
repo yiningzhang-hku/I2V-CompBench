@@ -3,7 +3,7 @@
   "dimension": "action_binding",
   "subtype": "single_subject_action",
   "input_mode": "single_image",
-  "difficulty": "hard",
+  "difficulty": "easy",
   "rarity": "common",
   "prompt": "The subject, William Shakespeare, raises his hand to tap a 'Tag' button on the illustration.",
   "evaluator_tools": [

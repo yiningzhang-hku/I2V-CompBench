@@ -3,8 +3,8 @@
   "dimension": "motion_binding",
   "subtype": "type_a_absolute_single",
   "input_mode": "single_image",
-  "difficulty": "hard",
-  "rarity": "rare",
+  "difficulty": "easy",
+  "rarity": "common",
   "prompt": "The futuristic spacecraft moves steadily to the right while remaining in the same position relative to the scene and background.",
   "evaluator_tools": [
     "grounding",
