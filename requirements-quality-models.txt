@@ -1,0 +1,8 @@
+# Quality experiment model dependencies
+# NOTE: These are blocked until GPU/model resources are available
+# Install only when running clarity/aspect/difficulty experiments
+torch>=2.1
+torchvision>=0.16
+transformers>=4.36
+sentence-transformers>=2.2
+# clip-interrogator  # for CLIP similarity

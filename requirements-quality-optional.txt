@@ -1,0 +1,5 @@
+# Optional quality experiment dependencies (MAY methods)
+# Only needed for C4-C7 clarity methods and D5/D7 aspect methods
+# gfpgan>=1.3
+# diffusers>=0.25
+# basicsr>=1.4

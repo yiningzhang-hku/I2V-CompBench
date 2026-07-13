@@ -177,16 +177,21 @@ class SiliconFlowClient:
             logger.error(f"LLM call failed after retries: {e}")
             return ""
 
-    async def async_call_vlm(self, image_path: str, prompt_text: str) -> str:
+    async def async_call_vlm(self, image_path: str, prompt_text: str, disable_thinking: bool = False) -> str:
         """Async VLM call for concurrent batch processing."""
         try:
-            b64_img = _resize_image_if_needed(image_path)
+            b64_img = await asyncio.to_thread(_resize_image_if_needed, image_path)
         except Exception as e:
             logger.error(f"Failed to read/resize image {image_path}: {e}")
             return ""
 
         for attempt in range(self.retry_count):
             try:
+                extra_kwargs = {}
+                if disable_thinking:
+                    extra_kwargs["extra_body"] = {
+                        "chat_template_kwargs": {"enable_thinking": False}
+                    }
                 response = await self.async_client.chat.completions.create(
                     model=self.vlm_model,
                     messages=[
@@ -206,6 +211,7 @@ class SiliconFlowClient:
                     max_tokens=self.vlm_max_tokens,
                     temperature=self.vlm_temperature,
                     timeout=self.timeout,
+                    **extra_kwargs,
                 )
                 await asyncio.sleep(self.rate_limit_delay)
                 content = response.choices[0].message.content or ""

@@ -1,0 +1,96 @@
+run:
+  run_id: null                    # null时生成 YYYYMMDD_HHMMSS
+  seed: 20260712
+  output_root: data/benchmark_dataset/quality_experiments
+  overwrite: false
+
+input:
+  benchmark_root: data/benchmark_dataset
+  phase1_bundle_dir: null
+  source_asset_manifest: null
+  asset_lineage_manifest: null
+  allow_legacy_qid_search: false
+  manifest: phase3_manifest.jsonl
+  question_plans: question_plans.jsonl
+  final_prompts: prompts/final_prompts.jsonl
+  formal_dimensions:
+    - attribute_binding
+    - action_binding
+    - motion_binding
+    - background_dynamics
+    - view_transformation
+
+split:
+  development_per_dimension: 50
+  validation_per_dimension: 50
+  stratify_by: [difficulty_old, semantic_rarity]
+
+target_repair:
+  prefer_phase1_rebuild: true
+  allow_vlm_migration: true
+  min_confidence: 0.80
+  manual_review_below: 0.90
+
+prompt:
+  min_words: 8
+  max_words: 25
+  zipf_threshold: 3.5
+  do_not_replace_pos: [NOUN, PROPN]
+  max_llm_retries: 3
+  semantic_similarity_min: 0.95
+  human_naturalness_min: 4.0
+  optional_perplexity_threshold: null
+  fallback_development_size: 60
+  fallback_validation_size: 57
+
+clarity:
+  sample_size: 120
+  validation_sample_size: 120
+  face_subset_size: 40
+  target_long_edge: 854
+  output_format: PNG
+  output_color_space: sRGB
+  methods: [lanczos, unsharp, realesrgan, swinir]
+  optional_methods: [realesrgan_gfpgan, realesrgan_unsharp, realesrgan_clahe, realesrgan_unsharp_clahe]
+  video_probe_size: 30
+  dino_subject_noninferiority_margin: null
+  face_identity_noninferiority_margin: null
+
+aspect:
+  ratio_stage_sample_size: 60
+  ratio_validation_sample_size: 60
+  strategy_stage_sample_size: 120
+  strategy_validation_sample_size: 120
+  ratios: ["4:3", "16:9"]
+  common_pixel_budget: null
+  target_sizes: {"4:3": null, "16:9": null}
+  size_multiple: 16
+  max_pixel_budget_relative_error: 0.02
+  methods: [stretch, center_crop, letterbox, blur_padding, saliency_crop, hybrid_conservative]
+  optional_methods: [outpainting, hybrid_aggressive]
+  subject_retention_noninferiority_margin: null
+  scene_retention_noninferiority_margin: null
+  hybrid:
+    minor_ratio_error: 0.04
+    saliency_ratio_error: 0.20
+    aggressive_saliency_ratio_error: 0.30
+
+subject_tier:
+  ratios:
+    T1_common: 0.55
+    T2_longtail: 0.28
+    T3_finegrained: 0.12
+    T4_rare_fictional: 0.05
+
+difficulty:
+  task_weights:
+    target_complexity: 0.35
+    subject_localization: 0.30
+    background_interference: 0.20
+    temporal_complexity: 0.15
+  initial_thresholds: [0.33, 0.66]
+  report_semantic_rarity_separately: true
+  judgeability_review_threshold: 0.70
+  feature_min_confidence: 0.80
+  prediction_manual_review_below: 0.60
+  allow_vlm_for_missing_features: true

@@ -116,10 +116,10 @@ def main():
     print(f"[summary] primary scanned : {total}")
     print(f"[summary] resize          : {stats.get('resize', 0)}    (near 16:9, direct resize)")
     print(f"[summary] crop            : {stats.get('crop', 0)}    (wider than 16:9, center crop LR)")
-    print(f"[summary] letterbox       : {stats.get('letterbox', 0)}    (narrower than 16:9, black bars)")
+    print(f"[summary] blur_pad        : {stats.get('blur_pad', 0)}    (narrower than 16:9, blur padding)")
     print(f"[summary] skipped_exists  : {stats.get('skipped_exists', 0)}")
     print(f"[summary] errors          : {stats.get('error', 0)}")
-    if not args.apply and (stats.get('resize', 0) + stats.get('crop', 0) + stats.get('letterbox', 0)) > 0:
+    if not args.apply and (stats.get('resize', 0) + stats.get('crop', 0) + stats.get('blur_pad', 0)) > 0:
         print()
         print("[hint] dry-run only. Re-run with --apply to write companions.")
 
