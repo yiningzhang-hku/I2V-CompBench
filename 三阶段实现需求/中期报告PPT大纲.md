@@ -2,13 +2,13 @@
 
 ## Benchmark Dataset Construction for Compositional Image-to-Video Generation
 
-> 共13+1页 | 总时长约15分钟 | PPT文字以英文为主，学术答辩风格
+> 共13页 | 正文约14.5分钟，预留0.5分钟机动 | PPT文字以英文为主，中文讲解
 
 ---
 
 ## Slide 1 — Title & Opening
 
-**预计时间**：1 min
+**预计时间**：0.5 min
 
 ### 页面文字内容
 
@@ -35,128 +35,86 @@ Slide 1: Title & Opening — 开场白介绍姓名、题目、核心问题预告
 
 ---
 
-## Slide 2 — Research Motivation
+## Slide 2 — Why Narrow Long-Video Benchmark to I2V?
 
-**预计时间**：2 min
+**预计时间**：1.75 min
 
 ### 页面文字内容
 
-1. I2V generation has achieved remarkable visual quality (SVD, CogVideoX, DynamiCrafter…)
-2. **Problem**: Visual quality ≠ Instruction following
-3. Example: "Make the white dog sit down"
-   - ✗ Wrong subject performs action (brown dog sits)
-   - ✗ No action occurs (camera zoom only)
-   - ✓ Traditional metrics (FVD, CLIPScore) give high scores
-4. **Gap**: Cannot diagnose *compositional failures* — wrong binding of actions/attributes/motions to subjects
+1. **Initial Scope**: A benchmark for minute-level long-video generation
+2. **What “Long Generation” Often Means**:
+   - Strong video generators are commonly short-horizon; StreamingT2V summarizes prior outputs as short clips, up to about **16 s**
+   - A major family rolls out clips autoregressively: `tail frame(s) + prompt → next clip` (StreamingT2V, ViD-GPT, Ca2-VDM)
+   - Concrete example: STIV conditions each new rollout on the **last two frames** of the previous rollout
+3. **Why This Motivates I2V Evaluation**:
+   - Each rollout contains an image/few-frame-conditioned local state transition
+   - Identity drift, wrong action binding, or camera-motion confusion can propagate across later clips
+4. **Boundary**: Not all long-video methods are repeated I2V—FIFO-Diffusion, FreeNoise, and NUWA-XL use queue, window, or hierarchical mechanisms
+5. **Feasibility Evidence**: Dedicated long-video data and validated long-horizon evaluators still require separate large-scale work (LVD-2M; MovieBench; Beyond FVD; SLVMEval)
+6. **Decision**: Isolate and validate the reusable local capability unit—**mechanism decomposition, not task equivalence**
 
 ### 建议配图/图表
 
-- **对比示例图**（页面核心视觉）：
-  - 上方：输入图像（两只狗：白+棕）+ 文本指令 "Make the white dog sit down"
-  - 下方三列对比：
-    - Column A: ✗ Brown dog sits（绑定错误）
-    - Column B: ✗ Camera zoom only（无动作）
-    - Column C: ✓ White dog sits（正确）
-  - 每列下方标注 FVD/CLIP 分数（A/B 高分但错误，形成反差）
-- 可用伪截图或示意简图代替
+- 页面主图采用**分段续写机制图**：
+  `Clip 1 (short generator) → [last k frames + prompt] → Clip 2 → [last k frames + prompt] → Clip 3 → …`
+- 在箭头上方标注：`StreamingT2V / ViD-GPT / Ca2-VDM / STIV`
+- 在链路下方用红色小箭头标出：`local error → propagated drift`
+- 右下角放“方法边界”小框：`Other routes: queue / sliding window / hierarchy ≠ repeated I2V`
+- 左下角放两项次要可行性约束：`Data Ground Truth`与`Validated Long-Horizon Evaluators`
+- 页脚小字：`I2V is an atomic capability in a major extension route—not a synonym for long video`
 
 ### 对应演讲稿段落
 
-Slide 2: Research Motivation — 从 I2V 模型进步引出"视觉好看≠指令遵循"，用两只狗的例子具体说明
+Slide 2: Why Narrow Long-Video Benchmark to I2V? — 先用技术报告核实“短片段生成器+末帧/末若干帧续写”机制，再说明I2V是可独立验证的局部能力而非长视频同义词
 
 ### 设计建议
 
-- 左右分栏布局：左侧文字要点，右侧对比图
-- 红色✗/绿色✓突出对错对比
-- 关键短语 "Compositional Failures" 加粗高亮（橙色/红色）
+- 中央约65%用于分段续写链路，右侧约35%放“证据—边界—研究决策”
+- 高亮`tail frame(s) + prompt → next clip`与`mechanism decomposition`
+- 不使用“Long video = I2V”，也不声称所有模型都固定生成10–15秒
+- 论文只显示作者/简称与会议年份，完整引用放页脚或备份页
 
 ---
 
-## Slide 2.5 — Long Video Generation → I2V Transition
+## Slide 3 — I2V Motivation & Benchmark Gap
 
-**预计时间**：1 min
-
-### 页面文字内容
-
-1. **Initial research focus**: Long video generation benchmark (1–5 min videos)
-2. **Key Insight from literature review**:
-   - Three main technical routes: Chunked Synthesis (StreamingT2V, MicroCinema, MovieDreamer), Autoregressive (LongLive, FreeNoise), Hierarchical (NUWA-XL, CogVideo)
-   - **All methods share the same fundamental paradigm**:
-     - Segment N: Generate short video conditioned on **last frame of Segment N−1**
-     - This IS an I2V task
-3. **Implication**: Long video generation = Chain of I2V tasks
-4. **Pivot rationale**:
-   - Performance bottleneck lies in single-segment I2V quality
-   - Existing metrics (FVD, CLIPScore, IS) designed for 16–64 frames — cannot assess long video global coherence or attribute failures to specific causes
-   - Long video human evaluation: high cost, attention decay, subjective inconsistency
-   - I2V evaluation: higher diagnostic precision, fully reproducible, low compute cost
-   - I2V enables automated evaluation pipelines (Grounding DINO, optical flow, DINOv2) — infeasible at long-video granularity
-   - Avoids conflation of stitching strategy quality with base model capability
-
-### 建议配图/图表
-
-- **长视频分段生成示意图**（页面核心视觉）：
-  - 横向时间轴，分为3-4个片段
-  - 每个片段显示为短视频帧序列
-  - 片段之间用粗箭头连接，箭头上标注“末帧 → 首帧”
-  - 每个箭头下方标注“I2V Generation”
-  - 用红色虚线框圈出“这就是I2V”的核心洞察
-- 右下角callout框：“Long Video Quality ≥ Single I2V Quality”
-
-### 对应演讲稿段落
-
-Slide 2: Research Motivation — “I want to briefly share how this project evolved”段落（课题从长视频Benchmark转向I2V Benchmark的动机说明）
-
-### 设计建议
-
-- 左侧放置分段生成示意图（占页面60%）
-- 右侧放置3个bullet point总结转向理由
-- 用橙色高亮“= Chain of I2V”关键结论
-- 底部用绿色callout强调“I2V benchmark = evaluate the atomic building block”
-- 与前后页风格一致，用箭头表明从Silde 2动机自然过渡到Slide 3 gap分析
-
----
-
-## Slide 3 — Gap in Existing Benchmarks
-
-**预计时间**：1 min
+**预计时间**：1.25 min
 
 ### 页面文字内容
 
-1. **T2I-CompBench**: Compositional evaluation for T2I — no temporal dynamics
-2. **T2V-CompBench**: Extends to video — text-only input, no first-frame constraint
-3. **VBench / VBench++**: Comprehensive video quality — lacks fine-grained compositional diagnosis
-4. **Key Insight**: I2V introduces *dual constraint*
+1. **Problem**: Visual quality ≠ Instruction following
+2. **Conceptual Example**: "Make the white dog sit down"
+   - ✗ Brown dog sits | ✗ Camera zoom only | ✓ White dog sits
+3. **Existing Benchmarks**:
+   - T2I-CompBench: no temporal dynamics
+   - T2V-CompBench: text-only input, no first-frame constraint
+   - VBench/VBench++: broad quality coverage; compositional failure attribution is not the primary focus
+4. **I2V introduces a dual constraint**:
    - Input image → inviolable initial state (subjects, layout, background)
    - Text prompt → selective changes to specific elements
-5. **No existing benchmark models this Preserve-Transform duality**
+5. **Our Focus**: explicit Preserve + Transform representation for failure attribution
 
 ### 建议配图/图表
 
-- **对比表格**（核心视觉元素）：
-
-| | T2I-CompBench | T2V-CompBench | VBench++ | **Ours** |
-|---|:---:|:---:|:---:|:---:|
-| Input | Text | Text | Text/Image | **Image+Text** |
-| Core Target | Static composition | Dynamic + text align | General quality | **Selective compositional change** |
-| First-frame modeling | ✗ | ✗ | Partial | **Explicit P-T** |
-| Data quality control | ✗ | ✗ | ✗ | **Systematic** |
+- 左侧放两只狗的三结果概念示例，并标注`Conceptual illustration — not an experimental result`
+- 右侧放紧凑对比：`T2I: no time`、`T2V: no first frame`、`VBench: broad quality`、`Ours: explicit P–T attribution`
+- 没有真实实验结果时不展示虚构的FVD/CLIP数值
 
 ### 对应演讲稿段落
 
-Slide 3: Gap in Existing Benchmarks — 逐项对比现有 Benchmark，引出 Preserve-Transform 对偶性
+Slide 3: I2V Motivation & Benchmark Gap — 用两只狗示例解释组合失败，再对比现有Benchmark并引出Preserve–Transform
 
 ### 设计建议
 
-- 表格占页面中心 60%，用颜色区分最后一列（蓝色/绿色高亮"Ours"）
-- 上方一句话定位：*"Where does our work fit?"*
-- 表格下方一句总结引出下页
+- 左图右文，概念示例占页面约55%
+- 红色✗/绿色✓突出绑定错误与正确结果
+- 页面底部用一句话过渡：`Known first frame makes change and preservation jointly testable`
 
 ---
 
 ## Slide 4 — Preserve-Transform Evaluation Framework
 
-**预计时间**：2 min
+**预计时间**：1.25 min
 
 ### 页面文字内容
 
@@ -165,7 +123,7 @@ Slide 3: Gap in Existing Benchmarks — 逐项对比现有 Benchmark，引出 Pr
 3. Each sample decomposes into:
    - **Transform set T**: What MUST change
    - **Preserve set P**: What MUST remain stable
-4. → Enables precise *failure attribution*
+4. → Supports more explicit *failure attribution*
 5. **Five Evaluation Dimensions**:
    - Attribute Binding | Action Binding | Motion Binding | Background Dynamics | View Transformation
 6. **Validity condition**: Valid(x) = Identifiable ∧ Observable ∧ Separable ∧ Non-trivial
@@ -233,7 +191,7 @@ Slide 5: Overall Pipeline Architecture — 四阶段总览+三条设计原则
 
 ## Slide 6 — Phase 1: Prior Data Preparation
 
-**预计时间**：2 min
+**预计时间**：1.25 min
 
 ### 页面文字内容
 
@@ -270,17 +228,17 @@ Slide 6: Phase 1 — Prior Data Preparation — TIP-I2V 来源、5步+6子模块
 
 ## Slide 7 — Phase 2: Dataset Synthesis
 
-**预计时间**：2 min
+**预计时间**：1.5 min
 
 ### 页面文字内容
 
 1. **8-Step Pipeline**: Quota → Sample → Plan → Construct → Verify → Finalize → Export → Audit
-2. **Key Innovations**:
+2. **Implemented Design Choices**:
    - **Largest Remainder Method**: Integer quota allocation with zero rounding error
-   - **Zero-Assembly Principle**: Every item traces back to TIP-I2V source
+   - **Prior Traceability**: Every semantic recipe traces back to a TIP-I2V source
    - **Dual-Track Image Output**: Native aspect ratio + 16:9 inference companion
-   - **VQA-based QC**: Structured verification with 3-state aggregation
-   - **Prompt Finalization**: VLM-describe → LLM-polish + forbidden-word constraints
+   - **VQA-based Candidate Check**: Structured verification with 3-state aggregation
+   - **Prompt Finalization**: VLM-describe → LLM-polish → rule audit
 3. **5 Contrastive Controls**:
    - static_copy | random_motion | global_filter | camera_pan_cheat | subject_swap
 
@@ -304,38 +262,38 @@ Slide 7: Phase 2 — Dataset Synthesis — 8步流水线、最大余数法、零
 
 ---
 
-## Slide 8 — Current Scale & Output
+## Slide 8 — Data Funnel & Current Status
 
-**预计时间**：0.5 min
+**预计时间**：1 min
 
 ### 页面文字内容
 
-1. **Dataset Scale**:
-   - **3,519** prompts
-   - **8,184** image assets (4,092 native + 4,092 × 16:9 companions)
-2. **Quality Metrics**:
-   - VQA pass rate: **85.9%** (3,517 / 4,092)
-   - Fallback prompt usage: only **3.3%** (117 items)
-3. **Delivery Format**: 17-field flat BenchmarkSample schema → directly consumable by Phase 3
-4. **Dimension Coverage**: Attribute | Action | Motion | Background | View
+1. **Data Funnel**:
+   - **4,092** Question Plans
+   - **3,519** Prompt Candidates
+   - **3,517** Candidate Manifest Rows (**85.9%** of plans; not a final QC pass rate)
+   - **1,500** Release Target = 5 dimensions × 300 (**not yet release-ready**)
+2. **Image Assets**: **8,184** = 4,092 native + 4,092 16:9 companions
+3. **Fallback Usage**: 117 / 3,519 = **3.3%**
+4. **Target Interface**: 17-field BenchmarkSample; mandatory fields must pass hard gates before Phase 3 delivery
 
 ### 建议配图/图表
 
-- **大数字展示**（Dashboard 风格）：
-  - 三个大数字卡片横排：`3,519 Prompts` | `8,184 Images` | `85.9% Pass`
-- 下方饼图或柱状图：五维度样本分布
-  - Attribute: 502 | Action: 948 | Motion: 658 | Background: 927 | View: 361
+- **数据漏斗**（页面核心）：`4,092 plans → 3,519 prompts → 3,517 candidates → 1,500 release target`
+- 下方柱状图展示当前候选分布：
+  - Attribute: 517 | Action: 1,013 | Motion: 676 | Background: 946 | View: 365
 - 右侧小示意：BenchmarkSample JSON Schema 缩略展示
+- 对1,500使用虚线框和`Target / Pending final audit`标签，避免被理解为已发布数据集
 
 ### 对应演讲稿段落
 
-Slide 8: Current Scale & Output — 数据规模、通过率、Schema 结构
+Slide 8: Data Funnel & Current Status — 区分题目计划、提示词、候选manifest和正式目标集
 
 ### 设计建议
 
-- Dashboard/数据面板风格，大数字突出
-- 绿色高亮通过率，蓝色标注规模
-- 简洁，让数字自己说话
+- 漏斗和状态标签优先于“大数字成绩单”
+- 绿色仅用于真正通过最终质量门控的数据；当前候选使用蓝色或灰色
+- 明确写出“文件已生成 ≠ Benchmark已可用”
 
 ---
 
@@ -345,51 +303,45 @@ Slide 8: Current Scale & Output — 数据规模、通过率、Schema 结构
 
 ### 页面文字内容
 
-1. **P0: Structured Evaluation Targets Completely Empty** (Blocking)
-2. Full-schema audit of 3,517 candidates reveals:
-   - 3,517/3,517 `target_subjects[].noun` = EMPTY
-   - Subject descriptions degraded to "the subject" (generic placeholder)
-   - No structured `target_relation` for downstream consumption
-3. → Phase 3 evaluators **cannot consume** current manifest
-4. **Root Causes** (5 factors):
-   - ① Field name mismatch: `target_instances` vs `aligned_subjects`
-   - ② Dimension-specific slot fields unused by Phase 2
-   - ③ v2 filename not recognized by loader
-   - ④ NL polish masks structural emptiness
-   - ⑤ View Transformation constraint logic inverted
-5. **Good news**: Candidate pool sufficient after fixing — code bugs, not data scarcity
+1. **Repair Baseline** (frozen old snapshot):
+   - 3,517 / 3,517 missing subject nouns and structured changes
+2. **Current Workspace Snapshot (2026-07-13)**:
+   - Subject noun recovered: **3,263 / 3,517 (92.8%)**
+   - Still unresolved: **254** generic/empty subjects
+   - `target_relation` still empty: **3,517 / 3,517**
+3. **Status**: P0 is partially repaired, but the manifest and preliminary “Final 1500” package are **not release-ready**
+4. **Main Causes**: cross-stage field mismatch, unused dimension slots, unstable file-version resolution, and insufficient export hard gates
+5. **Next Gate**: relation reconstruction → residual cleanup → full audit → version freeze → package
 
 ### 建议配图/图表
 
-- **根因鱼骨图/因果链图**：
-  - 中心：P0 现象（目标为空）
-  - 5条分支指向5个根因
-- 或用**流程断裂图**：Phase 1 产出 → [断裂点标红] → Phase 2 消费失败
-- 底部：候选池余量柱状图（5维度，标注各维度通过数 vs 目标300）
+- **修复前后对比图**：noun覆盖率 `0% → 92.8%`，同时用红色标出`target_relation = 0% complete`
+- **流程断裂图**：Phase 1结构信息 → 字段/版本适配 → Phase 2目标结构 → 导出硬门控
+- 底部红色状态条：`Candidate package — not a validated release`
 
 ### 对应演讲稿段落
 
-Slide 9: Quality Issues — P0 Critical Finding — P0 现象、根因五因素、候选池充足
+Slide 9: Quality Issues — P0 Critical Finding — 区分旧基线与当前部分修复状态，说明剩余阻断项
 
 ### 设计建议
 
 - 红色警告风格头部标题栏（⚠️ P0: BLOCKING）
 - 根因分析用编号列表或鱼骨图
-- 底部"Good News"用绿色 callout 缓和严肃氛围
+- 不使用“Good News”弱化阻断问题；用中性的`Recoverable from upstream evidence`说明可修复性
 
 ---
 
 ## Slide 10 — Quality Issues: P1–P4
 
-**预计时间**：1 min
+**预计时间**：0.75 min
 
 ### 页面文字内容
 
 | Issue | Severity | Finding | Key Metric |
 |-------|----------|---------|-----------|
-| **P1** Rare Vocabulary | Medium | 5.8% prompts contain rare words (malevolence, sclera…) | Tests encoder robustness, not composition |
-| **P2** Image Clarity | High | Source 224×126 → 3.8× upscale to 854×480; info density 6.9% | Severe blurring |
-| **P3** Aspect Ratio | High | Native AR range 0.53–2.52; only 2% near standard | Evaluation inconsistency |
+| **P1** Low-frequency Wording | Medium | 5.8% hit the rare-word list; not all are invalid | Separate necessary terms from decorative modifiers |
+| **P2** Image Clarity | High | Some sources are 224×126; upscale cannot restore true detail | Blur vs enhancement hallucination |
+| **P3** Aspect Ratio | High | Native AR range 0.53–2.52; 68% need crop/pad under target specs | Evaluation inconsistency |
 | **P4** Distribution | Medium | Subject frequency & difficulty uncalibrated | Uncontrolled confounds |
 
 ### 建议配图/图表
@@ -415,27 +367,28 @@ Slide 10: Quality Issues — P1 to P4 — 四类问题逐一说明
 
 ## Slide 11 — Future Work: Repair & Validation
 
-**预计时间**：2 min
+**预计时间**：1.5 min
 
 ### 页面文字内容
 
-**Thread 1: Systematic Repair**
-- P0: 6 targeted code fixes → full pipeline re-run
-- P1: 3-layer rare word defense (Zipf < 3.5 threshold)
-- P2: Real-ESRGAN + GFPGAN enhancement pipeline
-- P3: Intelligent AR adaptation (resize / center-crop / letterbox)
-- P4: Frequency-tier-aware sampling + difficulty calibration
+**Thread 1: P0 Closure & Versioning**
+- Reconstruct `target_relation`; resolve or reject 254 residual subjects
+- Add export hard gates; audit and freeze a new manifest before packaging
 
-**Thread 2: Ablation Experiments**
+**Thread 2: Quality Strategy Comparison**
+- P1: keep necessary terms; simplify only replaceable modifiers
+- P2: compare interpolation / non-generative sharpening / generative SR with identity-preservation checks
+- P3–P4: recorded AR adaptation + frequency-tier-aware sampling
+
+**Thread 3: Ablation & Validity**
 | Experiment | Control | Treatment | Metric |
 |---|---|---|---|
-| Vocabulary | Rare-word prompts | Simplified prompts | CLIP-Sim, inter-model variance |
-| Clarity | LANCZOS upscale | Real-ESRGAN | Laplacian Var, FID |
-| Aspect Ratio | Mixed AR | Unified 854×480 | Evaluator stability |
+| Vocabulary | Original | Meaning-preserving simplification | Human equivalence + score shift |
+| Clarity | Interpolation | Candidate enhancement | Sharpness + identity similarity + artifact rate |
+| Aspect Ratio | Model-default | Recorded unified adaptation | Evaluator variance + target loss rate |
 
-**Thread 3: Validity Verification**
-- Sample 50–100 items/dimension × 2–3 I2V models (SVD, CogVideoX, DynamiCrafter)
-- Prove: dimension discriminability, difficulty discriminability, failure mode predictability
+- 50–100 items/dimension × 2–3 **image+text conditioned** I2V models
+- Test dimension/difficulty discriminability and failure-mode validity; calibrate automatic metrics against blind human ratings
 
 ### 建议配图/图表
 
@@ -464,11 +417,11 @@ Slide 11: Future Work — Repair & Validation — 三条主线：修复、消融
 
 | Weeks | Task | Deliverable |
 |-------|------|-------------|
-| W1–W2 | P0 code fixes + pipeline re-run | Structurally complete manifest |
-| W3–W4 | P1–P4 systematic repairs | Repaired dataset artifacts |
-| W5–W6 | Quality experiments + ablation | Experiment data & analysis |
-| W7–W8 | Validity verification | Dimension/difficulty/failure statistics |
-| W9–W12 | Thesis writing (Ch.3–5) + iteration | Thesis draft |
+| W1–W2 | Close residual P0 issues + freeze versions | Audited candidate manifest |
+| W3–W4 | Compare and calibrate P1–P4 strategies | Frozen quality rules and thresholds |
+| W5–W6 | Build and audit the 1,500-sample release candidate | 5 × 300 versioned package |
+| W7–W9 | Multi-model validity + human agreement study | Dimension/difficulty/failure statistics |
+| W10–W12 | Thesis writing (Ch.3–5) + iteration | Thesis draft + dataset card |
 
 ### 建议配图/图表
 
@@ -490,27 +443,27 @@ Slide 12: Timeline — 12周时间规划
 
 ---
 
-## Slide 13 — Conclusion & Contributions
+## Slide 13 — Conclusion & Interim Contributions
 
-**预计时间**：1 min
+**预计时间**：0.75 min
 
 ### 页面文字内容
 
-**Four Main Contributions:**
+**Four Interim Outputs:**
 
 1. **Preserve-Transform Dual-Axis Framework**
    - Formally decomposes I2V evaluation into Transform (what must change) + Preserve (what must remain)
 
-2. **Fully Automated, Prior-Grounded Synthesis Pipeline**
-   - Produces benchmark samples traceable to real user data (TIP-I2V)
+2. **Prior-Grounded Candidate Construction Pipeline**
+   - Automated candidate generation with traceability to TIP-I2V; final release still requires quality gates
 
-3. **Dataset Scale: 3,519 Prompts × 8,184 Images**
-   - Five compositional dimensions with structured delivery
+3. **Candidate Scale & Release Target**
+   - 3,519 prompt candidates; 8,184 image assets; target release = 1,500 validated samples
 
-4. **Systematic Data Quality Methodology**
-   - P0–P4 issue taxonomy — first discussion in benchmark construction literature
+4. **Auditable Data Quality Workflow**
+   - P0–P4 taxonomy across schema, prompt, image, aspect ratio, and distribution
 
-**Next Phase**: Complete repairs → Ablation studies → Validated, publication-ready benchmark
+**Next Phase**: Close P0 → compare quality strategies → validate metrics → freeze a release candidate
 
 ### 建议配图/图表
 
@@ -522,7 +475,7 @@ Slide 12: Timeline — 12周时间规划
 
 ### 对应演讲稿段落
 
-Slide 13: Conclusion & Contributions — 四项贡献总结、下阶段方向、致谢
+Slide 13: Conclusion & Contributions — 四项阶段性产出、明确未完成边界、下阶段方向与致谢
 
 ### 设计建议
 
